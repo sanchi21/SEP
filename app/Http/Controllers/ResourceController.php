@@ -12,9 +12,17 @@ class ResourceController extends Controller {
 
 	public function index()
     {
-        $resources = Resource::all();
         $types = Type::all();
-        return view ('addResource',compact('types','resources'));
+        $id = "Office-Equipment";
+        $key = 'CMB/OEQ/001';
+        return view ('addResource',compact('types','id','key'));
+    }
+
+    public function hardware($id)
+    {
+        $types = Type::all();
+        $key = 'CMB/OEQ/002';
+        return view ('addResource',compact('types','id','key'));
     }
 
 }

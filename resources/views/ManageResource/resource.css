@@ -1,0 +1,21 @@
+input.rounded,textarea.rounded,select.rounded {
+    border: 1px solid #C0C0C0;
+    -moz-border-radius: 1px;
+    -webkit-border-radius: 1px;
+    border-radius: 6px;
+    font-size: 14px;
+    padding: 4px 7px;
+    outline: 0;
+    -webkit-appearance: none;
+}
+input.rounded:focus {
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
+}
+
+textarea.rounded:focus {
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
+}

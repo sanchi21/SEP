@@ -11,151 +11,104 @@
 <div class="well">
     <div class="row">
         <div class="col-xs-4 col-md-2">
-
             {!!Form::label('category','Category ')!!}
+        </div>
+        <div class="col-xs-4 col-md-4">
+
+            <select id="make" name="make" class="form-control" onchange="javascript:location.href = this.value;">
+    	        @foreach($types as $type)
+    	       	    <option value='/resource/{{$type->category}}' @if($id==$type->category) selected @endif>{{ $type->category }}</option>
+    	        @endforeach
+            </select>
 
         </div>
-    <div class="col-xs-4 col-md-4">
 
 
-        <select id="make" name="make">
+        <div class="col-xs-4 col-md-2">
+                {!!Form::label('quantity','Quantity')!!}
+        </div>
 
-    	    @foreach($types as $type)
-    	       	<option value='{{$type->category}}'>{{ $type->category }}</option>
-    	    @endforeach
-
-        </select>
-
+        <div class="col-xs-4 col-md-2">
+                    {!!Form::input('number','nm',1,['class'=>'form-control', 'min'=>'1', 'max'=>'10','onchange'=>'addRows(this.value)'])!!}
     </div>
 
     </div>
 </div>
 
-{{--Description--}}
-<div class="row">
+<div class="span12" style="overflow:auto">
 
-    <div class="col-xs-4 col-md-2">
-        {!!Form::label('inventory_code','Inventory Code')!!}
-    </div>
+@if($id == 'Office-Equipment' || $id == 'Communication-Equipment' || $id == 'Network-Equipment' || $id == 'Development-Device' || $id == 'Power-Equipment')
+    <table class="table table-hover" id="hardwareTable">
+        <tr id="headRow">
+            <th>Inventory&nbsp;Code</th>
+            <th width>Description</th>
+            <th>Serial&nbsp;No</th>
+            <th>IP&nbsp;Address&nbsp;</th>
+            <th>Make&nbsp;</th>
+            <th>Model</th>
+            <th>Purchase&nbsp;Date</th>
+            <th>Warranty&nbsp;Expiration</th>
+            <th>Insurance</th>
+            <th>Value</th>
+        </tr>
+        <tbody id="tableBody">
+        <tr id="firstRow">
+            <td>
+                <input type="inventory_code_t[1]" class="rounded" value="{{$key}}" readonly>
+                {{--{!!Form::text('inventory_code_t','$id',['class'=>'rounded','readonly'])!!}--}}
+            </td>
 
-    <div class="col-xs-4 col-md-4">
-        {!!Form::text('inventory_code',null,['class'=>'form-control'])!!}
-    </div>
+            <td>
+            {!!Form::textarea('description_t[1]','',['class'=>'rounded','size'=>'50x1'])!!}
+            </td>
 
-    <div class="col-xs-4 col-md-2">
-            {!!Form::label('description','Description ')!!}
-    </div>
+            <td>
+            {!!Form::text('serial_no_t[1]','',['class'=>'rounded'])!!}
+            </td>
 
-    <div class="col-xs-4 col-md-4">
-            {!!Form::textarea('description',null,['class'=>'form-control','size'=>'20x3'])!!}
-    </div>
+            <td>
+            {!!Form::text('ip_address_t[1]','',['class'=>'rounded'])!!}
+            </td>
 
-</div><br>
+            <td>
+            <select id="make" name="make" class="rounded">
+                	        @foreach($types as $type)
+                	       	    <option value='{{$type->category}}'>{{ $type->category }}</option>
+                	        @endforeach
+            </select>
+            </td>
 
-{{--Serial No--}}
-<div class="row">
+            <td>
+            {!!Form::text('model_t[1]','',['class'=>'rounded'])!!}
+            </td>
 
-    <div class="col-xs-4 col-md-2">
-            {!!Form::label('serial_no','Serial Number')!!}
-    </div>
+            <td>
+            {!!Form::input('date','purchase_date_t[1]',null,['class'=>'form-control input-sm'])!!}
+            </td>
 
-    <div class="col-xs-4 col-md-4">
-            {!!Form::text('serial_no',null,['class'=>'form-control'])!!}
-    </div>
+            <td>
+            {!!Form::input('date','warranty_exp_t[1]',null,['class'=>'form-control input-sm'])!!}
+            </td>
 
-    <div class="col-xs-4 col-md-2">
-                    {!!Form::label('purchase_date','Purchase Date')!!}
-    </div>
+            <td>
+            {!!Form::text('insurance_t[1]','',['class'=>'rounded'])!!}
+            </td>
 
-    <div class="col-xs-4 col-md-4">
+            <td>
+            {!!Form::text('value_t[1]','',['class'=>'rounded'])!!}
+            </td>
+        </tr>
 
-            {!!Form::input('date','purchase_date',null,['class'=>'form-control'])!!}
-    </div>
-</div><br>
-
-{{--ip address--}}
-<div class="row">
-
-    <div class="col-xs-4 col-md-2">
-            {!!Form::label('ip','IP Address')!!}
-    </div>
-
-    <div class="col-xs-2 col-md-1">
-            <input type="text" class="form-control">
-    </div>
-
-    <div class="col-xs-2 col-md-1">
-            <input type="text" class="form-control" min="0" max="255">
-    </div>
-
-    <div class="col-xs-2 col-md-1">
-            <input type="text" class="form-control" min="0" max="255">
-    </div>
-
-    <div class="col-xs-2 col-md-1">
-            <input type="text" class="form-control" min="0" max="255">
-    </div>
-
-    <div class="col-xs-4 col-md-2">
-        {!!Form::label('warranty__exp_date','Warranty Expiration')!!}
-    </div>
-
-    <div class="col-xs-4 col-md-4">
-        {!!Form::input('date','warranty_exp_date',null,['class'=>'form-control'])!!}
-    </div>
-
-</div><br>
-
-{{--make--}}
-<div class="row">
-
-    <div class="col-xs-4 col-md-2">
-            {!!Form::label('make','Make')!!}
-    </div>
-
-    <div class="col-xs-4 col-md-4">
-            {!!Form::text('make',null,['class'=>'form-control'])!!}
-    </div>
-
-    <div class="col-xs-4 col-md-2">
-        {!!Form::label('value','Value')!!}
-    </div>
-
-    <div class="col-xs-4 col-md-4">
-        {!!Form::text('value',null,['class'=>'form-control'])!!}
-    </div>
-
-</div><br>
-
-{{--model--}}
-<div class="row">
-
-    <div class="col-xs-4 col-md-2">
-            {!!Form::label('model','Model')!!}
-    </div>
-
-    <div class="col-xs-4 col-md-4">
-            {!!Form::text('model',null,['class'=>'form-control'])!!}
-    </div>
-
-    <div class="col-xs-4 col-md-2">
-        {!!Form::label('insurance','Insurance')!!}
-    </div>
-
-    <div class="col-xs-4 col-md-4">
-        {!!Form::text('insurance',null,['class'=>'form-control'])!!}
-    </div>
+        </tbody>
+    </table>
+  @elseif($id == 'Monitor')
+  @include('monitorTable')
+@endif
 
 </div>
-
-@include('desktopForm')
-@include('dongleSimForm')
 
 {!! Form ::close() !!}
 @endsection
-
 @stop
-
-
 
 {{--composer require "illuminate/html":"5.0.*"--}}

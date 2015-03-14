@@ -18,4 +18,9 @@ class Hardware extends Model {
         'insurance'
     ];
 
+    protected function getTableColumns()
+    {
+        return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+    }
+
 }

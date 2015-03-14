@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Resource extends Model {
+c3lass Resource extends Model {
 
     protected  $table = 'Resource';
 
