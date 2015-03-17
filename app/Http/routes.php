@@ -13,7 +13,13 @@
 
 Route::get('/', 'WelcomeController@index');
 
-Route::get('resource','ResourceController@index');
+Route::post('hardware','ResourceController@store');
+
+Route::get('hardware','ResourceController@index');
+Route::get('hardware/{id}','ResourceController@hardware');
+Route::get('software','SoftwareController@index');
+Route::post('software','SoftwareController@store');
+Route::post('software-edit','SoftwareController@editPage');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

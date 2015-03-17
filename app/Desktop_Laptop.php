@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 class Desktop_Laptop extends Model {
 
     protected $table = 'Desktop_Laptop';
+    protected $primaryKey = 'inventory_code';
+    public $timestamps = false;
 
 	protected $fillable = [
 

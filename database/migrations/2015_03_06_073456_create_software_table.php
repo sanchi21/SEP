@@ -14,10 +14,10 @@ class CreateSoftwareTable extends Migration {
 	{
 		Schema::create('Software', function(Blueprint $table)
 		{
-			$table->string('inventory_code','30');
-            $table->string('name','100')->nullable();
-            $table->string('description')->nullable();
-            $table->string('version','10')->nullable();
+            $table->string('inventory_code','30');
+            $table->string('name')->nullable();
+            $table->string('vendor')->nullable();
+            $table->string('no_of_license')->nullable();
 
             $table->primary('inventory_code');
             $table->foreign('inventory_code')

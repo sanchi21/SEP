@@ -8,6 +8,12 @@ input.rounded,textarea.rounded,select.rounded {
     outline: 0;
     -webkit-appearance: none;
 }
+
+textarea{
+    resize: none;
+    height: 30;
+}
+
 input.rounded:focus {
     outline: none;
     border-color: #9ecaed;
@@ -15,6 +21,11 @@ input.rounded:focus {
 }
 
 textarea.rounded:focus {
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
+}
+select.rounded:focus {
     outline: none;
     border-color: #9ecaed;
     box-shadow: 0 0 10px #9ecaed;
