@@ -214,4 +214,11 @@ class ResourceController extends Controller {
 
     }
 
+    public function editAll()
+    {
+        $hardwares = Hardware::paginate(30);
+        return view('ManageResource.editHardware',compact('hardwares'));
+    }
+
+
 }

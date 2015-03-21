@@ -36,7 +36,7 @@ function addRows(val)
             table.deleteRow(-1);
         }
     }
-    else if(val>curRows && val>0 && val<=10)
+    else if(val>curRows && val>0)
     {
         var diff = val - curRows;
         var firstRow = document.getElementById("firstRow");
@@ -65,8 +65,9 @@ function addRows(val)
 
             clone.deleteCell(0);
             var t1=document.createElement("input");
-            t1.setAttribute('class','rounded');
+            t1.setAttribute('class','form-control input-sm');
             t1.setAttribute('readOnly','true');
+            t1.setAttribute('style','width:130px');
             t1.setAttribute('name','inventory_code_t[]');
             t1.setAttribute('value',newCode);
             clone.insertCell(0).appendChild(t1);

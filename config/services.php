@@ -14,10 +14,10 @@ return [
 	|
 	*/
 
-	'mailgun' => [
-		'domain' => '',
-		'secret' => '',
-	],
+    'mailgun' => [
+        'domain' => 'sandboxf6de2bd260104ddda058f9656b7e8ea3.mailgun.org',
+        'secret' => 'key-f6dc43219044fdc2d3ed23588eea5f64',
+    ],
 
 	'mandrill' => [
 		'secret' => '',

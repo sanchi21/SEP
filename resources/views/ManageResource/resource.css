@@ -2,9 +2,9 @@ input.rounded,textarea.rounded,select.rounded {
     border: 1px solid #C0C0C0;
     -moz-border-radius: 1px;
     -webkit-border-radius: 1px;
-    border-radius: 6px;
+    border-radius: 4px;
     font-size: 14px;
-    padding: 4px 7px;
+    padding: 3px 5px;
     outline: 0;
     -webkit-appearance: none;
 }
@@ -30,3 +30,147 @@ select.rounded:focus {
     border-color: #9ecaed;
     box-shadow: 0 0 10px #9ecaed;
 }
+
+.btn-primary
+{
+    background-color: #9A0000;
+    border-color: #9A0000;
+}
+
+.btn-primary:hover
+{
+    background-color: #9A0000;
+    opacity: 0.90;
+
+    border-color: #9A0000;
+}
+
+.btn-primary:focus
+{
+    background-color: #9A0000;
+    opacity: 0.90;
+
+    border-color: #9A0000;
+}
+
+/*--------------------------------------------------*/
+
+/*.table-hover tbody tr:hover td, .table-hover tbody tr:hover {*/
+    /*background-color: #FFF0F5 ;*/
+    /*opacity: 0.9;*/
+/*}*/
+/*.table>tbody>tr>td {*/
+    /*padding: 3px;*/
+/*}*/
+
+
+
+
+/*--------------------------------------------------*/
+
+.navigation {
+    /* critical sizing and position styles */
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 52px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+
+    /* non-critical appearance styles */
+    list-style: none;
+    background: #E5E4E2;
+    /*background: rgba(229, 228, 226, 0.5);*/
+}
+
+/* Navigation Menu - List items */
+.nav-item {
+    /* non-critical appearance styles */
+    width: 200px;
+    border-top: 1px solid #BCC6CC;
+    /*border-bottom: 1px solid #848482;*/
+}
+
+.nav-item a {
+    /* non-critical appearance styles */
+    display: block;
+    padding: 0.5em;
+    /*background: linear-gradient(135deg, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);*/
+    color: #0C090A;
+    font-size: 1.2em;
+    text-decoration: none;
+    transition: color 0.2s, background 0.5s;
+}
+
+.nav-item a:hover {
+    color: #9A0000;
+    /*background: linear-gradient(135deg, rgba(0,0,0,0) 0%,rgba(75,20,20,0.65) 100%);*/
+}
+
+/* Site Wrapper - Everything that isn't navigation */
+.site-wrap {
+    /* Critical position and size styles */
+    min-height: 100%;
+    min-width: 100%;
+    background-color: #ffffff; /* Needs a background or else the nav will show through */
+    position: relative;
+    top: 0;
+    bottom: 100%;
+    left: 0;
+    z-index: 1;
+
+    /* non-critical apperance styles */
+    /*padding: 1em;*/
+    /*background-image: linear-gradient(135deg, rgb(254,255,255) 0%,rgb(221,241,249) 35%,rgb(160,216,239) 100%);*/
+    /*background-size: 200%;*/
+}
+
+/* Nav Trigger */
+.nav-trigger {
+    /* critical styles - hide the checkbox input */
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+}
+
+label[for="nav-trigger"] {
+    /* critical positioning styles */
+    position: fixed;
+    left: 15px; top: 1px;
+    z-index: 2;
+
+    /* non-critical apperance styles */
+    margin-left: 160px;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    background-image: url('http://localhost:8080/resources/views/images/menu.png');
+    background-size: contain;
+}
+
+/* Make the Magic Happen */
+.nav-trigger + label, .site-wrap {
+    transition: left 0.2s;
+}
+
+.nav-trigger:checked + label {
+    left: 215px;
+}
+
+.nav-trigger:checked ~ .site-wrap {
+    left: 200px;
+    /*box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);*/
+}
+
+body {
+    /* Without this, the body has excess horizontal scroll when the menu is open */
+    overflow-x: visible;
+}
+
+
+
+
+/* Micro reset */
+*,*:before,*:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0;}
+html, body { height: 100%; width: 100%; font-family: Helvetica, Arial, sans-serif; }
