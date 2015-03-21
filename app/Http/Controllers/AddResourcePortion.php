@@ -4,6 +4,8 @@ use App\operating_system;
 use App\make;
 use App\ScreenSize;
 use App\ServiceProvider;
+use App\RAM;
+use App\HardDisk;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -14,16 +16,19 @@ class AddResourcePortion extends Controller {
 
 	public function index(){
 
-        $operatingSystems = operating_system::paginate(2);//operating_system::showAllOperatingSystems();
-        $makes = make::showAllMakes();
-        $sizes = ScreenSize::showAllSizes();
-        $providers = ServiceProvider::showAllProviders();
-
+        $operatingSystems = operating_system::paginate(3);//operating_system::showAllOperatingSystems();
+        $makes = make::paginate(3);
+        $sizes = ScreenSize::paginate(3);
+        $providers = ServiceProvider::paginate(3);
+        $rams = RAM::paginate(3);
+        $disks = HardDisk::paginate(3);
 
         return view('pages.addResourcePortion')->with('operatingSystems', $operatingSystems)
                                                 ->with('makes', $makes)
                                                 ->with('sizes', $sizes)
-                                                ->with('providers', $providers);
+                                                ->with('providers', $providers)
+                                                ->with('rams', $rams)
+                                                ->with('disks', $disks);
     }
 
     public function delete($type,$id){
@@ -77,6 +82,18 @@ class AddResourcePortion extends Controller {
                 \Session::flash('flash_message', 'Service Provider deleted successfully!');
             else
                 \Session::flash('flash_message_error', 'Service Provider not deleted!');
+
+            return Redirect::action('AddResourcePortion@index');
+        }
+
+        elseif($type =='ram')
+        {
+            $status = RAM::deleteRamSize($id);
+
+            if ($status)
+                \Session::flash('flash_message', 'Ram Size deleted successfully!');
+            else
+                \Session::flash('flash_message_error', 'Ram Size not deleted!');
 
             return Redirect::action('AddResourcePortion@index');
         }
@@ -181,10 +198,10 @@ class AddResourcePortion extends Controller {
         $status = true;
 
         $input = Request::all();
-        $screen_name = $input['screen_name'];
+        $screen_size = $input['screen_size'];
 
         $screen =  new ScreenSize();
-        $screen->Screen_Size = $screen_name;
+        $screen->Screen_Size = $screen_size;
 
         $status = $screen->save() ? true : false;
 
@@ -269,85 +286,95 @@ class AddResourcePortion extends Controller {
 
     }
 
+    public function addRam(){
+
+
+        $status = true;
+
+        $input = Request::all();
+        $ram_size = $input['ram_size'];
+
+        $ramSize =  new RAM();
+        $ramSize->Ram_Size = $ram_size;
+
+        $status = $ramSize->save() ? true : false;
+
+        if($status)
+            \Session::flash('flash_message','New Ram Size added successfully!');
+        else
+            \Session::flash('flash_message_error','Ram Size Addition Failed!');
+
+        return Redirect::action('AddResourcePortion@index');
+
+    }
+
+    public function updateRam(){
+
+        $status = true;
+        $input = Request::all();
+
+
+        $ram_id = $input['ram_id'];
+        $ram = RAM::find($ram_id);
+
+        $ram->Ram_Size = $input['ramSize'];
+        $status = $ram->save() ? true : false;
 
 
 
+        if ($status)
+            \Session::flash('flash_message', 'Ram Size Updated successfully!');
+        else
+            \Session::flash('flash_message_error', 'Ram Size not Updated!');
 
-//    public function changeOS(){
-//
-//
-//        $status = true;
-//        $input = Request::all();
-//        $delete = Input::get('delete');
-//
-//        $os_id = $input['OS_id'];
-//
-//
-//        $operatingSystem = make::find($os_id);
-//
-//        if(!$delete){
-//            $operatingSystem->OS_Name = $input['os_name'];
-//        $status = $operatingSystem->save() ? true : false;
-//
-//        if ($status)
-//            \Session::flash('flash_message', 'Operating System Updated successfully!');
-//        else
-//            \Session::flash('flash_message_error', 'Operating System not Updated!');
-//
-//        return Redirect::action('AddResourcePortion@index');
-//
-//    }
-//
-//        else {
-//
-//            $status = operating_system::deleteOS($os_id);
-//
-//            if ($status)
-//                \Session::flash('flash_message', 'Operating System deleted successfully!');
-//            else
-//                \Session::flash('flash_message_error', 'Operating System not deleted!');
-//
-//            return Redirect::action('AddResourcePortion@index');
-//        }
-//
-//    }
+        return Redirect::action('AddResourcePortion@index');
 
-//    public function changeMake(){
-//
-//
-//        $status = true;
-//        $input = Request::all();
-//        $delete = Input::get('make_delete');
-//
-//        $os_id = $input['OS_id'];
-//
-//        $make = make::find($os_id);
-//
-//        if(!$delete){
-//
-//            $make->Make_Name = $input['make_name'];
-//            $status = $make->save() ? true : false;
-//
-//            if ($status)
-//                \Session::flash('flash_message', 'Make Updated successfully!');
-//            else
-//                \Session::flash('flash_message_error', 'Make not Updated!');
-//
-//            return Redirect::action('AddResourcePortion@index');
-//
-//        }
-//
-//        else {
-//
-//            $status = make::deleteMake($os_id);
-//
-//            if ($status)
-//                \Session::flash('flash_message', 'Make deleted successfully!');
-//            else
-//                \Session::flash('flash_message_error', 'Make not deleted!');
-//
-//            return Redirect::action('AddResourcePortion@index');
-//        }
+    }
+
+    public function addHardDisk(){
+
+
+        $status = true;
+
+        $input = Request::all();
+        $disk_size = $input['disk_size'];
+
+        $diskSize =  new HardDisk();
+        $diskSize->Disk_Size = $disk_size;
+
+        $status = $diskSize->save() ? true : false;
+
+        if($status)
+            \Session::flash('flash_message','New Disk Size added successfully!');
+        else
+            \Session::flash('flash_message_error','Disk Size Addition Failed!');
+
+        return Redirect::action('AddResourcePortion@index');
+
+    }
+
+    public function updateHardDisk(){
+
+        $status = true;
+        $input = Request::all();
+
+
+        $disk_id = $input['disk_id'];
+        $disk = HardDisk::find($disk_id);
+
+        $disk->Disk_Size = $input['diskSize'];
+        $status = $disk->save() ? true : false;
+
+
+
+        if ($status)
+            \Session::flash('flash_message', 'Disk Size Updated successfully!');
+        else
+            \Session::flash('flash_message_error', 'Disk Size not Updated!');
+
+        return Redirect::action('AddResourcePortion@index');
+
+    }
 
 
 
