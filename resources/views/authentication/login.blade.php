@@ -10,9 +10,9 @@
 
 
 @section(('content'))
-<div class="content-main">
+<div class="content-main" style="opacity: 0.5;">
 <center>
-    <div class="panel panel-default" >
+    <div class="panel panel-default" style="background-color: #e7e7e7" >
       <div class="panel-body">
 
         <form action ="{{ URL::route('postLogin') }}" method="post">
@@ -29,6 +29,11 @@
                 <div class="alert alert-danger" role="alert" id="divAlert">
                     {{Session::get('flash_message') }}
                 </div>
+            @elseif(Session::has('flash_message_success'))
+                                   <div class="alert alert-success" role="alert" id="divAlert">
+                                       {{Session::get('flash_message_success') }}
+                           </div>
+
             @endif
             </td>
         </tr>
@@ -64,7 +69,7 @@
         <tr>
             <td>
 
-                    <input type="checkbox" name="remember" id="remember"> Keep me logged in
+                    <input type="checkbox" name="remember" id="remember"> Remember me
 
             </td>
             <td style="text-align: right">

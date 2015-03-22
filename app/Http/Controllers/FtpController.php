@@ -3,8 +3,10 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\file;
+use App\version;
 use App\sfuser;
 use App\User;
+use App\req;
 use App\requesth;
 use Request;
 use Input;
@@ -14,10 +16,19 @@ class FtpController extends Controller {
     Public function FindU(){
 
         $sys_users=User::all();
-        return view('Requests.ftpreq',compact('sys_users') );
+        $pros=version::all();
+        $ftp=file::all();
+        $sf=sfuser::all();
+        $req=req::all();
+        return view('Requests.ftpreq',compact('sys_users','ftp','sf','req','pros') );
 
     }
 
+//    TEST METHOD
+    public function getTest()
+    {
+        return view('test');
+    }
     Public function view(){
         return view('Requests.ftpreq');
     }
@@ -26,8 +37,6 @@ class FtpController extends Controller {
     {
         $ftp = Input::get('ftp');
         $input = Request::all();
-        $type = "ftp account";
-        $type1 = "Share Folder";
         $project_id = $input['project_id'];
 
         if (!$ftp) {
@@ -59,7 +68,7 @@ class FtpController extends Controller {
                         $sf->sub_id = $subId;
                         $sf->user_id = $user_id;
                         $sf->user_name =$temp;
-                        $sf->type = $type1;
+                        $sf->type ='Shared Folder';
                         $sf->save();
                     }
 
@@ -99,11 +108,15 @@ class FtpController extends Controller {
 
                     $ftp->request_id = $req_id;
                     $ftp->sub_id = $subId;
-                    $ftp->type = $type;
-                    $ftp->save();
-                    \Session::flash('flash_message', 'FTP Request Sent');
-                    return redirect('ftpreq');
-
+                    $ftp->type = "Ftp Account";
+                    if($ftp->save()) {
+                        \Session::flash('flash_message', 'FTP Request Sent');
+                        return redirect('ftpreq');
+                    }
+                    else{
+                        \Session::flash('flash_message', 'Request Failure');
+                        return redirect('ftpreq');
+                    }
                 }
 
                 else
@@ -116,6 +129,7 @@ class FtpController extends Controller {
 
         }
     }
+
 
 
 
