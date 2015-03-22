@@ -10,9 +10,9 @@
 
 
 @section(('content'))
-<div class="content-main">
+<div class="content-main" style="opacity: 0.5;">
 <center>
-    <div class="panel panel-default" >
+    <div class="panel panel-default" style="background-color: #e7e7e7" >
       <div class="panel-body">
 
         <form action ="{{ URL::route('postLogin') }}" method="post">

@@ -149,7 +149,7 @@ label[for="nav-trigger"] {
     height: 50px;
     width: 50px;
     cursor: pointer;
-    background-image: url('http://localhost:8080/resources/views/images/menu.png');
+    background-image: url('/resources/views/images/menu.png');
     background-size: contain;
 }
 

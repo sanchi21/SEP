@@ -202,7 +202,6 @@ class Authentication_Controller extends Controller {
 
     public function postAddUser()
     {
-
             $newUsername = Input::get('activeUserNames');
             $permissions = Input::get('sltPermissions');
 
