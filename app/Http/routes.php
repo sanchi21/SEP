@@ -46,7 +46,18 @@ Route::post('updateProvider','AddResourcePortion@updateProvider');
 Route::group(array('middleware' => ['auth']), function() {
     //GET sign out
     Route::get('sign-out',array('as'=>'sign-out','uses'=>'Authentication_Controller@getSignOut'));
+    //GET adminFullHomePage
+    Route::get('home',array('as'=>'home-admin-full','uses'=>'HomeController@getHomeAdminFull'));
+    //GET adminPartialHome
+    Route::get('homeal',array('as'=>'home-admin-limited','uses'=>'HomeController@getHomeAdminLimited'));
+    //GET projectManagerHomePage
+    Route::get('homep',array('as'=>'home-project-manager','uses'=>'HomeController@getHomeProjectManager'));
 
+
+    //Administrator Group
+    Route::group(array('middleware' => ['role']), function() {
+        Route::get('addUser', array('as' => 'add-user', 'uses' => 'Authentication_Controller@getAddUser'));
+    });
     //CSRF protection group
     Route::group(array('before' => 'csrf'), function () {
 
@@ -58,18 +69,19 @@ Route::group(array('middleware' => ['auth']), function() {
         Route::post('user/deactivate', array('as' => 'accountDeactivate', 'uses' => 'Authentication_Controller@accountDeactivate'));
         //POST update permission
         Route::post('user/permission', array('as' => 'permissionUpdate', 'uses' => 'Authentication_Controller@postUpdatePermission'));
-
         //POST AddUser
-//        Route::post('addUser', array('as' => 'add-user-post', 'uses' => 'Authentication_Controller@postAddUser'));
+        Route::post('addUser', array('as' => 'add-user-post', 'uses' => 'Authentication_Controller@postAddUser'));
     });
 //GET AddUser
-//Route::get('addUser', array('as' => 'add-user', 'uses' => 'Authentication_Controller@getAddUser'));
+
 //GET change password
-    Route::get('changePassword', array('as' => 'account-change-password', 'uses' => 'Authentication_Controller@getChangePassword'));
+Route::get('changePassword', array('as' => 'account-change-password', 'uses' => 'Authentication_Controller@getChangePassword'));
 
 });
-Route::post('addUser', array('as' => 'add-user-post', 'uses' => 'Authentication_Controller@postAddUser'));
-Route::get('addUser', array('as' => 'add-user', 'uses' => 'Authentication_Controller@getAddUser'));
+//Route::post('addUser', array('as' => 'add-user-post', 'uses' => 'Authentication_Controller@postAddUser'));
+//Route::get('addUser', array('as' => 'add-user', 'uses' => 'Authentication_Controller@getAddUser'));
+
+
 
 
 
@@ -95,7 +107,21 @@ Route::group(array('before' => 'guest'), function() {
     Route::get('forgotPassword', array('as' => 'forgotPassword','uses' => 'Authentication_Controller@getForgotPassword'));
     //GET Recover
     Route::get('recover/{code}', array('as' => 'forgot-password-recover', 'uses' => 'Authentication_Controller@getRecover'));
+    //GET AccessDenied
+    Route::get('accessDenied', array('as' => 'access-permission-denied', 'uses' => 'HomeController@getAccessPermissionDenied'));
+
 });
+
+Route::get('test',['middleware' => 'role', function()
+{
+    return 'this page is limited';
+}]);
+
+Route::get('welcomeee',['middleware' => 'role', function()
+{
+    return 'this page is limited';
+}]);;
+
 
 //---------------------------------------------------------------------Srinithy
 

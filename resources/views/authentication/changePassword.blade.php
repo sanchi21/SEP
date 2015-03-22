@@ -6,43 +6,69 @@
  */
  ?>
 {{--{!! Form::open(array('url' => 'account-change-password-post', 'method' => 'POST')) !!}--}}
+@extends('layout-forgotPassword')
 
+
+
+@section(('content'))
 
 {{--{!! Form::submit('Submit!') !!}--}}
+
 @if(Session::has('flash_message'))
     <div class="alert alert-danger">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         {!! Session::get('flash_message')!!}
     </div>
+    @elseif(Session::has('flash_message_success'))
+     <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {!! Session::get('flash_message_success')!!}
+    </div>
 @endif
 <form action="{{ URL::route('account-change-password-post') }}" method="post">
-    <div class="field">
-        Old password: <input type="password" name="old_password">
-        @if($errors->has('old_password'))
-            {!!$errors->first('old_password')!!}
-        @endif
-    </div>
-    <div class="field">
-        New password: <input type="password" name="password">
-        @if($errors->has('password'))
-            {!!$errors->first('password')!!}
-        @endif
-    </div>
-    <div class="field">
-        New password again: <input type="password" name="password_again">
-         @if($errors->has('password_again'))
-            {!!$errors->first('password_again')!!}
-         @endif
-    </div>
-    <input type="submit" value="Change password">
+<table >
+<tr>
+    <td> Old password:</td>
+    <td>
+     <input type="password" name="old_password" class="form-control"><br>
+
+    </td>
+    <td>
+     @if($errors->has('old_password'))
+                       <p style="color: red"> <span class="glyphicon glyphicon-remove"></span> {!!$errors->first('old_password')!!}</p>
+                    @endif
+    </td>
+</tr>
+<tr>
+<td>  New password: </td>
+<td>
+<input type="password" name="password" class="form-control"><br>
+
+            </td>
+            <td>
+            @if($errors->has('password'))
+                            <p style="color: red">  <span class="glyphicon glyphicon-remove"></span> {!!$errors->first('password')!!}</p>
+                        @endif
+            </td>
+</tr>
+<tr>
+<td>New password again: </td>
+<td><input type="password" name="password_again" class="form-control"><br>
+
+             </td>
+             <td>@if($errors->has('password_again'))
+                                <p style="color: red">  <span class="glyphicon glyphicon-remove"></span> {!!$errors->first('password_again')!!}</p>
+                              @endif</td>
+</tr>
+<tr>
+<td></td>
+<td>
+<input type="submit" value="Change password" class="btn btn-info">
+</td>
+</tr>
+</table>
+
+
     {!! Form::token() !!}
 </form>
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+@endsection

@@ -32,5 +32,21 @@ class HomeController extends Controller {
 	{
 		return view('home');
 	}
+    public function getHomeAdminFull()
+    {
+        return view('home');
+    }
+    public function getHomeProjectManager()
+    {
+        return view('home-projectManager');
+    }
+    public function getHomeAdminLimited()
+    {
+        return view('home-adminLimit');
+    }
+    public function getAccessPermissionDenied()
+    {
+        return view('authentication.accessPermissionDenied');
+    }
 
 }

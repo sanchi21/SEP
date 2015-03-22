@@ -53,8 +53,8 @@ class Authentication_Controller extends Controller {
                 $user->password = Hash::make($password);
                 if($user->save())
                 {
-                    \Session::flash('flash_message','your password has been changed');
-                    return Redirect::route('home');//->with('global','your password has been changed');
+                    \Session::flash('flash_message_success','your password has been changed');
+                    return Redirect::route('account-change-password');
                 }
             }
             \Session::flash('flash_message','Your old password is incorrect');
@@ -105,8 +105,8 @@ class Authentication_Controller extends Controller {
                         $message->to($user->email, $user->username)->subject('Your new password');
                     });
 
-
-                    return Redirect::route('home')->with('global','we have sent you a new password');
+                    \Session::flash('flash_message_success','we have sent you a new password, please change the password');
+                    return Redirect::route('account-login');
                 }
             }
         }
@@ -170,17 +170,27 @@ class Authentication_Controller extends Controller {
             if ($auth) {
 
                 // validation successful!
-                // redirect them to the secure section or whatever
-                // return Redirect::to('secure');
-                // redirect to intended page;
                 //return Redirect::intended('/');
-                echo 'success';
+                if(Auth::user()->permissions=='Administrator Full')
+                {
+                    return Redirect::route('home-admin-full');
+                }
+                elseif(Auth::user()->permissions=='Administrator Limit')
+                {
+                    return Redirect::route('home-admin-limited');
+                }
+                elseif(Auth::user()->permissions=='Project Manager')
+                {
+                    return Redirect::route('home-project-manager');
+                }
+
 
             } else {
 
                 // validation not successful, send back to form
                 \Session::flash('flash_message','No record match or account is not activated');
-                return Redirect::route('account-login');
+//                return Redirect::route('account-login');
+                return Redirect::intended('/');
 
             }
 
@@ -193,21 +203,22 @@ class Authentication_Controller extends Controller {
     public function postAddUser()
     {
 
+            $newUsername = Input::get('activeUserNames');
+            $permissions = Input::get('sltPermissions');
 
-        $validator = validator::make(Input::all(),
-            array(
-                'username' => 'required|max:20|unique:system_users' //check if already exist
-            )
-        );
-        if ($validator->fails())
-        {
-            return Redirect::route('add-user')->withErrors($validator);
+        $system_users =  User::where('username','=',$newUsername);
+        $count = ($system_users->count());
+
+        if($count == 1){
+            \Session::flash('flash_message','User already exists');
+            return Redirect::route('add-user');
         }
         else
         {
-            $newUsername = Input::get('username');
-            $permissions = Input::get('sltPermissions');
-            $active_users = active_users::where('username','=',$newUsername);
+
+
+
+        $active_users = active_users::where('username','=',$newUsername);
 
             if($active_users->count()) {
                 $active_user = $active_users->first(); //picking first record for the above condition in active user table
@@ -224,7 +235,8 @@ class Authentication_Controller extends Controller {
                         'code' => $code,
                         'active' => 0,
                         'email' => $active_user_email,
-                        'role_id' => 1
+                        'role_id' => 1,
+                        'permissions' => $permissions
                     )
                 );
 
@@ -237,16 +249,9 @@ class Authentication_Controller extends Controller {
                         $message->to($user->email, $user->username)->subject('Your new password');
                     });
 
-//
-//                    if($user)
-//                {
-//                    //send email
-//                    Mail::send('emails.userActivation', array('link' => URL::route('activate', $code), 'username' => $newUsername), function($message) use ($user) {
-//                        $message->to($user->email, $user->username)->subject('Activate your account');
-//
-//                    });
 
-                    return Redirect::route('home')->with('global','account created,email send');
+                    \Session::flash('flash_message_success','User is connected with this system');
+                    return Redirect::route('add-user');
                 }
                 else
                 {
@@ -259,7 +264,8 @@ class Authentication_Controller extends Controller {
             }
             else
             {
-                echo 'username not exist';
+                \Session::flash('flash_message','User is not registered in zone24');
+                return Redirect::route('add-user');
             }
 
 
@@ -279,10 +285,20 @@ class Authentication_Controller extends Controller {
     }
     public function getAddUser()
     {
+//        $system_users= User::all();
+//        $active_users= active_users::all();
+//        if (Auth::user() && Auth::user()->role_id ==0 )
+//        {
+//
+//            return view('authentication.addUsers')->with('systemUsers',$system_users);
+//        }
+//            return view('authentication.login');
+
+//
         $system_users= User::all();
         $active_users= active_users::all();
 
-        return view('authentication.addUsers')->with('systemUsers',$system_users);
+        return view('authentication.addUsers')->with('systemUsers',$system_users)->with('activeUsers',$active_users);
 
     }
 
@@ -324,8 +340,9 @@ class Authentication_Controller extends Controller {
 
     public function getSignOut()
     {
+
         Auth::logout();
-        return Redirect::route('home');
+        return Redirect::route('account-login');
     }
 
     public function postDelete()
@@ -336,7 +353,11 @@ class Authentication_Controller extends Controller {
         $user = new User();
 //        $status = User::deleteMake($id);
         $user = User::find($id);
-       $user->delete();
+        $user->delete();
+
+        \Session::flash('flash_message_success','User removed from our system');
+        return Redirect::route('add-user');
+
 
 
     }
@@ -351,11 +372,13 @@ class Authentication_Controller extends Controller {
         $user->permissions = $permission;
 
         if ($user->save()) {
-            echo 'successfully changed';
+            \Session::flash('flash_message_success','User permission changed successfully');
+            return Redirect::route('add-user');
         }
         else
         {
-            echo 'failed';
+            \Session::flash('flash_message','User permission  changed failed');
+            return Redirect::route('add-user');
         }
     }
 
@@ -378,7 +401,7 @@ class Authentication_Controller extends Controller {
         $user->active = $active;
 
         if ($user->save()) {
-            \Session::flash('flash_message','Account status changed successfully');
+            \Session::flash('flash_message_success','Account status changed successfully');
             return Redirect::route('add-user');
         }
         else
@@ -386,11 +409,28 @@ class Authentication_Controller extends Controller {
             \Session::flash('flash_message','Account status changed failed');
             return Redirect::route('add-user');
         }
+
     }
+//    ublic function systemUsers()
+//    {
+//        $term      = Input::get('term');
+//        $users = array();
+//
+//        $search = DB::select("
+//	select username
+//	from system_users
+//	where match(username) against ('+{$term}*' IN BOOLEAN MODE)
+//	");
+//
+//        foreach ($search as $result) {
+//            $users[] = $result;
+//
+//        }
+//
+//        return json_encode($users);
+//    }
 
-
-
-
+//
 
 
 

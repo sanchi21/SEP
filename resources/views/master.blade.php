@@ -2,16 +2,26 @@
 <head>
     <title>Home</title>
 
+{{--styles--}}
+ <link href="{{ asset('/includes/css/bootstrap.min.css') }}" rel="stylesheet">
+ <link href="{{ asset('/includes/css/custom-login.css') }}" rel="stylesheet">
 
 
-    <script type="text/javascript" src = "https://code.jquery.com/jquery.js"></script>
+ {{--styles--}}
+
+ {{--scritps--}}
+ <script src="{{ asset('/includes/js/jquery.min.js') }}"></script>
+ <script src="{{ asset('/includes/js/bootstrap.min.js') }}"></script>
+ {{--scritps--}}
+
+    {{--<script type="text/javascript" src = "https://code.jquery.com/jquery.js"></script>--}}
     {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">--}}
     {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>--}}
-    <script src="http://localhost:8080/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="http://localhost:8080/resources/views/ManageResource/FormChange.js"></script>
+    {{--<script src="http://localhost:8080/bootstrap/js/bootstrap.min.js"></script>--}}
+    <script type="text/javascript" src="{{ asset('/includes/js/FormChange.js') }}"></script>
 
 
-    <link href="http://localhost:8080/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    {{--<link href="http://localhost:8080/bootstrap/css/bootstrap.min.css" rel="stylesheet">--}}
 
 
     <link href="http://localhost:8080/resources/views/ManageResource/resource.css" rel="stylesheet">
@@ -23,7 +33,7 @@
         <li class="nav-item"><a href="http://localhost:8080/hardware">Hardware</a></li>
         <li class="nav-item"><a href="http://localhost:8080/software">Software</a></li>
         <li class="nav-item"><a href="http://localhost:8080/software-edit">Software Edit</a></li>
-        <li class="nav-item"><a href="">soflsdkfn</a></li>
+        <li class="nav-item"><a href=""></a></li>
   </ul>
 <input type="checkbox" id="nav-trigger" class="nav-trigger"/>
 
@@ -33,12 +43,19 @@
 <nav class="navbar navbar-default navbar-fixed-top" style="background-color: rgba(0, 155, 179, 0.9); opacity: 0.93">
   <div class="container-fluid">
     <div class="navbar-header">
-        <img src="http://localhost:8080/resources/views/images/zone_logo.png" style="width: 168px; height: 50.6px">
+        <img src="{{ asset('/includes/images/zone_logo.png') }}" style="width: 168px; height: 50.6px">
         <label for="nav-trigger"></label>
     </div>
-    <div class="container">
 
-    </div>
+    <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="color: #ffffff">{{ Auth::User()->username }} <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="{{ URL::route('sign-out') }}">Sign Out</a></li>
+
+              </ul>
+            </li>
+          </ul>
   </div>
 </nav>
 
