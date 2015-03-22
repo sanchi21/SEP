@@ -7,23 +7,30 @@
     <script type="text/javascript" src = "https://code.jquery.com/jquery.js"></script>
     {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">--}}
     {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>--}}
-    <script src="http://localhost:8080/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="http://localhost:8080/resources/views/ManageResource/FormChange.js"></script>
+    <script src="http://localhost:8080/includes/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="http://localhost:8080/includes/js/FormChange.js"></script>
 
 
-    <link href="http://localhost:8080/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://localhost:8080/includes/css/bootstrap.min.css" rel="stylesheet">
 
 
-    <link href="http://localhost:8080/resources/views/ManageResource/resource.css" rel="stylesheet">
+    <link href="http://localhost:8080/includes/css/resource.css" rel="stylesheet">
 
 </head>
 <body style="background-color: rgba(229, 228, 226, 0.5); height:100%; width: 100% " onload="init()">
 {{--f1f1f1--}}
 <ul class="navigation">
-        <li class="nav-item"><a href="http://localhost:8080/hardware">Hardware</a></li>
-        <li class="nav-item"><a href="http://localhost:8080/software">Software</a></li>
-        <li class="nav-item"><a href="http://localhost:8080/software-edit">Software Edit</a></li>
-        <li class="nav-item"><a href="">soflsdkfn</a></li>
+        <li class="nav-item"><a href="http://localhost:8080/"><img src="{{asset('/includes/images/icons/home.png')}}" alt="Home" style="width:20px;height:20px">&nbsp;&nbsp;Home</a></li>
+        <li class="nav-item"><a href="http://localhost:8080/"><img src="{{asset('/includes/images/icons/users.png')}}" alt="Manage Users" style="width:20px;height:20px">&nbsp;&nbsp;Manage Users</a></li>
+        <li class="nav-item"><a href="http://localhost:8080/"><img src="{{asset('/includes/images/icons/hardware.png')}}" alt="Hardware" style="width:20px;height:20px">&nbsp;&nbsp;Hardware</a></li>
+                <li class="nav-item"><a href="http://localhost:8080/hardware">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Hardware" style="width:18px;height:18px">&nbsp;&nbsp;New Hardware</a></li>
+                <li class="nav-item"><a href="http://localhost:8080/hardware-edit/All">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Edit Hardware</a></li>
+
+        <li class="nav-item"><a href="http://localhost:8080/"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Software</a></li>
+                <li class="nav-item"><a href="http://localhost:8080/software">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;New Software</a></li>
+                <li class="nav-item"><a href="http://localhost:8080/software-edit">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Edit Software</a></li>
+        <li class="nav-item"><a href="http://localhost:8080/software"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Options</a></li>
   </ul>
 <input type="checkbox" id="nav-trigger" class="nav-trigger"/>
 
@@ -74,6 +81,6 @@
 
 </div>
 
-
+{{--<script src="http://listjs.com/no-cdn/list.js"></script>--}}
 </body>
 </html>

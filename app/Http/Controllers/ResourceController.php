@@ -5,11 +5,13 @@ use App\Desktop_Laptop;
 use App\Dongle_SIM;
 use App\Hardware;
 use App\Http\Requests;
+use App\Monitor;
 use App\Resource;
 use App\Http\Controllers\Controller;
 use App\Server;
 use App\Virtual_Server;
 use DoctrineTest\InstantiatorTestAsset\SerializableArrayObjectAsset;
+use GuzzleHttp\Tests\Adapter\MockAdapterTest;
 use Illuminate\Support\Facades\DB;
 use App\Type;
 //use Illuminate\Http\Request;
@@ -217,8 +219,122 @@ class ResourceController extends Controller {
     public function editAll()
     {
         $hardwares = Hardware::paginate(30);
-        return view('ManageResource.editHardware',compact('hardwares'));
+        $types = Type::all();
+        $id = "All";
+        $column = 'inventory_code';
+
+        return view('ManageResource.editHardware',compact('hardwares','types','id','column'));
     }
 
+    public function edit($id)
+    {
+        $types = Type::all();
+        $column = "inventory_code";
+        if($id == 'All')
+            $hardwares = Hardware::paginate(30);
+        else
+        {
+            $hardwares = Hardware::where('type', $id)->paginate(30);
+        }
+
+        return view('ManageResource.editHardware',compact('hardwares','types','id','column'));
+    }
+
+
+    public function search()
+    {
+        $key = Input::get('search_t');
+        $type = Input::get('category_t');
+        $id = substr($type,15);
+        $ascend = Input::get('ascend');
+        $descend = Input::get('descend');
+        $column = Input::get('sort_t');
+
+        $types = Type::all();
+
+        if($ascend=='ascend')
+        {
+            if($id=='All')
+                $hardwares = DB::table('Hardware')->orderBy($column,'asc')->paginate(30);
+            else
+                $hardwares = DB::table('Hardware')->where('type',$id)->orderBy($column,'asc')->paginate(30);
+        }
+        elseif($descend=='descend')
+        {
+            if($id=='All')
+                $hardwares = DB::table('Hardware')->orderBy($column,'desc')->paginate(30);
+            else
+                $hardwares = DB::table('Hardware')->where('type',$id)->orderBy($column,'desc')->paginate(30);
+        }
+        else
+        {
+            $hardwares = Hardware::where('inventory_code', 'LIKE', '%' . $key . '%')->
+            orWhere(function ($query) use ($key) {
+                    $query->where('serial_no', 'LIKE', '%' . $key . '%');
+                })->
+            orWhere(function ($query) use ($key) {
+                    $query->where('description', 'LIKE', '%' . $key . '%');
+                })->
+            orWhere(function ($query) use ($key) {
+                    $query->where('ip_address', 'LIKE', '%' . $key . '%');
+                })->
+            orWhere(function ($query) use ($key) {
+                    $query->where('make', 'LIKE', '%' . $key . '%');
+                })->
+            orWhere(function ($query) use ($key) {
+                    $query->where('model', 'LIKE', '%' . $key . '%');
+                })->
+            orWhere(function ($query) use ($key) {
+                    $query->where('purchase_date', 'LIKE', '%' . $key . '%');
+                })->
+            orWhere(function ($query) use ($key) {
+                    $query->where('warranty_exp', 'LIKE', '%' . $key . '%');
+                })->
+            orWhere(function ($query) use ($key) {
+                    $query->where('insurance', 'LIKE', '%' . $key . '%');
+                })->
+            orWhere(function ($query) use ($key) {
+                    $query->where('value', 'LIKE', '%' . $key . '%');
+                })->
+            paginate(30);
+        }
+
+        return view('ManageResource.editHardware',compact('hardwares','types','id','column'));
+    }
+
+    public function editSpecific()
+    {
+        $inventory_code = Input::get('inventory_code_t');
+
+        $hardware = Hardware::find($inventory_code);
+        $type = $hardware->type;
+        $laptop = '';
+        $monitor = '';
+        $server = '';
+        $virtual_server = '';
+        $dongle = "";
+        $client_device = '';
+
+        if($type == "Desktop" || $type == "Laptop" || $type == "Server" || $type == "Virtual-Server")
+            $laptop = Desktop_Laptop::find($inventory_code);
+        if($type == "Monitor")
+            $monitor = Monitor::find($inventory_code);
+        if($type == "Server")
+            $server = Server::find($inventory_code);
+        if($type == "Virtual-Server")
+            $virtual_server = Virtual_Server::find($inventory_code);
+        if($type == "Dongle" || $type == "Sim")
+            $dongle = Dongle_SIM::find($inventory_code);
+        if($type == "Client-Device")
+            $client_device = Client_Device::find($inventory_code);
+
+        return view('ManageResource.editHardwareForm',compact('hardware','laptop','monitor','server','virtual_server','dongle','client_device','type'));
+    }
+
+    public function update()
+    {
+
+        return "";
+    }
 
 }

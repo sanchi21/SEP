@@ -22,7 +22,7 @@ class CreateSystemUsersTable extends Migration {
             $table->string('password_old', 60);
             $table->string('code', 60);
             $table->integer('active');
-            $table->integer('role_id');
+            $table->string('permissions',20);
             $table->rememberToken();
             $table->timestamps();
 		});
