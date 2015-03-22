@@ -102,11 +102,16 @@ Route::group(array('before' => 'guest'), function() {
 
 Route::get('hardwarereq','HardwareReqController@v');
 Route::get('hardwarereq','HardwareReqController@version');
-Route::post('hardwarereq','HardwareReqController@save');
-Route::get('ftpreq','FtpController@view');
+Route::post('hardwarereq', array('as' => 'requestRes','uses'=>'HardwareReqController@save'));
+//Route::post('hardwarereq', array('as' => 'DelRequest', 'uses' => 'HardwareReqController@DeleteRequest'));
+//Route::post('ftpreq', array('as' => 'DeleteRequestF', 'uses' => 'FtpController@DeleteRequestF'));
+//Route::post('hardwarereq','HardwareReqController@DeleteRequest');
 
+Route::get('ftpreq','FtpController@view');
 Route::post('ftpreq','FtpController@Ftp');
 Route::get('ftpreq','FtpController@FindU');
+Route::get('test','FtpController@getTest');
+
 
 
 //
