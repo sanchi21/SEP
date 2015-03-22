@@ -40,6 +40,13 @@ Route::post('updateScreen','AddResourcePortion@updateScreen');
 Route::post('addProvider','AddResourcePortion@addProvider');
 Route::post('updateProvider','AddResourcePortion@updateProvider');
 
+Route::post('addRam','AddResourcePortion@addRam');
+Route::post('updateRam','AddResourcePortion@updateRam');
+
+Route::post('addHardDisk','AddResourcePortion@addHardDisk');
+Route::post('updateHardDisk','AddResourcePortion@updateHardDisk');
+
+
 
 //--------------------------------------------------------------Abhay
 //Authenticated group

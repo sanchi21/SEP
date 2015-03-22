@@ -63,6 +63,8 @@
                                  </tr>
                             @endforeach
                             </table>
+
+                            <div> {!!$makes->render()!!}</div>
                   </div>
             </div>
 
@@ -74,8 +76,8 @@
                         <div class="panel-heading">Screen Size</div>
                           <div class="panel-body">
                                 {!! Form ::open(['method' => 'POST', 'action' => ['AddResourcePortion@addScreen']]) !!}
-                                <input type="text" name="provider_name" class="form-control input-sm" value="" style="width: 120px">
-                                <input type="submit" name="add_provider" class="btn btn-primary" value="Add&nbsp;">
+                                <input type="text" name="screen_size" class="form-control input-sm" value="" style="width: 120px">
+                                <input type="submit" name="addScreen" class="btn btn-primary" value="Add&nbsp;">
                                 {!! Form::close() !!}
 
 
@@ -84,7 +86,7 @@
                                          <tr>
                                              <td>
                                                  {!! Form ::open(['method' => 'POST', 'url' => 'updateScreen']) !!}
-                                                 <input type="text" name="providerName" class="form-control input-sm" value="{{$size->Screen_Size}}" style="width: 120px">&nbsp; <a class="btn btn-default" name="deleteScreen" href="delete/screen/{{$size->id}}">Delete</a>
+                                                 <input type="text" name="screenName" class="form-control input-sm" value="{{$size->Screen_Size}}" style="width: 120px">&nbsp; <a class="btn btn-default" name="deleteScreen" href="delete/screen/{{$size->id}}">Delete</a>
                                                  &nbsp; <input type="submit" name="updateScreen" value="Save">
                                                  <input type="hidden" name="screen_id" value="{{$size->id}}">
                                                  {!! Form::close() !!}
@@ -92,6 +94,8 @@
                                          </tr>
                                     @endforeach
                                     </table>
+
+                                    <div> {!!$sizes->render()!!}</div>
                           </div>
                     </div>
 
@@ -120,10 +124,72 @@
                                                  </tr>
                                             @endforeach
                                             </table>
+
+                                            <div> {!!$providers->render()!!}</div>
                                   </div>
                             </div>
 
                  </div>
+
+                 <div class="col-md-6">
+                             <div class="panel panel-default">
+                                 <div class="panel-heading">Ram Size</div>
+                                   <div class="panel-body">
+                                         {!! Form ::open(['method' => 'POST', 'action' => ['AddResourcePortion@addRam']]) !!}
+                                         <input type="text" name="ram_size" class="form-control input-sm" value="" style="width: 120px">
+                                         <input type="submit" name="addRam" class="btn btn-primary" value="Add&nbsp;">
+                                         {!! Form::close() !!}
+
+
+                                             <table class="table table-hover" id="ram">
+                                             @foreach($rams as $ram)
+                                                  <tr>
+                                                      <td>
+                                                          {!! Form ::open(['method' => 'POST', 'url' => 'updateRam']) !!}
+                                                          <input type="text" name="ramSize" class="form-control input-sm" value="{{$ram->Ram_Size}}" style="width: 120px">&nbsp; <a class="btn btn-default" name="deleteScreen" href="delete/ram/{{$ram->id}}">Delete</a>
+                                                          &nbsp; <input type="submit" name="updateRam" value="Save">
+                                                          <input type="hidden" name="ram_id" value="{{$ram->id}}">
+                                                          {!! Form::close() !!}
+                                                      </td>
+                                                  </tr>
+                                             @endforeach
+                                             </table>
+                                            <div> {!!$rams->render()!!}</div>
+                                   </div>
+                             </div>
+
+                           </div>
+
+
+                    <div class="col-md-6">
+                          <div class="panel panel-default">
+                                  <div class="panel-heading">Hard Disk Size</div>
+                                    <div class="panel-body">
+                                          {!! Form ::open(['method' => 'POST', 'action' => ['AddResourcePortion@addHardDisk']]) !!}
+                                          <input type="text" name="disk_size" class="form-control input-sm" value="" style="width: 120px">
+                                          <input type="submit" name="addDisk" class="btn btn-primary" value="Add&nbsp;">
+                                          {!! Form::close() !!}
+
+
+                                              <table class="table table-hover" id="HardDisk">
+                                              @foreach($disks as $disk)
+                                                   <tr>
+                                                       <td>
+                                                           {!! Form ::open(['method' => 'POST', 'url' => 'updateHardDisk']) !!}
+                                                           <input type="text" name="diskSize" class="form-control input-sm" value="{{$disk->Disk_Size}}" style="width: 120px">&nbsp; <a class="btn btn-default" name="deleteScreen" href="delete/disk/{{$disk->id}}">Delete</a>
+                                                            &nbsp; <input type="submit" name="updateDisk" value="Save">
+                                                           <input type="hidden" name="disk_id" value="{{$disk->id}}">
+                                                           {!! Form::close() !!}
+                                                       </td>
+                                                   </tr>
+                                              @endforeach
+                                              </table>
+                                             <div> {!!$disks->render()!!}</div>
+                                    </div>
+                              </div>
+
+                               </div>
+
 
 
 
