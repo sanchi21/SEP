@@ -2,6 +2,15 @@
 
 @section('content')
 
+<style>
+div.scroll {
+    /*background-color: #00FFFF;*/
+    /*width: 100px;*/
+    height: 300px;
+    overflow: scroll;
+}
+</style>
+
 <br>
 <br>
 <h2 style="color: #9A0000">Add Resource Portions</h2>
@@ -12,23 +21,42 @@
 <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">Operating Systems</div>
+            <div class="scroll">
               <div class="panel-body">
+
                     {!! Form ::open(['method' => 'POST', 'action' => ['AddResourcePortion@addOS']]) !!}
-                    <input type="text" name="os_name" class="form-control input-sm" value="" style="width: 120px">
-                    <input type="submit" name="add" class="btn btn-primary" value="Add&nbsp;">
+                    <div class="row">
+                        <div class="col-lg-9">
+                        <input type="text" name="os_name" class="form-control input-sm" value="" style="width: 300px">
+                        </div>
+                        <div class="col-lg-3">
+                        <input type="submit" name="add" class="btn btn-primary" value="Add&nbsp;">
+
+                        </div>
+                    </div>
+                    <span class="help-block alert-danger">{{ $errors->first('os_name') }}</span>
                     {!! Form::close() !!}
 
-
+                    <br>
                         <table class="table table-hover" id="operatingSystem">
                         @foreach($operatingSystems as $OS)
                              <tr>
                                  <td>
                                  {!! Form ::open(['method' => 'POST', 'url' => 'updateOS']) !!}
-                                 <input type="text" name="os_name" class="form-control input-sm" value="{{$OS->OS_Name}}" style="width: 120px">&nbsp;<a class="btn btn-default" name="deleteOS" href="delete/OS/{{$OS->id}}">Delete</a>
-                                 &nbsp; <input type="submit" name="updateOS" value="Save">
+                                 <input type="text" name="osName" class="form-control input-sm" value="{{$OS->OS_Name}}" style="width: 300px">
+                                 </td>
+                                 <td>
+                                 &nbsp;<a class="btn btn-default" name="deleteOS" href="delete/OS/{{$OS->id}}">Delete</a>
+                                  </td>
+                                  <td>
+                                 <input class="btn btn-default" type="submit" name="updateOS" value="Save">
+                                 </td>
                                  <input type="hidden" name="OS_id" value="{{$OS->id}}">
                                  {!! Form::close() !!}
-                                 </td>
+                                  @if ($errors->first('osName'))
+                                {{Session::flash('flash_message_error',$errors->first('osName'))}}
+                                 @endif
+
                              </tr>
                         @endforeach
                         </table>
@@ -37,36 +65,64 @@
 
               </div>
         </div>
+        </div>
 
     </div>
 
     <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">Make</div>
+                <div class="scroll">
                   <div class="panel-body">
+
                         {!! Form ::open(['method' => 'POST', 'action' => ['AddResourcePortion@addMake']]) !!}
-                        <input type="text" name="make_name" class="form-control input-sm" value="" style="width: 120px">
+                        <div class="row">
+                        <div class="col-lg-9">
+                        <input type="text" name="make_name" class="form-control input-sm" value="" style="width: 300px">
+                        </div>
+                        <div class="col-lg-3">
+
                         <input type="submit" name="add_make" class="btn btn-primary" value="Add&nbsp;">
+
+                        </div>
+                        </div>
+                        <span class="help-block alert-danger">{{ $errors->first('make_name') }}</span>
                         {!! Form::close() !!}
 
+                        <br>
 
-                            <table class="table table-hover" id="Make">
-                            @foreach($makes as $make)
-                                 <tr>
-                                     <td>
-                                         {!! Form ::open(['method' => 'POST', 'url' => 'updateMake']) !!}
-                                         <input type="text" name="make_name" class="form-control input-sm" value="{{$make->Make_Name}}" size="50px">&nbsp; <a class="btn btn-default" name="deleteMake" href="delete/make/{{$make->id}}">Delete</a>
-                                         &nbsp; <input type="submit" name="updateMake" value="Save">
-                                         <input type="hidden" name="make_id" value="{{$make->id}}">
-                                         {!! Form::close() !!}
+
+                        <table class="table table-hover" id="Make">
+                        @foreach($makes as $make)
+                             <tr>
+                                 <td>
+                                     {!! Form ::open(['method' => 'POST', 'url' => 'updateMake']) !!}
+                                     <input type="text" name="makeName" class="form-control input-sm" value="{{$make->Make_Name}}" size="50px">
                                      </td>
+                                     <td>
+                                     <a class="btn btn-default" name="deleteMake" href="delete/make/{{$make->id}}">Delete</a>
+                                     </td>
+                                     <td>
+                                     &nbsp; <input class="btn btn-default" type="submit" name="updateMake" value="Save">
+                                     </td>
+
+                                     <input class="hidden" name="make_id" value="{{$make->id}}">
+                                     {!! Form::close() !!}
+                                      @if ($errors->first('makeName'))
+                                     {{Session::flash('flash_message_error',$errors->first('makeName'))}}
+                                      @endif
+
+
                                  </tr>
                             @endforeach
                             </table>
 
-                            <div> {!!$makes->render()!!}</div>
+                            {{--<div> {!!$makes->render()!!}</div>--}}
+
+                  </div>
                   </div>
             </div>
+
 
         </div>
 
@@ -77,6 +133,7 @@
                           <div class="panel-body">
                                 {!! Form ::open(['method' => 'POST', 'action' => ['AddResourcePortion@addScreen']]) !!}
                                 <input type="text" name="screen_size" class="form-control input-sm" value="" style="width: 120px">
+                                <span class="help-block alert-danger">{{ $errors->first('screen_size') }}</span>
                                 <input type="submit" name="addScreen" class="btn btn-primary" value="Add&nbsp;">
                                 {!! Form::close() !!}
 
@@ -90,6 +147,9 @@
                                                  &nbsp; <input type="submit" name="updateScreen" value="Save">
                                                  <input type="hidden" name="screen_id" value="{{$size->id}}">
                                                  {!! Form::close() !!}
+                                                 @if ($errors->first('screenName'))
+                                                  {{Session::flash('flash_message_error',$errors->first('screenName'))}}
+                                                   @endif
                                              </td>
                                          </tr>
                                     @endforeach
@@ -107,6 +167,7 @@
                                   <div class="panel-body">
                                         {!! Form ::open(['method' => 'POST', 'action' => ['AddResourcePortion@addProvider']]) !!}
                                         <input type="text" name="provider_name" class="form-control input-sm" value="" style="width: 120px">
+                                        <span class="help-block alert-danger">{{ $errors->first('provider_name') }}</span>
                                         <input type="submit" name="add_provider" class="btn btn-primary" value="Add&nbsp;">
                                         {!! Form::close() !!}
 
@@ -120,6 +181,9 @@
                                                          &nbsp; <input type="submit" name="updateProvider" value="Save">
                                                          <input type="hidden" name="provider_id" value="{{$provider->id}}">
                                                          {!! Form::close() !!}
+                                                          @if ($errors->first('ProviderName'))
+                                                         {{Session::flash('flash_message_error',$errors->first('ProviderName'))}}
+                                                        @endif
                                                      </td>
                                                  </tr>
                                             @endforeach
@@ -137,6 +201,7 @@
                                    <div class="panel-body">
                                          {!! Form ::open(['method' => 'POST', 'action' => ['AddResourcePortion@addRam']]) !!}
                                          <input type="text" name="ram_size" class="form-control input-sm" value="" style="width: 120px">
+                                         <span class="help-block alert-danger">{{ $errors->first('ram_size') }}</span>
                                          <input type="submit" name="addRam" class="btn btn-primary" value="Add&nbsp;">
                                          {!! Form::close() !!}
 
@@ -150,6 +215,9 @@
                                                           &nbsp; <input type="submit" name="updateRam" value="Save">
                                                           <input type="hidden" name="ram_id" value="{{$ram->id}}">
                                                           {!! Form::close() !!}
+                                                          @if ($errors->first('ramSize'))
+                                                       {{Session::flash('flash_message_error',$errors->first('ramSize'))}}
+                                                      @endif
                                                       </td>
                                                   </tr>
                                              @endforeach

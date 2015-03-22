@@ -3,19 +3,14 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOperatingSystemsTable extends Migration {
+class CreateRamTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
 	public function up()
 	{
-		Schema::create('operating_systems', function(Blueprint $table)
+		Schema::create('rams', function(Blueprint $table)
 		{
             $table->increments('id');
-            $table->string('OS_Name','30');
+            $table->string('Ram_Size','10');
 		});
 	}
 
@@ -26,7 +21,7 @@ class CreateOperatingSystemsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('operating_systems');
+		Schema::drop('rams');
 	}
 
 }

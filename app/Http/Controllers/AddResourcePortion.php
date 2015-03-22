@@ -1,5 +1,15 @@
 <?php namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateMakeRequest;
+use App\Http\Requests\CreateOSRequest;
+use App\Http\Requests\CreateProviderRequest;
+use App\Http\Requests\CreateRamRequest;
+use App\Http\Requests\CreateScreenRequest;
+use App\Http\Requests\UpdateMakeRequest;
+use App\Http\Requests\updateOSRequest;
+use App\Http\Requests\UpdateProviderRequest;
+use App\Http\Requests\UpdateRamRequest;
+use App\Http\Requests\UpdateScreenRequest;
 use App\operating_system;
 use App\make;
 use App\ScreenSize;
@@ -16,8 +26,8 @@ class AddResourcePortion extends Controller {
 
 	public function index(){
 
-        $operatingSystems = operating_system::paginate(3);//operating_system::showAllOperatingSystems();
-        $makes = make::paginate(3);
+        $operatingSystems = operating_system::paginate(3);
+        $makes = make::get();
         $sizes = ScreenSize::paginate(3);
         $providers = ServiceProvider::paginate(3);
         $rams = RAM::paginate(3);
@@ -100,7 +110,8 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function addOS(){
+    public function addOS(CreateOSRequest $request){
+
 
 
         $status = true;
@@ -122,7 +133,7 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function updateOS(){
+    public function updateOS(updateOSRequest $request){
 
         $status = true;
         $input = Request::all();
@@ -130,9 +141,8 @@ class AddResourcePortion extends Controller {
 
         $os_id = $input['OS_id'];
         $operatingSystem = operating_system::find($os_id);
-        $sizes =
 
-        $operatingSystem->OS_Name = $input['os_name'];
+        $operatingSystem->OS_Name = $input['osName'];
         $status = $operatingSystem->save() ? true : false;
 
 
@@ -147,7 +157,7 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function addMake(){
+    public function addMake(CreateMakeRequest $request){
 
 
         $status = true;
@@ -169,7 +179,7 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function updateMake(){
+    public function updateMake(UpdateMakeRequest $request){
 
         $status = true;
         $input = Request::all();
@@ -178,7 +188,7 @@ class AddResourcePortion extends Controller {
         $make_id = $input['make_id'];
         $make = Make::find($make_id);
 
-        $make->Make_Name = $input['make_name'];
+        $make->Make_Name = $input['makeName'];
         $status = $make->save() ? true : false;
 
 
@@ -192,7 +202,7 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function addScreen(){
+    public function addScreen(CreateScreenRequest $request){
 
 
         $status = true;
@@ -216,7 +226,7 @@ class AddResourcePortion extends Controller {
 
 
 
-    public function updateScreen(){
+    public function updateScreen(UpdateScreenRequest $request){
 
         $status = true;
         $input = Request::all();
@@ -225,7 +235,7 @@ class AddResourcePortion extends Controller {
         $screen_id = $input['screen_id'];
         $screen = ScreenSize::find($screen_id);
 
-        $screen->Screen_Size = $input['screenName'];
+        $screen->Screen_Size = $input['screenSize'];
         $status = $screen->save() ? true : false;
 
 
@@ -239,7 +249,7 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function addProvider(){
+    public function addProvider(CreateProviderRequest $request){
 
 
         $status = true;
@@ -263,7 +273,7 @@ class AddResourcePortion extends Controller {
 
 
 
-    public function updateProvider(){
+    public function updateProvider(UpdateProviderRequest $request){
 
         $status = true;
         $input = Request::all();
@@ -286,7 +296,7 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function addRam(){
+    public function addRam(CreateRamRequest $request){
 
 
         $status = true;
@@ -308,7 +318,7 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function updateRam(){
+    public function updateRam(UpdateRamRequest $request){
 
         $status = true;
         $input = Request::all();

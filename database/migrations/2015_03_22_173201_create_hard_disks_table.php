@@ -3,19 +3,14 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateScreenSizesTable extends Migration {
-
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
+class CreateHardDisksTable extends Migration {
+    
 	public function up()
 	{
-		Schema::create('screen_sizes', function(Blueprint $table)
+		Schema::create('hard_disks', function(Blueprint $table)
 		{
             $table->increments('id');
-            $table->string('Screen_Size','20');
+            $table->string('Disk_Size','20');
 		});
 	}
 
@@ -26,7 +21,7 @@ class CreateScreenSizesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('screen_sizes');
+		Schema::drop('hard_disks');
 	}
 
 }
