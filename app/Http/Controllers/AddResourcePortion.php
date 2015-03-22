@@ -1,10 +1,12 @@
 <?php namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateDiskRequest;
 use App\Http\Requests\CreateMakeRequest;
 use App\Http\Requests\CreateOSRequest;
 use App\Http\Requests\CreateProviderRequest;
 use App\Http\Requests\CreateRamRequest;
 use App\Http\Requests\CreateScreenRequest;
+use App\Http\Requests\UpdateDiskRequest;
 use App\Http\Requests\UpdateMakeRequest;
 use App\Http\Requests\updateOSRequest;
 use App\Http\Requests\UpdateProviderRequest;
@@ -26,12 +28,12 @@ class AddResourcePortion extends Controller {
 
 	public function index(){
 
-        $operatingSystems = operating_system::paginate(3);
+        $operatingSystems = operating_system::get();
         $makes = make::get();
-        $sizes = ScreenSize::paginate(3);
-        $providers = ServiceProvider::paginate(3);
-        $rams = RAM::paginate(3);
-        $disks = HardDisk::paginate(3);
+        $sizes = ScreenSize::get();
+        $providers = ServiceProvider::get();
+        $rams = RAM::get();
+        $disks = HardDisk::get();
 
         return view('pages.addResourcePortion')->with('operatingSystems', $operatingSystems)
                                                 ->with('makes', $makes)
@@ -104,6 +106,18 @@ class AddResourcePortion extends Controller {
                 \Session::flash('flash_message', 'Ram Size deleted successfully!');
             else
                 \Session::flash('flash_message_error', 'Ram Size not deleted!');
+
+            return Redirect::action('AddResourcePortion@index');
+        }
+
+        elseif($type =='disk')
+        {
+            $status = HardDisk::deleteDiskSize($id);
+
+            if ($status)
+                \Session::flash('flash_message', 'Disk Size deleted successfully!');
+            else
+                \Session::flash('flash_message_error', 'Disk Size not deleted!');
 
             return Redirect::action('AddResourcePortion@index');
         }
@@ -341,7 +355,7 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function addHardDisk(){
+    public function addHardDisk(CreateDiskRequest $request){
 
 
         $status = true;
@@ -363,7 +377,7 @@ class AddResourcePortion extends Controller {
 
     }
 
-    public function updateHardDisk(){
+    public function updateHardDisk(UpdateDiskRequest $request){
 
         $status = true;
         $input = Request::all();
