@@ -16,8 +16,12 @@ Route::get('/', 'WelcomeController@index');
 Route::post('hardware','ResourceController@store');
 
 Route::get('hardware','ResourceController@index');
-Route::get('hardware-edit-all','ResourceController@editAll');
-Route::post('hardware-edit-all','ResourceController@updateAll');
+Route::get('hardware-edit/All','ResourceController@editAll');
+
+Route::post('hardware-edit/{id}','ResourceController@search'); //parthi search
+Route::get('hardware-edit/{id}','ResourceController@edit');
+Route::post('hardware-edit','ResourceController@editSpecific');
+
 Route::get('hardware/{id}','ResourceController@hardware');
 Route::get('software','SoftwareController@index');
 Route::post('software','SoftwareController@store');
