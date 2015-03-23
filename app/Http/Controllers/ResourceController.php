@@ -7,6 +7,13 @@ use App\Hardware;
 use App\Http\Requests;
 use App\Monitor;
 use App\Resource;
+use App\Operating_system;
+use App\HardDisk;
+use App\Make;
+use App\RAM;
+use App\ScreenSize;
+use App\ServiceProvider;
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Controller;
 use App\Server;
 use App\Virtual_Server;
@@ -15,6 +22,7 @@ use GuzzleHttp\Tests\Adapter\MockAdapterTest;
 use Illuminate\Support\Facades\DB;
 use App\Type;
 //use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Input;
 use Request;
 
@@ -23,16 +31,28 @@ class ResourceController extends Controller {
 	public function index()
     {
         $types = Type::all();
+        $os = Operating_system::all();
+        $hard_disk = HardDisk::all();
+        $make = Make::all();
+        $screen_size = ScreenSize::all();
+        $ram = RAM::all();
+        $service_provider = ServiceProvider::all();
         $id = "Office-Equipment";
         $key = Hardware::getInventoryCode($id);
-        return view ('ManageResource.addHardware',compact('types','id','key'));
+        return view ('ManageResource.addHardware',compact('types','id','key','os','hard_disk','make','screen_size','ram','service_provider'));
     }
 
     public function hardware($id)
     {
         $types = Type::all();
+        $os = Operating_system::all();
+        $hard_disk = HardDisk::all();
+        $make = Make::all();
+        $screen_size = ScreenSize::all();
+        $ram = RAM::all();
+        $service_provider = ServiceProvider::all();
         $key = Hardware::getInventoryCode($id);
-        return view ('ManageResource.addHardware',compact('types','id','key'));
+        return view ('ManageResource.addHardware',compact('types','id','key','os','hard_disk','make','screen_size','ram','service_provider'));
     }
 
     public function store()
@@ -85,7 +105,7 @@ class ResourceController extends Controller {
                 $noOfCore = $input['no_of_core_t'];
             }
         }
-        elseif($category == "Dongle" || $category == "SIM")
+        elseif($category == "Dongle" || $category == "Sim")
         {
             $phoneNo = $input['phone_number_t'];
             $serviceProvider = $input['service_provider_t'];
@@ -165,7 +185,7 @@ class ResourceController extends Controller {
                     }
                 }
 
-                if($category == "Dongle" || $category == "SIM")
+                if($category == "Dongle" || $category == "Sim")
                 {
                     $dongleSim = new Dongle_SIM();
                     $dongleSim->inventory_code = $inventoryCode[$i];
@@ -212,7 +232,7 @@ class ResourceController extends Controller {
         $types = Type::all();
         $id = "Office-Equipment";
         $key = Hardware::getInventoryCode($id);
-        return view ('ManageResource.addHardware',compact('types','id','key'));
+        return view ('ManageResource.addHardware',compact('types','id','key','os','hard_disk','make','screen_size','ram','service_provider'));
 
     }
 
@@ -220,6 +240,12 @@ class ResourceController extends Controller {
     {
         $hardwares = Hardware::paginate(30);
         $types = Type::all();
+        $os = Operating_system::all();
+        $hard_disk = HardDisk::all();
+        $make = Make::all();
+        $screen_size = ScreenSize::all();
+        $ram = RAM::all();
+        $service_provider = ServiceProvider::all();
         $id = "All";
         $column = 'inventory_code';
 
@@ -328,13 +354,173 @@ class ResourceController extends Controller {
         if($type == "Client-Device")
             $client_device = Client_Device::find($inventory_code);
 
-        return view('ManageResource.editHardwareForm',compact('hardware','laptop','monitor','server','virtual_server','dongle','client_device','type'));
+        $os = Operating_system::all();
+        $hard_disk = HardDisk::all();
+        $make = Make::all();
+        $screen_size = ScreenSize::all();
+        $ram = RAM::all();
+        $service_provider = ServiceProvider::all();
+
+        return view('ManageResource.editHardwareForm',compact('hardware','laptop','monitor','server','virtual_server',
+            'dongle','client_device','type','os','hard_disk','make','screen_size','ram','service_provider'));
     }
 
     public function update()
     {
+        $input = Request::all();
+        $status = true;
+        $delete = Input::get('delete');
+        $inventory_code = $input['inventory_code_t'];
+        $description = $input['description_t'];
+        $serial_no = $input['serial_no_t'];
+        $ip_address = $input['ip_address_t'];
+        $make = $input['make_t'];
+        $model = $input['model_t'];
+        $purchase_date = $input['purchase_date_t'];
+        $warranty_exp = $input['warranty_exp_t'];
+        $insurance = $input['insurance_t'];
+        $value = $input['value_t'];
+        $type = Input::get('type_t');
 
-        return "";
+        DB::beginTransaction();
+
+        $hardware = Hardware::find($inventory_code);
+        if ($delete!="Delete")
+        {
+            $hardware->description = $description;
+            $hardware->serial_no = $serial_no;
+            $hardware->ip_address = $ip_address;
+            $hardware->make = $make;
+            $hardware->model = $model;
+            $hardware->purchase_date = $purchase_date;
+            $hardware->warranty_exp = $warranty_exp;
+            $hardware->insurance = $insurance;
+            $hardware->value = $value;
+
+            $status = $hardware->save() ? true : false;
+
+
+            if ($type == "Monitor")
+            {
+                $monitor = Monitor::find($inventory_code);
+                $monitor->screen_size = $input['screen_size_t'];
+
+                if ($status)
+                    $status = $monitor->save() ? true : false;
+            }
+            elseif ($type == "Desktop" || $type == "Laptop" || $type == "Server" || $type == "Virtual-Server")
+            {
+                $laptop = Desktop_Laptop::find($inventory_code);
+                $laptop->CPU = $input['cpu_t'];
+                $laptop->RAM = $input['ram_t'];
+                $laptop->hard_disk = $input['hard_disk_t'];
+                $laptop->OS = $input['os_t'];
+
+                if ($status)
+                    $status = $laptop->save() ? true : false;
+
+                if ($type == "Server") {
+                    $server = Server::find($inventory_code);
+                    $server->classification = $input['classification_t'];
+                    $server->no_of_cpu = $input['no_of_cpu_t'];
+
+                    if ($status)
+                        $status = $server->save() ? true : false;
+                } elseif ($type == "Virtual-Server") {
+                    $virtual_server = Virtual_Server::find($inventory_code);
+                    $virtual_server->host_server = $input['host_server_t'];
+                    $virtual_server->no_of_cores = $input['no_of_cores_t'];
+
+                    if ($status)
+                        $status = $virtual_server->save() ? true : false;
+                }
+            }
+            elseif ($type == "Dongle" || $type == "Sim")
+            {
+                $dongle = Dongle_SIM::find($inventory_code);
+                $dongle->phone_no = $input['phone_no_t'];
+                $dongle->service_provider = $input['service_provider_t'];
+                $dongle->data_limit = $input['data_limit_t'];
+                $dongle->monthly_rental = $input['monthly_rental_t'];
+                $dongle->location = $input['location_t'];
+
+                if ($status)
+                    $status = $dongle->save() ? true : false;
+            }
+            elseif ($type == 'Client-Device')
+            {
+                $client = Client_Device::find($inventory_code);
+                $client->device_type = $input['device_type_t'];
+                $client->client_name = $input['client_name_t'];
+
+                if ($status)
+                    $status = $client->save() ? true : false;
+            }
+
+            if ($status) {
+                DB::commit();
+                \Session::flash('flash_message', 'Hardware updated successfully!');
+            } else {
+                DB::rollback();
+                \Session::flash('flash_message_error', 'Hardware update failed!');
+            }
+
+        }
+        else
+        {
+            if ($type == "Monitor") {
+                $monitor = Monitor::find($inventory_code);
+                if ($monitor->delete())
+                    $status = true;
+            } elseif ($type == "Desktop" || $type == "Laptop" || $type == "Server" || $type == "Virtual-Server") {
+                if ($type == "Server") {
+                    $server = Server::find($inventory_code);
+                    if ($server->delete())
+                        $status = true;
+                } elseif ($type == "Virtual-Server") {
+                    $virtual_server = Virtual_Server::find($inventory_code);
+                    if ($virtual_server->delete())
+                        $status = true;
+                }
+
+                $laptop = Desktop_Laptop::find($inventory_code);
+                if ($status)
+                    if ($laptop->delete())
+                        $status = true;
+
+            } elseif ($type == "Dongle" || $type == "Sim") {
+                $dongle = Dongle_SIM::find($inventory_code);
+                if ($status)
+                    $status = $dongle->delete() ? true : false;
+            } elseif ($type == "Client-Device") {
+                $client = Client_Device::find($inventory_code);
+                $status = $client->delete() ? true : false;
+
+                if ($status)
+                    $status = $client->save() ? true : false;
+            }
+
+            if ($status) {
+                if ($hardware->delete())
+                    if (Resource::find($inventory_code)->delete())
+                        $status = true;
+                    else
+                        $status = false;
+                else
+                    $status = false;
+            }
+            if ($status) {
+                DB::commit();
+                \Session::flash('flash_message_error', 'Hardware '.$inventory_code.' Deleted!');
+            } else {
+                DB::rollback();
+                \Session::flash('flash_message_error', 'Hardware deletion failed!');
+            }
+        }
+
+
+
+        return Redirect::action('ResourceController@editAll');
+
     }
-
 }

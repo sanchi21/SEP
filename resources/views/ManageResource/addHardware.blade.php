@@ -9,22 +9,25 @@
 </style>
 
 
-
-
 <h2 style="color: #9A0000">New Hardware Resource</h2>
 <br>
 
 {!! Form ::open(array('url' => 'hardware')) !!}
 
+         <div class="alert alert-danger" id="error_msg" style="display: none">
 
+         <label id="msg"></label>
+         </div>
 <div class="well">
     <div class="row">
         <div class="col-xs-4 col-md-2">
             {!!Form::label('category','Category ',['style'=>'font-size:20px'])!!}
         </div>
+
+
         <div class="col-xs-4 col-md-4">
 
-            <select id="category" name="category_t" class="form-control" style="width: 250px" onchange="javascript:location.href = this.value;">
+            <select id="category_t" name="category_t" class="form-control" style="width: 250px" onchange="javascript:location.href = this.value;">
     	        @foreach($types as $type)
     	       	    <option value='/hardware/{{$type->category}}' @if($id==$type->category) selected @endif>{{ $type->category }}</option>
     	        @endforeach
@@ -107,8 +110,8 @@
             @if($id=="Monitor")
                 <td>
                     <select style="width: 80px" id="screen_size_t" name="screen_size_t[]" class="form-control input-sm">
-                        @foreach($types as $type)
-                            <option value='{{$type->category}}'>{{ $type->category }}</option>
+                        @foreach($screen_size as $screen)
+                            <option value='{{$screen->OS_Name}}'>{{ $screen->OS_Name }}</option>
                         @endforeach
                     </select>
                 </td>
@@ -120,33 +123,34 @@
 
             @if($id == "Desktop" || $id == "Laptop" || $id == 'Server' || $id == 'Virtual-Server')
                 <td>
-                    <select id="cpu_t" name="cpu_t[]" class="form-control input-sm" style="width: 100px">
-                        @foreach($types as $type)
-                            <option value='{{$type->category}}'>{{ $type->category }}</option>
-                        @endforeach
-                    </select>
+                {!!Form::text('cpu_t[]','',['class'=>'form-control input-sm','style'=>'width:80px'])!!}
+                    {{--<select id="cpu_t" name="cpu_t[]" class="form-control input-sm" style="width: 100px">--}}
+                        {{--@foreach($types as $type)--}}
+                            {{--<option value='{{$type->category}}'>{{ $type->category }}</option>--}}
+                        {{--@endforeach--}}
+                    {{--</select>--}}
                 </td>
 
                 <td>
                     <select id="ram_t" name="ram_t[]" class="form-control input-sm" style="width: 130px">
-                        @foreach($types as $type)
-                            <option value='{{$type->category}}'>{{ $type->category }}</option>
+                        @foreach($ram as $rm)
+                            <option value='{{$rm->Ram_Size}}'>{{ $rm->Ram_Size }}</option>
                         @endforeach
                     </select>
                 </td>
 
                 <td>
                     <select id="hard_disk_t" name="hard_disk_t[]" class="form-control input-sm" style="width: 130px">
-                        @foreach($types as $type)
-                            <option value='{{$type->category}}'>{{ $type->category }}</option>
+                        @foreach($hard_disk as $hard)
+                            <option value='{{$hard->Disk_Size}}'>{{ $hard->Disk_Size }}</option>
                         @endforeach
                     </select>
                 </td>
 
                 <td>
                     <select id="os_t" name="os_t[]" class="form-control input-sm" style="width: 130px">
-                        @foreach($types as $type)
-                            <option value='{{$type->category}}'>{{ $type->category }}</option>
+                        @foreach($os as $operating)
+                            <option value='{{$operating->OS_Name}}'>{{ $operating->OS_Name }}</option>
                         @endforeach
                     </select>
                 </td>
@@ -183,7 +187,12 @@
                 {!!Form::text('phone_number_t[]','',['class'=>'form-control input-sm','style'=>'width:120px'])!!}
                 </td>
                 <td>
-                {!!Form::text('service_provider_t[]','',['class'=>'form-control input-sm','style'=>'width:120px'])!!}
+                {{--{!!Form::text('service_provider_t[]','',['class'=>'form-control input-sm','style'=>'width:120px'])!!}--}}
+                    <select id="service_provider_t" name="service_provider_t[]" class="form-control input-sm" style="width: 130px">
+                        @foreach($service_provider as $service)
+                            <option value='{{$service->Provider_Name}}'>{{ $service->Provider_Name }}</option>
+                        @endforeach
+                    </select>
                 </td>
 
                 <td>
@@ -217,8 +226,8 @@
 
             <td>
             <select id="make_t" name="make_t[]" class="form-control input-sm" style="width: 140px">
-                	        @foreach($types as $type)
-                	       	    <option value='{{$type->category}}'>{{ $type->category }}</option>
+                	        @foreach($make as $mk)
+                	       	    <option value='{{$mk->Make_Name}}'>{{ $mk->Make_Name }}</option>
                 	        @endforeach
             </select>
             </td>
@@ -253,7 +262,7 @@
 </div>
 <br>
 <div align="right">
-{!! Form::submit('Insert',['class' => 'btn btn-primary']) !!}
+{!! Form::submit('Insert',['class' => 'btn btn-primary','onclick'=>'javascript:return validation()']) !!}
 {{--{!! Form ::token()!!}--}}
 </div>
 <br>

@@ -49,7 +49,7 @@
                 </td>
 
                 <td>
-                    {!!Form::input('number','no_of_license_t[]',1,['class'=>'form-control input-sm', 'min'=>'1', 'max'=>'100'])!!}
+                    {!!Form::input('number','no_of_license_t[]',1,['class'=>'form-control input-sm', 'min'=>'1'])!!}
                 </td>
                 </tr>
             </tbody>

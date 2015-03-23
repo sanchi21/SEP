@@ -55,7 +55,7 @@
 
             <td>
                 {{--{!!Form::text('inventory_code_t','{{$software->no_of_license}}',['class'=>'rounded'])!!}--}}
-                <input type="number" name="no_of_license_t" class="rounded" value="{{$software->no_of_license}}" min="1" max="100" size="50px">
+                <input type="number" name="no_of_license_t" class="rounded" value="{{$software->no_of_license}}" min="1"  size="50px">
             </td>
         </tr>
 

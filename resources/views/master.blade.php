@@ -23,6 +23,7 @@
     {{--<script src="http://localhost:8080/includes/js/bootstrap.min.js"></script>--}}
 
     <script type="text/javascript" src="{{ asset('/includes/js/FormChange.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/includes/js/validate.js') }}"></script>
 
 
     {{--<link href="http://localhost:8080/includes/css/bootstrap.min.css" rel="stylesheet">--}}
@@ -31,17 +32,19 @@
     <link href="{{ asset('/includes/css/resource.css') }}" rel="stylesheet">
 
 </head>
+
+
 <body style="background-color: rgba(229, 228, 226, 0.5); height:100%; width: 100% " onload="init()">
 {{--f1f1f1--}}
 <ul class="navigation">
 @if(Auth::User()->permissions=="Administrator Full")
         <li class="nav-item"><a href=" {{ URL::route('forgotPassword') }}"><img src="{{asset('/includes/images/icons/home.png')}}" alt="Home" style="width:20px;height:20px">&nbsp;&nbsp;Home</a></li>
         <li class="nav-item"><a href=" {{ URL::route('add-user') }}"><img src="{{asset('/includes/images/icons/users.png')}}" alt="Manage Users" style="width:20px;height:20px">&nbsp;&nbsp;Manage Users</a></li>
-        <li class="nav-item"><img src="{{asset('/includes/images/icons/hardware.png')}}" alt="Hardware" style="width:20px;height:20px">&nbsp;&nbsp;Hardware</li>
+        <li class="nav-item"><a><img src="{{asset('/includes/images/icons/hardware.png')}}" alt="Hardware" style="width:20px;height:20px">&nbsp;&nbsp;Hardware</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('hardware') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Hardware" style="width:18px;height:18px">&nbsp;&nbsp;New Hardware</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('hardware-edit-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Edit Hardware</a></li>
 
-        <li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Software</li>
+        <li class="nav-item"><a><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Software</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('software-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;New Software</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('software-edit-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Edit Software</a></li>
         <li class="nav-item"><a href=" {{ URL::route('hardware-edit-get') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Options</a></li>
@@ -92,9 +95,9 @@
         @endif
        @yield('content')
       </div>
-      <script>
-        $('div.alert').delay(3000).slideUp(300);
-      </script>
+      {{--<script>--}}
+        {{--$('div.alert').delay(3000).slideUp(300);--}}
+      {{--</script>--}}
     </div>
 </div>
 

@@ -6,10 +6,15 @@
 
 <h2 style="color: #9A0000">Edit Software Resource</h2>
 
-{!! Form ::open(['method' => 'POST', 'action' => ['SoftwareController@update']]) !!}
+{!! Form ::open(['method' => 'POST', 'action' => ['ResourceController@update']]) !!}
+<div class="alert alert-danger" id="error_msg" style="display: none">
 
+         <label id="msg"></label>
+         </div>
+
+<br>
 <div class="panel-body">
-<h3>{{$type}}</h3>
+<h3>{{$type}}</h3><input type="hidden" name="type_t" id="type_t" value="{{$type}}">
 <br>
     <table class="table table-hover" id="hardwareTable">
         <tbody id="tableBody">
@@ -46,7 +51,7 @@
             </td>
 
             <td>
-                <input type="text" name="ip_address_t" class="form-control input-sm" value="{{$hardware->ip_address}}" style="width: 250px">
+                <input type="text" name="ip_address_t" id="ip_address_t" class="form-control input-sm" value="{{$hardware->ip_address}}" style="width: 250px">
             </td>
         </tr>
 
@@ -56,11 +61,11 @@
             </td>
 
             <td>
-               <select name="make_t">
-                <option>
-                123
-                </option>
-               </select>
+                <select id="make_t" name="make_t" class="form-control input-sm" style="width: 140px">
+                    @foreach($make as $mk)
+                        <option value='{{$mk->Make_Name}}' @if($hardware->make == $mk->Make_Name) selected @endif>{{ $mk->Make_Name }}</option>
+                    @endforeach
+                </select>
             </td>
 
             <td>
@@ -78,7 +83,7 @@
             </td>
 
             <td>
-                <input type="text" name="purchase_date_t" class="form-control input-sm" value="{{$hardware->purchase_date}}" style="width: 250px">
+                <input type="date" name="purchase_date_t" id="purchase_date_t" class="form-control input-sm" value="{{$hardware->purchase_date}}" style="width: 250px">
             </td>
 
             <td>
@@ -86,7 +91,7 @@
             </td>
 
             <td>
-                <input type="text" name="warranty_exp_t" class="form-control input-sm" value="{{$hardware->warranty_exp}}" style="width: 250px">
+                <input type="date" name="warranty_exp_t" id="warranty_exp_t" class="form-control input-sm" value="{{$hardware->warranty_exp}}" style="width: 250px">
             </td>
         </tr>
 
@@ -96,7 +101,7 @@
             </td>
 
             <td>
-                <input type="text" name="insurance_t" class="form-control input-sm" value="{{$hardware->insurance}}" style="width: 250px">
+                <input type="text" name="insurance_t" id="insurance_t" class="form-control input-sm" value="{{$hardware->insurance}}" style="width: 250px">
             </td>
 
             <td>
@@ -104,7 +109,7 @@
             </td>
 
             <td>
-                <input type="text" name="value_t" class="form-control input-sm" value="{{$hardware->value}}" style="width: 250px">
+                <input type="text" name="value_t" id="value_t" class="form-control input-sm" value="{{$hardware->value}}" style="width: 250px">
             </td>
         </tr>
 
@@ -135,7 +140,11 @@
             </td>
 
             <td>
-                <input type="text" name="ram_t" class="form-control input-sm" value="{{$laptop->RAM}}" style="width: 250px">
+                    <select id="ram_t" name="ram_t" class="form-control input-sm" style="width: 130px">
+                        @foreach($ram as $rm)
+                            <option value='{{$rm->Ram_Size}}' @if($laptop->RAM == $rm->Ram_Size) selected @endif>{{ $rm->Ram_Size }}</option>
+                        @endforeach
+                    </select>
             </td>
         </tr>
         <tr>
@@ -144,7 +153,11 @@
             </td>
 
             <td>
-            <input type="text" name="hard_disk_t" class="form-control input-sm" value="{{$laptop->hard_disk}}" style="width: 250px">
+                    <select id="hard_disk_t" name="hard_disk_t" class="form-control input-sm" style="width: 130px">
+                        @foreach($hard_disk as $hard)
+                            <option value='{{$hard->Disk_Size}}' @if($laptop->hard_disk == $hard->Disk_Size) selected @endif>{{ $hard->Disk_Size }}</option>
+                        @endforeach
+                    </select>
             </td>
 
             <td>
@@ -152,7 +165,11 @@
             </td>
 
             <td>
-                <input type="text" name="os_t" class="form-control input-sm" value="{{$laptop->OS}}" style="width: 250px">
+                    <select id="os_t" name="os_t" class="form-control input-sm" style="width: 130px">
+                        @foreach($os as $operating)
+                            <option value='{{$operating->OS_Name}}' @if($laptop->OS == $operating->OS_Name) selected @endif>{{ $operating->OS_Name }}</option>
+                        @endforeach
+                    </select>
             </td>
         </tr>
         @endif
@@ -206,7 +223,7 @@
             </td>
 
             <td>
-            <input type="text" name="phone_no_t" class="form-control input-sm" value="{{$dongle->phone_no}}" style="width: 250px">
+            <input type="text" name="phone_no_t" id="phone_no_t" class="form-control input-sm" value="{{$dongle->phone_no}}" style="width: 250px">
             </td>
 
             <td>
@@ -214,7 +231,11 @@
             </td>
 
             <td>
-                <input type="text" name="service_provider_t" class="form-control input-sm" value="{{$dongle->service_provider}}" style="width: 250px">
+                    <select id="service_provider_t" name="service_provider_t" class="form-control input-sm" style="width: 130px">
+                        @foreach($service_provider as $service)
+                            <option value='{{$service->Provider_Name}}' @if($dongle->service_provider == $service->Provider_Name) selected @endif>{{ $service->Provider_Name }}</option>
+                        @endforeach
+                    </select>
             </td>
             <td>
         </tr>
@@ -278,8 +299,8 @@
             </td>
 
             <td style="align-content: right">
-            <input type="submit" name="delete" class="btn btn-primary" value="Delete&nbsp;">&nbsp;&nbsp;
-            <input type="submit" name="update" class="btn btn-primary" value="Update">
+            <input type="submit" name="delete" class="btn btn-primary" value="Delete">&nbsp;&nbsp;
+            <input type="submit" name="update" class="btn btn-primary" value="Update" onclick="javascript:return validation2()">
             </td>
         </tr>
 

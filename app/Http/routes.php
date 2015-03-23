@@ -21,6 +21,7 @@ Route::get('hardware-edit/All',array('as'=>'hardware-edit-get','uses'=>'Resource
 Route::post('hardware-edit/{id}',array('as'=>'hardware-edit-post','uses'=>'ResourceController@search')); //parthi search
 Route::get('hardware-edit/{id}',array('as'=>'hardware-edit','uses'=>'ResourceController@edit'));
 Route::post('hardware-edit','ResourceController@editSpecific');
+Route::post('hardware-update','ResourceController@update');
 
 Route::get('hardware/{id}','ResourceController@hardware');
 Route::get('software',array('as'=>'software-get','uses'=>'SoftwareController@index'));

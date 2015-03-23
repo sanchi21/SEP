@@ -4,6 +4,7 @@
 @section('content')
 <h2 style="color: #9A0000">Hardware Resource</h2>
 <br>
+
 <div class="well">
 {!! Form ::open() !!}
 <table>
