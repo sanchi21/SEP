@@ -20,8 +20,8 @@ class HardwareReqController extends Controller {
         $pros=version::all();
         $types=Type::all();
         $sws= DB::table('software')->get();
-        //$user_id=Auth::user()->userID;
-        $user_id=1;
+        $user_id=Auth::user()->userID;
+        //$user_id=1;
         $id= requesth::where('user_id','=',$user_id)->get();
         $a = $id->first();
         $req_id = $a->request_id;
@@ -66,8 +66,8 @@ class HardwareReqController extends Controller {
           $end_date = $input['end_date'];
 
           $project_id = $input['project_id'];
-          //$user_id=Auth::user()->userID;
-          $user_id = 1;
+          $user_id=Auth::user()->userID;
+         // $user_id = 1;
           $request_status = 1;
 
           $item = $input['item'];

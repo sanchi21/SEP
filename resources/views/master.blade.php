@@ -6,6 +6,9 @@
  <link href="{{ asset('/includes/css/bootstrap.min.css') }}" rel="stylesheet">
  <link href="{{ asset('/includes/css/custom-login.css') }}" rel="stylesheet">
  <link href="{{ asset('/includes/css/bootstrap-multiselect.css') }}" rel="stylesheet">
+ <link href="{{ asset('/includes/css/bootstrapDatetimepicker.min.css') }}" rel="stylesheet">
+ <link href="{{ asset('/includes/css/resource.css') }}" rel="stylesheet">
+
 
 
  {{--styles--}}
@@ -14,40 +17,34 @@
  <script src="{{ asset('/includes/js/jquery.min.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrap.min.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrap-multiselect.js') }}"></script>
+ <script src="{{ asset('/includes/js/bootstrapDatetimepicker.min.js') }}"></script>
+ <script type="text/javascript" src="{{ asset('/includes/js/FormChange.js') }}"></script>
  {{--scritps--}}
 
 
-    {{--<script type="text/javascript" src = "https://code.jquery.com/jquery.js"></script>--}}
-    {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">--}}
-    {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>--}}
-    {{--<script src="http://localhost:8080/includes/js/bootstrap.min.js"></script>--}}
 
-    <script type="text/javascript" src="{{ asset('/includes/js/FormChange.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('/includes/js/validate.js') }}"></script>
 
 
     {{--<link href="http://localhost:8080/includes/css/bootstrap.min.css" rel="stylesheet">--}}
 
 
-    <link href="{{ asset('/includes/css/resource.css') }}" rel="stylesheet">
+
 
 </head>
-
-
 <body style="background-color: rgba(229, 228, 226, 0.5); height:100%; width: 100% " onload="init()">
 {{--f1f1f1--}}
 <ul class="navigation">
 @if(Auth::User()->permissions=="Administrator Full")
-        <li class="nav-item"><a href=" {{ URL::route('forgotPassword') }}"><img src="{{asset('/includes/images/icons/home.png')}}" alt="Home" style="width:20px;height:20px">&nbsp;&nbsp;Home</a></li>
+        <li class="nav-item"><a href=" {{ URL::route('home-admin-full') }}"><img src="{{asset('/includes/images/icons/home.png')}}" alt="Home" style="width:20px;height:20px">&nbsp;&nbsp;Home</a></li>
         <li class="nav-item"><a href=" {{ URL::route('add-user') }}"><img src="{{asset('/includes/images/icons/users.png')}}" alt="Manage Users" style="width:20px;height:20px">&nbsp;&nbsp;Manage Users</a></li>
-        <li class="nav-item"><a><img src="{{asset('/includes/images/icons/hardware.png')}}" alt="Hardware" style="width:20px;height:20px">&nbsp;&nbsp;Hardware</a></li>
+        <li class="nav-item"><img src="{{asset('/includes/images/icons/hardware.png')}}" alt="Hardware" style="width:20px;height:20px">&nbsp;&nbsp;Hardware</li>
                 <li class="nav-item"><a href=" {{ URL::route('hardware') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Hardware" style="width:18px;height:18px">&nbsp;&nbsp;New Hardware</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('hardware-edit-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Edit Hardware</a></li>
 
-        <li class="nav-item"><a><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Software</a></li>
+        <li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Software</li>
                 <li class="nav-item"><a href=" {{ URL::route('software-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;New Software</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('software-edit-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Edit Software</a></li>
-        <li class="nav-item"><a href=" {{ URL::route('hardware-edit-get') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Options</a></li>
+        <li class="nav-item"><a href=" {{ URL::route('addPortion') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Options</a></li>
 @else
         <li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Requests</li>
                 <li class="nav-item"><a href=" {{ URL::route('hardwarereq') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;Resources</a></li>
@@ -65,9 +62,16 @@
         <img src="{{ asset('/includes/images/zone_logo.png') }}" style="width: 168px; height: 50.6px">
         <label for="nav-trigger"></label>
     </div>
-    <div class="container">
-
-    </div>
+    <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" style="color: #ffffff">user role: {{Auth::User()->permissions}}</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> {{Auth::User()->username }} <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="{{ URL::route('account-change-password') }}">Change Password</a></li>
+                <li><a href="{{ URL::route('sign-out') }}">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
   </div>
 </nav>
 
@@ -95,9 +99,9 @@
         @endif
        @yield('content')
       </div>
-      {{--<script>--}}
-        {{--$('div.alert').delay(3000).slideUp(300);--}}
-      {{--</script>--}}
+      <script>
+        $('div.alert').delay(3000).slideUp(300);
+      </script>
     </div>
 </div>
 

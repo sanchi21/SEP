@@ -4,7 +4,7 @@
  * Date: 3/18/2015
  * Time: 8:07 AM
  */ ?>
- @extends('layout')
+ @extends('master')
  
  @section('content')
 <script type="text/javascript">
@@ -23,71 +23,18 @@
                     });
                 });
 </script>
+<ul class="nav nav-tabs" role="tablist" id="myTab">
 
-<H3 style="background-color: #95a5a6">Connect User</H3>
- <form action="{{ URL::route('add-user-post') }}" method="post">
- <div style="box-shadow: 5px 5px 5px #888888; border-style: groove; border-color: #e7e7e7">
-<br>
+  <li role="presentation" class="active"><a href="#ChangeUsers" aria-controls="ChangeUsers" role="tab" data-toggle="tab">User Settings</a></li>
+  <li role="presentation"><a href="#ViewUsers" aria-controls="ViewUsers" role="tab" data-toggle="tab">View Users</a></li>
+  <li role="presentation"><a href="#ConnectUser" aria-controls="ConnectUser" role="tab" data-toggle="tab">Connect User</a></li>
+</ul>
 
- <table style="width: 100%;">
- <tr>
-    <td >
-    Pick username
-    </td>
-     <td>
-     <select id="activeUserNames" name="activeUserNames">
-             @foreach($activeUsers as $activeUser)
-             <option>
-                {{ $activeUser->username }}
-             </option>
-             @endforeach
-    </select>
-    </td>
-    <td>
-    Set Permissions
-    </td>
-    <td>
-        <select name="sltPermissions" id="sltPermissions">
-            <option>Administrator Full</option>
-            <option>Administrator Limit</option>
-            <option>Project Manager</option>
-        </select>
-    </td>
-    <td>
-        {!! Form::token() !!}
-        <input type="submit" value="Connect User" class="btn btn-info" >
-        <br>
-    </td>
- </tr>
- <tr>
- <td colspan="5">
- <br>
-@if (Session::has('flash_message'))
-                <div class="alert alert-danger" role="alert" id="divAlert">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {{Session::get('flash_message') }}
-                </div>
-                @elseif(Session::has('flash_message_success'))
-                <div class="alert alert-success" role="alert" id="divAlert">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    {{Session::get('flash_message_success') }}
-                                </div>
-@endif</td>
+<div class="tab-content">
 
- </tr>
-
- </table>
- </div>
-
-
-
-
-
-
- </form>
-
-<H3 style="background-color: #95a5a6">Current Users</H3>
-    <table class="table table-hover">
+  <div role="tabpanel" class="tab-pane active" id="ChangeUsers">
+    <br>
+<table class="table table-hover">
 
        <tr style="background-color: #e7e7e7">
             <th>User ID</th>
@@ -172,4 +119,104 @@
     @endforeach
 
     </table>
+
+  </div>
+  <div role="tabpanel" class="tab-pane" id="ViewUsers">
+    <br>
+    <table class="table table-hover" style="width: 100%">
+      <tr style="background-color: #e7e7e7">
+          <th>User ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Permissions</th>
+          <th>User Created</th>
+          <th>User Updated</th>
+      </tr>
+
+       @foreach($systemUsers as $systemUser)
+      <tr>
+                  <td>{{ $systemUser->id }}</td>
+                  <td>{{ $systemUser->username }}</td>
+                  <td>{{ $systemUser->email }}</td>
+                  <td>{{ $systemUser->permissions }}</td>
+                  <td>{{ $systemUser->created_at }}</td>
+                  <td>{{ $systemUser->updated_at }}</td>
+      </tr>
+      @endforeach
+    </table>
+
+    </div>
+  <div role="tabpanel" class="tab-pane" id="ConnectUser">
+
+
+   <form action="{{ URL::route('add-user-post') }}" method="post">
+
+  <br>
+
+   <table style="width: 100%;">
+   <tr>
+      <td >
+      Pick username
+      </td>
+       <td>
+       <select id="activeUserNames" name="activeUserNames">
+               @foreach($activeUsers as $activeUser)
+               <option>
+                  {{ $activeUser->username }}
+               </option>
+               @endforeach
+      </select>
+      </td>
+      <td>
+      Set Permissions
+      </td>
+      <td>
+          <select name="sltPermissions" id="sltPermissions">
+              <option>Administrator Full</option>
+              <option>Administrator Limit</option>
+              <option>Project Manager</option>
+          </select>
+      </td>
+      <td>
+          {!! Form::token() !!}
+          <input type="submit" value="Connect User" class="btn btn-info" >
+
+      </td>
+   </tr>
+   <tr>
+   <td colspan="5" style="height: 200px">
+   <br>
+  @if (Session::has('flash_message'))
+                  <div class="alert alert-danger" role="alert" id="divAlert">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      {{Session::get('flash_message') }}
+                  </div>
+                  @elseif(Session::has('flash_message_success'))
+                  <div class="alert alert-success" role="alert" id="divAlert">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                      {{Session::get('flash_message_success') }}
+                                  </div>
+  @endif</td>
+
+   </tr>
+
+   </table>
+
+
+
+
+
+
+
+   </form>
+  </div>
+
+</div>
+
+<script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script>
+
 @endsection

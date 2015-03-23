@@ -1,5 +1,6 @@
 @extends('master')
 
 @section('content')
-Admin Page
+<h1>Automatic Resource Allocation</h1>
+
 @endsection

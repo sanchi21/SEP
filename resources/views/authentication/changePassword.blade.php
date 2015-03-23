@@ -6,7 +6,7 @@
  */
  ?>
 {{--{!! Form::open(array('url' => 'account-change-password-post', 'method' => 'POST')) !!}--}}
-@extends('layout-forgotPassword')
+@extends('layout-changePassword')
 
 
 
@@ -26,6 +26,15 @@
     </div>
 @endif
 <form action="{{ URL::route('account-change-password-post') }}" method="post">
+
+<table style="width: 100%">
+    <tr>
+    <td><h3>Change Password</h3></td>
+    <td style="text-align: right"><input type="button" class="btn btn-default" value="Back to Home" onclick="window.location.href='{{ URL::route('home-admin-full') }}'" /></td>
+    </tr>
+</table>
+
+<hr>
 <table >
 <tr>
     <td> Old password:</td>
@@ -35,7 +44,7 @@
     </td>
     <td>
      @if($errors->has('old_password'))
-                       <p style="color: red"> <span class="glyphicon glyphicon-remove"></span> {!!$errors->first('old_password')!!}</p>
+                       <p style="color: darkred; font-size: 14px"> <span class="glyphicon glyphicon-remove"></span> {!!$errors->first('old_password')!!}</p>
                     @endif
     </td>
 </tr>
@@ -47,7 +56,7 @@
             </td>
             <td>
             @if($errors->has('password'))
-                            <p style="color: red">  <span class="glyphicon glyphicon-remove"></span> {!!$errors->first('password')!!}</p>
+                            <p style="color: darkred; font-size: 14px">  <span class="glyphicon glyphicon-remove"></span> {!!$errors->first('password')!!}</p>
                         @endif
             </td>
 </tr>
@@ -57,7 +66,7 @@
 
              </td>
              <td>@if($errors->has('password_again'))
-                                <p style="color: red">  <span class="glyphicon glyphicon-remove"></span> {!!$errors->first('password_again')!!}</p>
+                                <p style="color: darkred; font-size: 14px">  <span class="glyphicon glyphicon-remove"></span> {!!$errors->first('password_again')!!}</p>
                               @endif</td>
 </tr>
 <tr>

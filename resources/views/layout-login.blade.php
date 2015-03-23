@@ -33,19 +33,26 @@
 
    <!-- Wrapper for slides -->
    <div class="carousel-inner" role="listbox">
-     <div class="item active">
-       <img src="{{ asset('/includes/images/background1.jpg') }}" alt="...">
+     <div class="item">
+       <img src="{{ asset('/includes/images/server_back1.jpg') }}" alt="...">
        <div class="carousel-caption">
-         ...
+            <h1>Customer Centric Innovation beyond technology boundaries</h1>
        </div>
      </div>
      <div class="item">
-       <img src="..." alt="...">
+       <img src="{{ asset('/includes/images/server_back2.jpg') }}" alt="...">
        <div class="carousel-caption">
-         ...
+         <h1>
+Secure Payment Solutions</h1>
        </div>
      </div>
-     ...
+     <div class="item active" >
+            <img src="{{ asset('/includes/images/server_back3.jpg') }}" alt="...">
+            <div class="carousel-caption">
+              <h1>A leader in Omnichannel retail innovation</h1>
+            </div>
+      </div>
+
    </div>
 
    <!-- Controls -->

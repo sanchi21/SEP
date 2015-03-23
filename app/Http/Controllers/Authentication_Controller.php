@@ -105,7 +105,7 @@ class Authentication_Controller extends Controller {
                         $message->to($user->email, $user->username)->subject('Your new password');
                     });
 
-                    \Session::flash('flash_message_success','we have sent you a new password, please change the password');
+                    \Session::flash('flash_message_success','We have sent you an email that you can use to change your password');
                     return Redirect::route('account-login');
                 }
             }
@@ -181,7 +181,7 @@ class Authentication_Controller extends Controller {
                 }
                 elseif(Auth::user()->permissions=='Project Manager')
                 {
-                    return Redirect::route('home-project-manager');
+                    return Redirect::route('hardwarereq');
                 }
 
 
@@ -189,8 +189,8 @@ class Authentication_Controller extends Controller {
 
                 // validation not successful, send back to form
                 \Session::flash('flash_message','No record match or account is not activated');
-//                return Redirect::route('account-login');
-                return Redirect::intended('/');
+                return Redirect::route('account-login');
+//                return Redirect::intended('/');
 
             }
 
@@ -249,7 +249,7 @@ class Authentication_Controller extends Controller {
                     });
 
 
-                    \Session::flash('flash_message_success','User is connected with this system');
+                    \Session::flash('flash_message','User is connected with this system');
                     return Redirect::route('add-user');
                 }
                 else
@@ -349,13 +349,19 @@ class Authentication_Controller extends Controller {
 //        DB::table('users')->where('votes', '<', 100)->delete();
 
         $id = Input::get('hiddenId');
-        $user = new User();
-//        $status = User::deleteMake($id);
-        $user = User::find($id);
-        $user->delete();
+        $currentUser = Auth::User()->username;
 
-        \Session::flash('flash_message_success','User removed from our system');
-        return Redirect::route('add-user');
+        $user = new User();
+
+
+            $user = User::find($id);
+
+
+            $user->delete();
+
+            \Session::flash('flash_message', 'User removed from our system');
+            return Redirect::route('add-user');
+        
 
 
 
@@ -371,7 +377,7 @@ class Authentication_Controller extends Controller {
         $user->permissions = $permission;
 
         if ($user->save()) {
-            \Session::flash('flash_message_success','User permission changed successfully');
+            \Session::flash('flash_message','User permission changed successfully');
             return Redirect::route('add-user');
         }
         else
@@ -400,7 +406,7 @@ class Authentication_Controller extends Controller {
         $user->active = $active;
 
         if ($user->save()) {
-            \Session::flash('flash_message_success','Account status changed successfully');
+            \Session::flash('flash_message','Account status changed successfully');
             return Redirect::route('add-user');
         }
         else

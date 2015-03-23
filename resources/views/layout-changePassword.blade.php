@@ -28,8 +28,19 @@
 <nav class="navbar navbar-default navbar-fixed-top" style="background-color: rgba(0, 155, 179, 0.9); opacity: 0.93">
   <div class="container-fluid">
     <div class="navbar-header">
-         <img src="{{ asset('/includes/images/zone_logo.png') }}" style="width: 168px; height: 50.6px">
+        <img src="{{ asset('/includes/images/zone_logo.png') }}" style="width: 168px; height: 50.6px">
+        <label for="nav-trigger"></label>
     </div>
+    <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" style="color: #ffffff">user role: {{Auth::User()->permissions}}</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> {{Auth::User()->username }} <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="{{ URL::route('account-change-password') }}">Change Password</a></li>
+                <li><a href="{{ URL::route('sign-out') }}">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
   </div>
 </nav>
 
