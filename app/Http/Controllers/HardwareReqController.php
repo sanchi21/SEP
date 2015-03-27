@@ -20,8 +20,8 @@ class HardwareReqController extends Controller {
         $pros=version::all();
         $types=Type::all();
         $sws= DB::table('software')->get();
-        $user_id=Auth::user()->userID;
-        //$user_id=1;
+        //$user_id=Auth::user()->userID;
+        $user_id=8;
         $id= requesth::where('user_id','=',$user_id)->get();
         $a = $id->first();
         $req_id = $a->request_id;
@@ -66,8 +66,8 @@ class HardwareReqController extends Controller {
           $end_date = $input['end_date'];
 
           $project_id = $input['project_id'];
-          $user_id=Auth::user()->userID;
-         // $user_id = 1;
+          //$user_id=Auth::user()->userID;
+          $user_id = 8;
           $request_status = 1;
 
           $item = $input['item'];
@@ -131,14 +131,16 @@ class HardwareReqController extends Controller {
                   if (empty($start_date) || empty($end_date)) {
                       \Session::flash('flash_message', 'Date Fields Cannot Be Empty');
                       return redirect('hardwarereq');
-                  } elseif (strtotime($start_date) > strtotime($end_date)) {
+                  } elseif (strtotime($start_date) < strtotime($end_date)) {
                       \Session::flash('flash_message', 'Invalid Dates');
                       return redirect('hardwarereq');
+                  }
 
-                  } elseif (strtotime($start_date) < strtotime($date_today)) {
-                      \Session::flash('flash_message', 'Invalid Required From');
-                      return redirect('hardwarereq');
-                  } else {
+//                  } elseif (strtotime($start_date) < strtotime($date_today)) {
+//                      \Session::flash('flash_message', 'Invalid Required From');
+//                      return redirect('hardwarereq');
+//                  }
+                  else {
                       $max_requestID = requesth::max('request_id');
                       $new_reqID = $max_requestID + 1;
                       $init = new requesth;

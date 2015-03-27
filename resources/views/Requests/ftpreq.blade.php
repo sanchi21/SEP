@@ -2,6 +2,7 @@
 @extends('master')
 
  @section('content')
+ <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <script type="text/javascript">
                 $(document).ready(function() {
                     $('#user').multiselect({

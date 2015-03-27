@@ -19,6 +19,7 @@
  <script src="{{ asset('/includes/js/bootstrap-multiselect.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrapDatetimepicker.min.js') }}"></script>
  <script type="text/javascript" src="{{ asset('/includes/js/FormChange.js') }}"></script>
+ <script type="text/javascript" src="{{ asset('/includes/js/validate.js') }}"></script>
  {{--scritps--}}
 
 
