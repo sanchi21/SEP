@@ -19,6 +19,7 @@
  <script src="{{ asset('/includes/js/bootstrap-multiselect.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrapDatetimepicker.min.js') }}"></script>
  <script type="text/javascript" src="{{ asset('/includes/js/FormChange.js') }}"></script>
+ <script type="text/javascript" src="{{ asset('/includes/js/validate.js') }}"></script>
  {{--scritps--}}
 
 
@@ -63,7 +64,7 @@
         <label for="nav-trigger"></label>
     </div>
     <ul class="nav navbar-nav navbar-right">
-          <li><a href="#" style="color: #ffffff">user role: {{Auth::User()->permissions}}</a></li>
+          <li><a href="#" style="color: #ffffff">User Role : {{Auth::User()->permissions}}</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> {{Auth::User()->username }} <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
@@ -86,7 +87,7 @@
 <br>
 <br>
 <div id="content_main">
-    <div class="panel panel-default" style="width: 100%; overflow: auto">
+    <div class="panel panel-default" style="width: 100%; overflow: auto;">
       <div class="panel-body">
         @if(Session::has('flash_message'))
         <div class="alert alert-success">
@@ -99,9 +100,9 @@
         @endif
        @yield('content')
       </div>
-      <script>
-        $('div.alert').delay(3000).slideUp(300);
-      </script>
+      {{--<script>--}}
+        {{--$('div.alert').delay(3000).slideUp(300);--}}
+      {{--</script>--}}
     </div>
 </div>
 

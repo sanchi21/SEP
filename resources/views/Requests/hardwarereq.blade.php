@@ -8,6 +8,7 @@
    {{--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>--}}
    {{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>--}}
 
+
   <script>
        $(document).ready(function(){
            $("button").click(function(){
@@ -17,13 +18,13 @@
        });
        </script>
 
-      <div >
-        @if(Session::has('flash_message'))
-         <div class="alert alert-info">
-         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-         {{Session::get('flash_message')}}</div>
-        @endif
-       </div>
+      {{--<div >--}}
+        {{--@if(Session::has('flash_message'))--}}
+         {{--<div class="alert alert-info">--}}
+         {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>--}}
+         {{--{{Session::get('flash_message')}}</div>--}}
+        {{--@endif--}}
+       {{--</div>--}}
 
 <form action="{{ URL::route('requestRes') }}" method="post">
     <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">
@@ -88,11 +89,12 @@
 
     <h4>Hardware</h4>
     <table class="table table-hover" style="width: 10%">
-    <td> <input type="button" value="+"  class="btn btn-info  form-control" onClick="addRow('dataTable')" /></td>
-    <td> <input type="button" value="-" class="btn btn-info  form-control"  onClick="deleteRow('dataTable')" /></td>
+    <td> <input type="button" value="+"  class="btn btn-info  form-control" onClick="add_Row('dataTable')" /></td>
+    <td> <input type="button" value="-" class="btn btn-info  form-control"  onClick="delete_Row('dataTable')" /></td>
     </table>
 
     </p>
+
 
     <table id="dataTable" class="table table-hover" style="font-size: small;font-family: Arial" >
     <tbody>
@@ -104,7 +106,10 @@
   	<td>
   	<!-- get item values in to dropdown  -->
   	{!! Form::label('item','Item') !!}
+
+
   	  <select class="form-control" name="item[]">
+  	              <option>Select Type</option>
                   @foreach($types as $type)
                       <option>
                         {{$type->category}}
@@ -142,8 +147,8 @@
    <table class="table table-hover" style="width: 10%">
 
    <!--buttons for adding and removing table rows -->
-   <td> <input type="button" value="+"  class="btn btn-info  form-control" onClick="addRow('Table2')" /></td>
-   <td> <input type="button" value="-" class="btn btn-info  form-control"  onClick="deleteRow('Table2')" /></td>
+   <td> <input type="button" value="+"  class="btn btn-info  form-control" onClick="add_Row('Table2')" /></td>
+   <td> <input type="button" value="-" class="btn btn-info  form-control"  onClick="delete_Row('Table2')" /></td>
 
    </table>
    </p>
@@ -158,18 +163,19 @@
    <td>
       {!! Form::label('device_type','Device-Type') !!}
       <select class="form-control" name="device_type[]">
-          {{--@foreach($sws as $sw)--}}
-            {{--<option>--}}
-                {{--{{$sw->name}}--}}
-            {{--</option>--}}
-          {{--@endforeach--}}
-          <option>1</option>
+          <option>Select Device</option>
+          @foreach($sws as $sw)
+            <option>
+                {{$sw->name}}
+            </option>
+          @endforeach
+
+
       </select>
    </td>
    <td>
       {!! Form::label('model','No Of License') !!}
-      {!! Form::text('model[]',null,['class'=>'form-control','style'=>'height:33px']) !!}
-
+      <input type="number" name="model[]" min="0" style="height: 33px; width: 100%" />
    </td>
    <td>
       {!! Form::label('additional_information_sw','Additional_Information')!!}
@@ -238,7 +244,7 @@
 
 
    <script>
-   function addRow(tableID) {
+   function add_Row(tableID) {
    	var table = document.getElementById(tableID);
    	var rowCount = table.rows.length;
 
@@ -250,7 +256,7 @@
    		}
    		}
 
-   function deleteRow(tableID) {
+   function delete_Row(tableID) {
    	var table = document.getElementById(tableID);
    	var rowCount = table.rows.length;
    	for(var i=0; i<rowCount; i++) {

@@ -2,6 +2,7 @@
 @extends('master')
 
  @section('content')
+ <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <script type="text/javascript">
                 $(document).ready(function() {
                     $('#user').multiselect({
@@ -32,13 +33,13 @@
 
 {!! Form::open() !!}
 
-    <div >
-         @if(Session::has('flash_message'))
-          <div class="alert alert-info">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          {{Session::get('flash_message')}}</div>
-         @endif
-        </div>
+    {{--<div >--}}
+         {{--@if(Session::has('flash_message'))--}}
+          {{--<div class="alert alert-info">--}}
+          {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>--}}
+          {{--{{Session::get('flash_message')}}</div>--}}
+         {{--@endif--}}
+        {{--</div>--}}
 
 
 

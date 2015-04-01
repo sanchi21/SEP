@@ -10,8 +10,8 @@ function validation()
     var value = document.getElementsByName('value_t[]');
     var msg = document.getElementById("msg");
     var ipFormat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    var dateFormat = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-    var amount  = /^\d+(?:\.\d{0,2})$/;
+    var dateFormat = /^([0-9][0-9])\/([0-9][0-9])\/([0-9]{4})$/;
+    //var amount  = /^\d+(?:\.\d{0,2})$/;
     var phonenoFormat = /^\d{10}$/;
     msg.innerHTML = "";
 
@@ -53,7 +53,8 @@ function validation()
 
         if(insurance[i].value != "")
         {
-            if(!amount.test(insurance[i].value))
+            var amount = +insurance[i].value;
+            if(isNaN(amount))
             {
                 msg.innerHTML = "Invalid insurance amount!";
                 document.getElementById("error_msg").style.display = "block";
@@ -64,7 +65,8 @@ function validation()
 
         if(value[i].value != "")
         {
-            if(!amount.test(value[i].value))
+            var amount = +value[i].value;
+            if(isNaN(amount))
             {
                 msg.innerHTML = "Invalid value amount!";
                 document.getElementById("error_msg").style.display = "block";
@@ -103,7 +105,7 @@ function validation2()
     var msg = document.getElementById("msg");
     var ipFormat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     var dateFormat = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-    var amount  = /^\d+(?:\.\d{0,2})$/;
+    //var amount  = /^\d+(?:\.\d{0,2})$/;
     var phonenoFormat = /^\d{10}$/;
     msg.innerHTML = "";
 
@@ -143,7 +145,8 @@ function validation2()
 
         if(insurance.value != "")
         {
-            if(!amount.test(insurance.value))
+            var amount = +insurance.value;
+            if(isNaN(amount))
             {
                 msg.innerHTML = "Invalid insurance amount!";
                 document.getElementById("error_msg").style.display = "block";
@@ -154,7 +157,8 @@ function validation2()
 
         if(value.value != "")
         {
-            if(!amount.test(value.value))
+            var amount = +value.value;
+            if(isNaN(amount))
             {
                 msg.innerHTML = "Invalid value amount!";
                 document.getElementById("error_msg").style.display = "block";
