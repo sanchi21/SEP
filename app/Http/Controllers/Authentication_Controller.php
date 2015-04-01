@@ -349,11 +349,16 @@ class Authentication_Controller extends Controller {
 //        DB::table('users')->where('votes', '<', 100)->delete();
 
         $id = Input::get('hiddenId');
-        $currentUser = Auth::User()->username;
+        $currentUser = Auth::User()->id;
 
         $user = new User();
 
-
+            if($currentUser==$id)
+            {
+                \Session::flash('flash_message', 'Cannot delete current user');
+                return Redirect::route('add-user');
+            }
+        else {
             $user = User::find($id);
 
 
@@ -361,6 +366,7 @@ class Authentication_Controller extends Controller {
 
             \Session::flash('flash_message', 'User removed from our system');
             return Redirect::route('add-user');
+        }
         
 
 
