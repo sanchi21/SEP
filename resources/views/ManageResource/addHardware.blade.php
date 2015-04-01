@@ -109,7 +109,7 @@
                 <td>
                     <select style="width: 80px" id="screen_size_t" name="screen_size_t[]" class="form-control input-sm">
                         @foreach($screen_size as $screen)
-                            <option value='{{$screen->OS_Name}}'>{{ $screen->OS_Name }}</option>
+                            <option value='{{$screen->Screen_Size}}'>{{ $screen->Screen_Size }}</option>
                         @endforeach
                     </select>
                 </td>

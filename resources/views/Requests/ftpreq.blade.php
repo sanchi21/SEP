@@ -45,20 +45,26 @@
 
  <h3 style="color: maroon">Request For Account And Folder</h3></br>
 
- <select class="form-control" name="project_id" style="width: 25%">
-      @foreach($pros as $pro)
+    <table width="70%">
+    <tr>
+        <td width="20%"><h4>&nbsp;&nbsp;PR&nbsp;Code</h4></td>
+        <td>
+        <select class="form-control" name="project_id" style="width: 250px">
+        @foreach($pros as $pro)
              <option>
                  {{$pro->os_version}}
              </option>
-            @endforeach
-     </select>
-
+        @endforeach
+        </select>
+        </td>
+    </tr>
+    </table>
 </br>
 
- <table class="table table-hover" >
+ <table class="table table-hover" width="70%">
  <tbody>
  <td> <h4>Request for FTP Account</h4></td>
- <td style="width: 15%">{!! Form::submit('Send',['class'=>'btn btn-info form-control','name'=>'ftp']) !!}</td>
+ <td style="width: 15%">{!! Form::submit('Send',['class'=>'sbtn','name'=>'ftp']) !!}</td>
  </tbody>
  </table>
  </br>
@@ -78,13 +84,13 @@
      </select>
 
 </td>
-<td  style="width: 15%">{!! Form::submit('Send',['class'=>'btn btn-info form-control','name'=>'folder']) !!}</td>
+<td  style="width: 15%">{!! Form::submit('Send',['class'=>'sbtn','name'=>'folder']) !!}</td>
 </tr>
 </tbody>
 </table>
 
 <div class="form-group" style="width: 10%;margin-left: 0.25cm">
- {!! Form::button('View',['class'=>'btn btn-info form-control','name'=>'view']) !!}
+ {!! Form::button('View',['class'=>'sbtn','name'=>'view']) !!}
  </div>
 
  <table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial" >

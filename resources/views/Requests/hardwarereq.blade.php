@@ -25,73 +25,94 @@
          {{--{{Session::get('flash_message')}}</div>--}}
         {{--@endif--}}
        {{--</div>--}}
+<h2 style="color: #9A0000">Request</h2>
 
 <form action="{{ URL::route('requestRes') }}" method="post">
     <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">
-    <b><h3 style="color: darkred">Request</h3></b>
-    <table>
-    <!--Date pickers  -->
-    <td  style="font-size: small;font-family: Arial">
+    {{--<b><h3 style="color: darkred">Request</h3></b>--}}
 
-           <div id="datepicker_start" class="input-append">
-                <input type="text" id="start" name="start_date" data-format="MM-dd-yyyy" placeholder="Required From" style="height:30px">
-                <span class="add-on" style="height: 30px;">
-                    <i class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-                </span>
+
+
+<div class="well">
+    <div class="row">
+            <div class="col-xs-2 col-md-2" style="width: 150px">
+                <label style="font-size: 18px">Start Date</label>
             </div>
 
+            <div class="col-xs-2 col-md-2">
+            <div id="datepicker_start" class="input-append">
+                <input type="text" id="start" name="start_date" data-format="MM-dd-yyyy" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
+                <span class="add-on" style="height: 30px;">
+                <i class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                </span>
+            </div>
+            <script type="text/javascript">
+                    $(function() {
 
-    <script type="text/javascript">
-        $(function() {
+                        var nowDate = new Date();
+                        var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
+                       $('#datepicker_start').datetimepicker({
+                            pickTime: false,
+                            startDate: today
+                       });
+                    });
+                </script>
+            </div>
 
-            var nowDate = new Date();
-            var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
-           $('#datepicker_start').datetimepicker({
-                pickTime: false,
-                startDate: today
-           });
-        });
-    </script>
+            <div class="col-xs-2 col-md-2" style="width: 150px">
+                <label style="font-size: 18px;">End Date</label>
+            </div>
 
-    </td>
-    <td>
-    <div id="datepicker_end" class="input-append">
-                    <input type="text" id="start" name="end_date" data-format="MM-dd-yyyy" placeholder="Required Upto" style="height:30px">
+            <div class="col-xs-2 col-md-2">
+                <div id="datepicker_end" class="input-append">
+                    <input type="text" id="start" name="end_date" data-format="MM-dd-yyyy" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
                     <span class="add-on" style="height: 30px;">
-                        <i class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                    <i class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                     </span>
                 </div>
 
+                <script type="text/javascript">
+                            $(function() {
 
-        <script type="text/javascript">
-            $(function() {
+                                var nowDate = new Date();
+                                var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
+                               $('#datepicker_end').datetimepicker({
+                                    pickTime: false,
+                                    startDate: today
+                               });
+                            });
+                        </script>
+            </div>
 
-                var nowDate = new Date();
-                var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
-               $('#datepicker_end').datetimepicker({
-                    pickTime: false,
-                    startDate: today
-               });
-            });
-        </script>
-    </td>
-    <td style="font-size: small;font-family: Arial;width: 40%">
-    <select class="form-control" name="project_id" >
-      @foreach($pros as $pro)
+            <div class="col-xs-2 col-md-2" style="width: 150px">
+                <label style="font-size: 18px">PR Code</label>
+            </div>
+
+            <div class="col-xs-2 col-md-2" style="width: 250px">
+                <select class="form-control" name="project_id" >
+                      @foreach($pros as $pro)
                         <option>
-                            {{$pro->os_version}}
+                        {{$pro->os_version}}
                         </option>
-                       @endforeach
-    </select>
-    </td>
-    </table>
-    </br>
+                      @endforeach
+                    </select>
+            </div>
+    </div>
+</div>
 
-    <h4>Hardware</h4>
-    <table class="table table-hover" style="width: 10%">
-    <td> <input type="button" value="+"  class="btn btn-info  form-control" onClick="add_Row('dataTable')" /></td>
-    <td> <input type="button" value="-" class="btn btn-info  form-control"  onClick="delete_Row('dataTable')" /></td>
-    </table>
+    </br>
+<div class="well">
+    <div class="row">
+            <div class="col-xs-4 col-md-4">
+                <h3>Hardware</h3>
+            </div>
+
+        <div class="col-xs-2 col-md-2">
+            <h3><input type="button" value="+"  class="sbtn" style="width: 35px" onClick="add_Row('dataTable')" />&nbsp;
+            <input type="button" value="-" class="sbtn" style="width: 35px" onClick="delete_Row('dataTable')" /></h3>
+        </div>
+    </div>
+</div>
 
     </p>
 
@@ -101,6 +122,7 @@
     <tr>
   	<p>
   	<td >
+  	    <label>Select</label>
   		<input type='checkbox' />
   	</td>
   	<td>
@@ -141,23 +163,30 @@
   <!--hidden field to count rows  -->
    <input type="hidden" id = "test" name="test">
 
+<br>
+   {{--<p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">--}}
 
-   <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">
-   <h4>Software</h4>
-   <table class="table table-hover" style="width: 10%">
+   <div class="well">
+       <div class="row">
+               <div class="col-xs-4 col-md-4">
+                   <h3>Software</h3>
+               </div>
 
-   <!--buttons for adding and removing table rows -->
-   <td> <input type="button" value="+"  class="btn btn-info  form-control" onClick="add_Row('Table2')" /></td>
-   <td> <input type="button" value="-" class="btn btn-info  form-control"  onClick="delete_Row('Table2')" /></td>
+           <div class="col-xs-2 col-md-2">
+               <h3><input type="button" value="+"  class="sbtn" style="width: 35px" onClick="add_Row('Table2')" />&nbsp;
+               <input type="button" value="-" class="sbtn" style="width: 35px"  onClick="delete_Row('Table2')" /></h3>
+           </div>
+       </div>
+   </div>
 
-   </table>
-   </p>
+   {{--</p>--}}
 
-   <table id="Table2" class="table table-hover" style="font-size: small;font-family: Arial" >
+   <table id="Table2" class="table table-hover" style="font-size: 15px;">
    <tbody>
    <tr>
    <p>
-   <td >
+   <td>
+       <label>Select</label>
       <input type='checkbox' />
    </td>
    <td>
@@ -188,16 +217,17 @@
 
    <input type="hidden" id ="test1" name="test1">
 
-   <div class="form-group" style="width: 20%;margin-left: 0.25cm">
-
-     {!! Form::submit('Request',['class'=>'btn btn-info form-control','name'=>'request','onClick'=>'Both()']) !!}
+   {{--<div class="form-group" style="width: 20%;margin-left: 0.25cm">--}}
+        <div align="right">
+     {!! Form::submit('Request',['class'=>'sbtn','name'=>'request','onClick'=>'Both()']) !!}
+     </div>
      {!! Form::token() !!}
-   </div>
+   {{--</div>--}}
 
    </br>
 
    <div class="form-group" style="width: 10%;margin-left: 0.25cm">
-    {!! Form::button('View',['class'=>'btn btn-info form-control','name'=>'view']) !!}
+    {!! Form::button('View',['class'=>'sbtn','name'=>'view']) !!}
     </div>
 
     <table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial" >

@@ -41,7 +41,7 @@
             <th>Username</th>
             <th>Email</th>
 
-            <th>Permissions</th>
+            <th>Permissions</th><th></th>
              <th>Delete</th>
             <th>Status</th>
        </tr>
@@ -59,11 +59,12 @@
 
                                  <input type="hidden" value="{{$systemUser->id}}" name="hiddenId">
                                     {{--<input type="text" name="sltPermission">--}}
-                                   <td><select name="sltPermission" class="form-group" style="height: 32px">
-                                        <option>Administrator Full</option>
-                                        <option>Administrator Limit</option>
-                                        <option>Project Manager</option>
-                                    </select>
+                                   <td><select name="sltPermission" class="form-control" style="height: 32px">
+                                        <option @if($systemUser->permissions == "Administrator Full") selected @endif>Administrator Full</option>
+                                        <option @if($systemUser->permissions == "Administrator Limit") selected @endif>Administrator Limit</option>
+                                        <option @if($systemUser->permissions == "Project Manager") selected @endif>Project Manager</option>
+                                    </select></td>
+                                    <td>
                                    <button type="submit" class="btn btn-default" aria-label="Left Align">
                                       <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Update
                                     </button></td>
