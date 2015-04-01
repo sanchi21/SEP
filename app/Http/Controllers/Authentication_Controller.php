@@ -346,7 +346,7 @@ class Authentication_Controller extends Controller {
 
     public function postDelete()
     {
-//        DB::table('users')->where('votes', '<', 100)->delete();
+
 
         $id = Input::get('hiddenId');
         $currentUser = Auth::User()->id;
