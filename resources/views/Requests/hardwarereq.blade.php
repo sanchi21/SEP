@@ -109,6 +109,7 @@
 
 
   	  <select class="form-control" name="item[]">
+  	              <option>Select Type</option>
                   @foreach($types as $type)
                       <option>
                         {{$type->category}}
@@ -162,18 +163,19 @@
    <td>
       {!! Form::label('device_type','Device-Type') !!}
       <select class="form-control" name="device_type[]">
+          <option>Select Device</option>
           @foreach($sws as $sw)
             <option>
                 {{$sw->name}}
             </option>
           @endforeach
 
+
       </select>
    </td>
    <td>
       {!! Form::label('model','No Of License') !!}
-      {!! Form::text('model[]',null,['class'=>'form-control','style'=>'height:33px']) !!}
-
+      <input type="number" name="model[]" min="0" style="height: 33px; width: 100%" />
    </td>
    <td>
       {!! Form::label('additional_information_sw','Additional_Information')!!}
