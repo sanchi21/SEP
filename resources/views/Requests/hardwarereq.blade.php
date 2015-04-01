@@ -8,6 +8,7 @@
    {{--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>--}}
    {{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>--}}
 
+
   <script>
        $(document).ready(function(){
            $("button").click(function(){
@@ -17,13 +18,13 @@
        });
        </script>
 
-      <div >
-        @if(Session::has('flash_message'))
-         <div class="alert alert-info">
-         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-         {{Session::get('flash_message')}}</div>
-        @endif
-       </div>
+      {{--<div >--}}
+        {{--@if(Session::has('flash_message'))--}}
+         {{--<div class="alert alert-info">--}}
+         {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>--}}
+         {{--{{Session::get('flash_message')}}</div>--}}
+        {{--@endif--}}
+       {{--</div>--}}
 
 <form action="{{ URL::route('requestRes') }}" method="post">
     <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">
@@ -94,6 +95,7 @@
 
     </p>
 
+
     <table id="dataTable" class="table table-hover" style="font-size: small;font-family: Arial" >
     <tbody>
     <tr>
@@ -104,6 +106,8 @@
   	<td>
   	<!-- get item values in to dropdown  -->
   	{!! Form::label('item','Item') !!}
+
+
   	  <select class="form-control" name="item[]">
                   @foreach($types as $type)
                       <option>
@@ -250,7 +254,7 @@
    		}
    		}
 
-   function delet_eRow(tableID) {
+   function delete_Row(tableID) {
    	var table = document.getElementById(tableID);
    	var rowCount = table.rows.length;
    	for(var i=0; i<rowCount; i++) {

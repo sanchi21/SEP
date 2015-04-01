@@ -12,8 +12,7 @@ div.scroll {
 </style>
 
 <br>
-<br>
-<h2 style="color: #9A0000">Add Resource Portions</h2>
+<h2 style="color: #9A0000">Configure Options</h2>
 
 <br>
 <br>
@@ -68,7 +67,18 @@ div.scroll {
         </div>
 
     </div>
+<style>
+.panel-default {
+  border-color: #e7e7e7;
+}
 
+.panel-default>.panel-heading {
+            background-color: #e7e7e7;
+            border-bottom-color: #e7e7e7;
+            color: #000000;
+            font: bold;
+            font-size: 18px;
+       }</style>
     <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">Make</div>

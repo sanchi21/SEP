@@ -60,7 +60,7 @@
 <div class="span12" style="overflow:auto">
 
 <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
-    <tr id="headRow">
+    <tr id="headRow" style="background-color: #e7e7e7">
         <th>Inventory&nbsp;Code</th>
         <th>Category</th>
         <th>Description</th>
@@ -124,7 +124,7 @@
         </td>
 
         <td>
-        <input type="submit" name="edit" value="Edit" class="btn btn-primary" style="height: 30px; vertical-align: center">
+        <input type="submit" name="edit" value="Edit" class="btn btn-primary" style="height: 35px; vertical-align: center;width: 60px">
         </td>
     </tr>
     {!! Form ::close() !!}

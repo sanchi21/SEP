@@ -61,7 +61,8 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::get('hardware/{id}','ResourceController@hardware');
     Route::get('software',array('as'=>'software-get','uses'=>'SoftwareController@index'));
     Route::post('software','SoftwareController@store');
-    Route::post('software-edit','SoftwareController@update');
+    Route::post('software-edit/search','SoftwareController@search');
+    Route::post('software-edit/','SoftwareController@update');
     Route::get('software-edit',array('as'=>'software-edit-get','uses'=>'SoftwareController@edit'));
 
 

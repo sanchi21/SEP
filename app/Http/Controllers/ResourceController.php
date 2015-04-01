@@ -24,6 +24,7 @@ use App\Type;
 //use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Input;
+use PhpSpec\Exception\Exception;
 use Request;
 
 class ResourceController extends Controller {
@@ -124,115 +125,101 @@ class ResourceController extends Controller {
             $deviceType = $input['device_type_t'];
             $clientName = $input['client_name_t'];
         }
+            for ($i = 0; $i < $count; $i++) {
+                DB::beginTransaction();
 
-        for($i=0 ; $i<$count ; $i++)
-        {
-            DB::beginTransaction();
+                $resource = new Resource();
+                $hardware = new Hardware();
 
-            $resource = new Resource();
-            $hardware = new Hardware();
+                $status = true;
+                $resource->inventory_code = $inventoryCode[$i];
 
-            $status = true;
-            $resource->inventory_code = $inventoryCode[$i];
+                $hardware->inventory_code = $inventoryCode[$i];
+                $hardware->type = $category;
+                $hardware->description = $description[$i];
+                $hardware->serial_no = $serialNo[$i];
+                $hardware->ip_address = $ipAddress[$i];
+                $hardware->make = $make[$i];
+                $hardware->model = $model[$i];
+                if ($purchaseDate[$i] != '')
+                    $hardware->purchase_date = date("Y-m-d", strtotime($purchaseDate[$i]));
+                if ($warrantyExpDate[$i] != '')
+                    $hardware->warranty_exp = date("Y-m-d", strtotime($warrantyExpDate[$i]));
+                $hardware->insurance = $insurance[$i];
+                $hardware->value = $value[$i];
 
-            $hardware->inventory_code = $inventoryCode[$i];
-            $hardware->type = $category;
-            $hardware->description = $description[$i];
-            $hardware->serial_no = $serialNo[$i];
-            $hardware->ip_address = $ipAddress[$i];
-            $hardware->make = $make[$i];
-            $hardware->model = $model[$i];
-            if($purchaseDate[$i]!='')
-                $hardware->purchase_date = date("Y-m-d",strtotime($purchaseDate[$i]));
-            if($warrantyExpDate[$i]!='')
-                $hardware->warranty_exp = date("Y-m-d",strtotime($warrantyExpDate[$i]));
-            $hardware->insurance = $insurance[$i];
-            $hardware->value = $value[$i];
+                if ($resource->save()) {
+                    $status = $hardware->save() ? true : false;
 
-            if($resource->save()) {
-                $status = $hardware->save() ? true : false;
+                    if ($category == "Desktop" || $category == "Laptop" || $category == "Server" || $category == "Virtual-Server") {
+                        $desktop = new Desktop_Laptop();
+                        $desktop->inventory_code = $inventoryCode[$i];
+                        $desktop->CPU = $cpu[$i];
+                        $desktop->RAM = $ram[$i];
+                        $desktop->hard_disk = $hardDisk[$i];
+                        $desktop->OS = $os[$i];
 
-                if ($category == "Desktop" || $category == "Laptop" || $category == "Server" || $category == "Virtual-Server") {
-                    $desktop = new Desktop_Laptop();
-                    $desktop->inventory_code = $inventoryCode[$i];
-                    $desktop->CPU = $cpu[$i];
-                    $desktop->RAM = $ram[$i];
-                    $desktop->hard_disk = $hardDisk[$i];
-                    $desktop->OS = $os[$i];
+                        if ($status)
+                            $status = $desktop->save() ? true : false;
 
-                    if($status)
-                        $status = $desktop->save() ? true : false;
+                        if ($category == "Server") {
+                            $server = new Server();
+                            $server->inventory_code = $inventoryCode[$i];
+                            $server->classification = $serverClassification[$i];
+                            $server->no_of_cpu = $noOfCpu[$i];
 
-                    if ($category == "Server")
-                    {
-                        $server = new Server();
-                        $server->inventory_code = $inventoryCode[$i];
-                        $server->classification = $serverClassification[$i];
-                        $server->no_of_cpu = $noOfCpu[$i];
+                            if ($status)
+                                $status = $server->save() ? true : false;
+                        } elseif ($category == "Virtual_Server") {
+                            $virtualServer = new Virtual_Server();
+                            $virtualServer->inventorycode = $inventoryCode[$i];
+                            $virtualServer->no_of_cores = $noOfCore[$i];
+                            $virtualServer->host_server = $hostServer[$i];
 
-                        if($status)
-                            $status = $server->save() ? true : false;
+                            if ($status)
+                                $status = $virtualServer->save() ? true : false;
+                        }
                     }
-                    elseif ($category == "Virtual_Server")
-                    {
-                        $virtualServer = new Virtual_Server();
-                        $virtualServer->inventorycode = $inventoryCode[$i];
-                        $virtualServer->no_of_cores = $noOfCore[$i];
-                        $virtualServer->host_server = $hostServer[$i];
 
-                        if($status)
-                            $status = $virtualServer->save() ? true : false;
+                    if ($category == "Dongle" || $category == "Sim") {
+                        $dongleSim = new Dongle_SIM();
+                        $dongleSim->inventory_code = $inventoryCode[$i];
+                        $dongleSim->phone_no = $phoneNo[$i];
+                        $dongleSim->service_provider = $serviceProvider[$i];
+                        if ($category == "Dongle") {
+                            $dongleSim->data_limit = $dataLimit[$i];
+                            $dongleSim->monthly_rental = $monthlyRental[$i];
+                        } else {
+                            $dongleSim->location = $location[$i];
+                        }
+                        if ($status)
+                            $status = $dongleSim->save() ? true : false;
+                    } elseif ($category == "Client-Device") {
+                        $clientDevice = new Client_Device();
+                        $clientDevice->inventory_code = $inventoryCode[$i];
+                        $clientDevice->device_type = $deviceType[$i];
+                        $clientDevice->client_name = $clientName[$i];
+
+                        if ($status)
+                            $status = $clientDevice->save() ? true : false;
                     }
                 }
 
-                if($category == "Dongle" || $category == "Sim")
-                {
-                    $dongleSim = new Dongle_SIM();
-                    $dongleSim->inventory_code = $inventoryCode[$i];
-                    $dongleSim->phone_no = $phoneNo[$i];
-                    $dongleSim->service_provider = $serviceProvider[$i];
-                    if($category == "Dongle")
-                    {
-                        $dongleSim->data_limit = $dataLimit[$i];
-                        $dongleSim->monthly_rental = $monthlyRental[$i];
-                    }
-                    else
-                    {
-                        $dongleSim->location = $location[$i];
-                    }
-                    if($status)
-                        $status = $dongleSim->save() ? true : false;
-                }
-                elseif($category == "Client-Device")
-                {
-                    $clientDevice = new Client_Device();
-                    $clientDevice->inventory_code = $inventoryCode[$i];
-                    $clientDevice->device_type = $deviceType[$i];
-                    $clientDevice->client_name = $clientName[$i];
-
-                    if($status)
-                        $status = $clientDevice->save() ? true : false;
+                if ($status) {
+                    DB::commit();
+                } else {
+                    DB::rollback();
+                    break;
                 }
             }
 
-            if($status)
-            {
-                DB::commit();
-            }
-            else {
-                DB::rollback();
-                break;
-            }
-        }
 
         if($status)
-            \Session::flash('flash_message','('.$count.')new Resource(s) added successfully!');
+            \Session::flash('flash_message','Resource(s) added successfully!');
         else
             \Session::flash('flash_message_error','Resource(s) addition failed!');
-        $types = Type::all();
-        $id = "Office-Equipment";
-        $key = Hardware::getInventoryCode($id);
-        return view ('ManageResource.addHardware',compact('types','id','key','os','hard_disk','make','screen_size','ram','service_provider'));
+
+        return Redirect::action('ResourceController@index');
 
     }
 
@@ -382,11 +369,12 @@ class ResourceController extends Controller {
         $value = $input['value_t'];
         $type = Input::get('type_t');
 
-        DB::beginTransaction();
-
         $hardware = Hardware::find($inventory_code);
+
         if ($delete!="Delete")
         {
+            DB::beginTransaction();
+
             $hardware->description = $description;
             $hardware->serial_no = $serial_no;
             $hardware->ip_address = $ip_address;
@@ -459,7 +447,7 @@ class ResourceController extends Controller {
 
             if ($status) {
                 DB::commit();
-                \Session::flash('flash_message', 'Hardware updated successfully!');
+                \Session::flash('flash_message', 'Hardware '.$inventory_code.' updated successfully!');
             } else {
                 DB::rollback();
                 \Session::flash('flash_message_error', 'Hardware update failed!');
@@ -468,59 +456,66 @@ class ResourceController extends Controller {
         }
         else
         {
-            if ($type == "Monitor") {
-                $monitor = Monitor::find($inventory_code);
-                if ($monitor->delete())
-                    $status = true;
-            } elseif ($type == "Desktop" || $type == "Laptop" || $type == "Server" || $type == "Virtual-Server") {
-                if ($type == "Server") {
-                    $server = Server::find($inventory_code);
-                    if ($server->delete())
-                        $status = true;
-                } elseif ($type == "Virtual-Server") {
-                    $virtual_server = Virtual_Server::find($inventory_code);
-                    if ($virtual_server->delete())
-                        $status = true;
-                }
-
-                $laptop = Desktop_Laptop::find($inventory_code);
-                if ($status)
-                    if ($laptop->delete())
-                        $status = true;
-
-            } elseif ($type == "Dongle" || $type == "Sim") {
-                $dongle = Dongle_SIM::find($inventory_code);
-                if ($status)
-                    $status = $dongle->delete() ? true : false;
-            } elseif ($type == "Client-Device") {
-                $client = Client_Device::find($inventory_code);
-                $status = $client->delete() ? true : false;
-
-                if ($status)
-                    $status = $client->save() ? true : false;
-            }
-
-            if ($status) {
-                if ($hardware->delete())
-                    if (Resource::find($inventory_code)->delete())
-                        $status = true;
-                    else
-                        $status = false;
-                else
-                    $status = false;
-            }
-            if ($status) {
-                DB::commit();
-                \Session::flash('flash_message_error', 'Hardware '.$inventory_code.' Deleted!');
-            } else {
-                DB::rollback();
-                \Session::flash('flash_message_error', 'Hardware deletion failed!');
-            }
+            $this->remove($type,$inventory_code);
         }
-
-
-
         return Redirect::action('ResourceController@editAll');
 
+    }
+
+    public function remove($type,$inventory_code)
+    {
+        $status = true;
+        $hardware = Hardware::find($inventory_code);
+
+        DB::beginTransaction();
+
+        if ($type == "Monitor") {
+            $monitor = Monitor::find($inventory_code);
+            if ($monitor->delete())
+                $status = true;
+        } elseif ($type == "Desktop" || $type == "Laptop" || $type == "Server" || $type == "Virtual-Server") {
+            if ($type == "Server") {
+                $server = Server::find($inventory_code);
+                if ($server->delete())
+                    $status = true;
+            } elseif ($type == "Virtual-Server") {
+                $virtual_server = Virtual_Server::find($inventory_code);
+                if ($virtual_server->delete())
+                    $status = true;
+            }
+
+            $laptop = Desktop_Laptop::find($inventory_code);
+            if ($status)
+                if ($laptop->delete())
+                    $status = true;
+
+        } elseif ($type == "Dongle" || $type == "Sim") {
+            $dongle = Dongle_SIM::find($inventory_code);
+            if ($status)
+                $status = $dongle->delete() ? true : false;
+        } elseif ($type == "Client-Device") {
+            $client = Client_Device::find($inventory_code);
+            $status = $client->delete() ? true : false;
+
+            if ($status)
+                $status = $client->save() ? true : false;
+        }
+
+        if ($status) {
+            if ($hardware->delete())
+                if (Resource::find($inventory_code)->delete())
+                    $status = true;
+                else
+                    $status = false;
+            else
+                $status = false;
+        }
+        if ($status) {
+            DB::commit();
+            \Session::flash('flash_message_error', 'Hardware '.$inventory_code.' Deleted!');
+        } else {
+            DB::rollback();
+            \Session::flash('flash_message_error', 'Hardware deletion failed!');
+        }
     }
 }

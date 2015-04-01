@@ -24,10 +24,10 @@
 </div>
 </div>
 
-<div class="span12" style="overflow:auto">
+<div class="span12" style="overflow:auto; min-height: 200px">
 
     <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
-        <tr id="headRow">
+        <tr id="headRow" style="background-color: #e7e7e7">
             <th style="width: 10%">Inventory&nbsp;Code</th>
             <th style="width: 30%">Name</th>
             <th style="width: 30%">Vendor</th>
