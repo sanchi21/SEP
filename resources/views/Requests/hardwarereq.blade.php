@@ -28,7 +28,7 @@
 <h2 style="color: #9A0000">Request</h2>
 
 <form action="{{ URL::route('requestRes') }}" method="post">
-    <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">
+    <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;">
     {{--<b><h3 style="color: darkred">Request</h3></b>--}}
 
 
@@ -117,7 +117,7 @@
     </p>
 
 
-    <table id="dataTable" class="table table-hover" style="font-size: small;font-family: Arial" >
+    <table id="dataTable" class="table table-hover" style="font-size: small;" >
     <tbody>
     <tr>
   	<p>
@@ -230,7 +230,7 @@
     {!! Form::button('View',['class'=>'sbtn','name'=>'view']) !!}
     </div>
 
-    <table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial" >
+    <table id="Table3"  class="table table-hover" style="font-size: small;" >
     <tbody>
     <tr style="width: 20%">
          <td align="left">{!! Form::label('request_id','Request_ID') !!} </td>

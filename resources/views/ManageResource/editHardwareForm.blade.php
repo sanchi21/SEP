@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h2 style="color: #9A0000">Edit Software Resource</h2>
+<h2 style="color: #9A0000">Edit Hardware Resource</h2>
 
 {!! Form ::open(['method' => 'POST', 'action' => ['ResourceController@update']]) !!}
 <div class="alert alert-danger" id="error_msg" style="display: none">

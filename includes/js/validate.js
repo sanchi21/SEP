@@ -10,7 +10,7 @@ function validation()
     var value = document.getElementsByName('value_t[]');
     var msg = document.getElementById("msg");
     var ipFormat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    var dateFormat = /^([0-9][0-9])\/([0-9][0-9])\/([0-9]{4})$/;
+    var dateFormat = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
     //var amount  = /^\d+(?:\.\d{0,2})$/;
     var phonenoFormat = /^\d{10}$/;
     msg.innerHTML = "";
@@ -104,7 +104,7 @@ function validation2()
     var value = document.getElementById('value_t');
     var msg = document.getElementById("msg");
     var ipFormat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    var dateFormat = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+    var dateFormat = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
     //var amount  = /^\d+(?:\.\d{0,2})$/;
     var phonenoFormat = /^\d{10}$/;
     msg.innerHTML = "";

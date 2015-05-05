@@ -59,8 +59,8 @@
 
 <div class="span12" style="overflow:auto">
 
-<table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
-    <tr id="headRow" style="background-color: #e7e7e7">
+<table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
+    <tr id="headRow" style="background-color: #e7e7e7;">
         <th>Inventory&nbsp;Code</th>
         <th>Category</th>
         <th>Description</th>
