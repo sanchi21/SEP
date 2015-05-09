@@ -108,10 +108,27 @@ Route::group(array('middleware' => ['auth']), function() {
 //Route::post('ftpreq', array('as' => 'DeleteRequestF', 'uses' => 'FtpController@DeleteRequestF'));
 //Route::post('hardwarereq','HardwareReqController@DeleteRequest');
 
-//Route::get('ftpreq','FtpController@view');
+    Route::get('Allocate','AllocationController@view');
+    Route::post('Allocate/ViewRequests', array('as' => 'ViewRequests', 'uses' => 'AllocationController@ViewRequests'));
+    Route::post('Allocate/ResourceAllocation', array('as' => 'ResourceAllocation', 'uses' => 'AllocationController@ResourceAllocation'));
+    Route::post('Allocate/SearchResource', array('as' => 'SearchResource', 'uses' => 'AllocationController@SearchResource'));
+    Route::post('Allocate/SendResource', array('as' => 'SendResource', 'uses' => 'AllocationController@SendResource'));
+
+    Route::get('ViewAll','AllocationController@getViewAll');
+    Route::post('ViewAll', array('as' => 'ViewAll', 'uses' => 'AllocationController@ViewAll'));
+
     Route::post('ftpreq','FtpController@Ftp');
     Route::get('ftpreq', array('as'=>'ftpreq','uses'=>'FtpController@FindU'));
-    Route::get('test','FtpController@getTest');
+
+    Route::get('Connectivity','FtpController@ViewConnectivity');
+    Route::post('Connectivity', array('as' => 'Res','uses'=>'FtpController@SendConnRequest'));
+
+    Route::get('TrackResource','AllocationController@getTrackResource');
+    Route::post('TrackResource/s', array('as' => 'Track','uses'=>'AllocationController@Track'));
+    Route::post('TrackResource/FindHistory', array('as' => 'FindHistory','uses'=>'AllocationController@FindHistory'));
+
+
+
 
 
 

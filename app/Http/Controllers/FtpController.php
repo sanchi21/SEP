@@ -10,7 +10,7 @@ use App\req;
 use App\requesth;
 use Request;
 use Input;
-
+use Illuminate\Support\Facades\DB;
 class FtpController extends Controller {
 
     Public function FindU(){
@@ -24,13 +24,73 @@ class FtpController extends Controller {
 
     }
 
-//    TEST METHOD
-    public function getTest()
-    {
-        return view('test');
+    Public function ViewConnectivity(){
+        $pros=version::all();
+        $protocols=DB::table('protocol')->get();
+        $connectivity=DB::table('connectivity')->get();
+        return view('Requests.Connectivity')->with('pros',$pros)->with('protocols',$protocols)->with('connectivity',$connectivity);
     }
-    Public function view(){
-        return view('Requests.ftpreq');
+
+    public function SendConnRequest()
+    {
+        //$type=Input::get('project_id');
+        $send = Input::get('connect');
+        $view = Input::get('view');
+        $input = Request::all();
+        $project_id = $input['project_id'];
+        $connectivity = $input['connectivity'];
+        $protocol = $input['protocol'];
+        $port = $input['port'];
+        $sever = $input['sever'];
+        $ip = $input['ip'];
+        $id = requesth::where('project_id', '=', $project_id)->get();
+        $get_id = $id->first();
+        $req_id = $get_id->request_id;
+        $max_subID = DB::table('connectivityreq')->where('request_id', '=', $req_id)->max('sub_id');
+        $subId = $max_subID + 1;
+
+        if ($send)
+        {
+            if (empty($port) || empty($sever) || empty($ip)) {
+                \Session::flash('flash_message_error', 'Port or Sever or Ip address Fields Cannot Be Empty');
+                return redirect('Connectivity');
+            }
+            else{
+                if (!filter_var($ip, FILTER_VALIDATE_IP) === false) {
+                    $insert=DB::table('connectivityreq')->insert(array('request_id' =>$req_id,
+                            'sub_id' => $subId,
+                            'type' => $connectivity,
+                            'protocol' => $protocol,
+                            'port' => $port,
+                            'sever_name' => $sever,
+                            'ip_address' =>$ip)
+                    );
+                    \Session::flash('flash_message', 'Request Sent Successfully');
+                    return redirect('Connectivity');
+                }
+                else {
+                    \Session::flash('flash_message_error', 'Invalid IP Address');
+                    return redirect('Connectivity');
+                }
+            }
+        }
+
+       if($view)
+        {
+            $pros=version::all();
+            $protocols=DB::table('protocol')->get();
+            $connectivity=DB::table('connectivity')->get();
+            $project_id = Input::get('project_id');
+            $id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
+            $all_table =DB::table('connectivityreq')->where('request_id','=',$id)->get();
+
+
+            \Session::flash('flash_av','');
+            return view('Requests.Connectivity')->with('pros',$pros)->with('protocols',$protocols)->with('connectivity',$connectivity)->with('project_id',$project_id)->with('all_table',$all_table);
+
+
+        }
+
     }
 
     public function Ftp()

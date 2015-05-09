@@ -9,14 +9,14 @@
    {{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>--}}
 
 
-  <script>
-       $(document).ready(function(){
-           $("button").click(function(){
-               $("#Table3").toggle();
+  {{--<script>--}}
+       {{--$(document).ready(function(){--}}
+           {{--$("button").click(function(){--}}
+               {{--$("#Table3").toggle();--}}
 
-           });
-       });
-       </script>
+           {{--});--}}
+       {{--});--}}
+       {{--</script>--}}
 
       {{--<div >--}}
         {{--@if(Session::has('flash_message'))--}}
@@ -28,7 +28,7 @@
 <h2 style="color: #9A0000">Request</h2>
 
 <form action="{{ URL::route('requestRes') }}" method="post">
-    <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;">
+    <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">
     {{--<b><h3 style="color: darkred">Request</h3></b>--}}
 
 
@@ -41,7 +41,7 @@
 
             <div class="col-xs-2 col-md-2">
             <div id="datepicker_start" class="input-append">
-                <input type="text" id="start" name="start_date" data-format="MM-dd-yyyy" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
+                <input type="text" id="start" name="start_date" data-format="yyyy-MM-dd" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
                 <span class="add-on" style="height: 30px;">
                 <i class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                 </span>
@@ -65,7 +65,7 @@
 
             <div class="col-xs-2 col-md-2">
                 <div id="datepicker_end" class="input-append">
-                    <input type="text" id="start" name="end_date" data-format="MM-dd-yyyy" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
+                    <input type="text" id="start" name="end_date" data-format="yyyy-MM-dd" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
                     <span class="add-on" style="height: 30px;">
                     <i class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                     </span>
@@ -117,7 +117,7 @@
     </p>
 
 
-    <table id="dataTable" class="table table-hover" style="font-size: small;" >
+    <table id="dataTable" class="table table-hover" style="font-size: small;font-family: Arial" >
     <tbody>
     <tr>
   	<p>
@@ -227,10 +227,11 @@
    </br>
 
    <div class="form-group" style="width: 10%;margin-left: 0.25cm">
-    {!! Form::button('View',['class'=>'sbtn','name'=>'view']) !!}
+  {!! Form::submit('View',['class'=>'sbtn','name'=>'view']) !!}
     </div>
 
-    <table id="Table3"  class="table table-hover" style="font-size: small;" >
+ @if(Session::has('flash_view'))
+    <table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial" >
     <tbody>
     <tr style="width: 20%">
          <td align="left">{!! Form::label('request_id','Request_ID') !!} </td>
@@ -268,6 +269,8 @@
 
     </tbody>
     </table>
+  @endif
+
 </form>
 
    {!! Form::close() !!}

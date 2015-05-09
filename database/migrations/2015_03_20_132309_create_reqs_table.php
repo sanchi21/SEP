@@ -21,6 +21,13 @@ class CreateReqsTable extends Migration {
             $table->string('device_type',200)->nullable();
             $table->string('model',200)->nullable();
             $table->string('additional_information',300)->nullable();
+            $table->string('status',100);
+            $table->string('inventory_code',100);
+            $table->date('assigned_date');
+            $table->string('remarks',400);
+            $table->date('required_from');
+            $table->date('required_upto');
+            $table->integer('renewal');
             $table->primary(array('request_id', 'sub_id'));
             $table->foreign('request_id')->references('request_id')->on('requesths');
             $table->foreign('');

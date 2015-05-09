@@ -19,21 +19,22 @@ class HardwareReqController extends Controller
 
     Public function version()
     {
+
         $versions = Operating_system::all();
         $pros = version::all();
         $types = Type::all();
         $sws = DB::table('software')->get();
         //$user_id=Auth::user()->userID;
-        $user_id = 8;
-        $id = requesth::where('user_id', '=', $user_id)->get();
-        $ab = $id->count();
-        $a = $id->first();
+//        $user_id = 8;
+//        $id = requesth::where('user_id', '=', $user_id)->get();
+//        $ab = $id->count();
+//        $a = $id->first();
+//
+//        $req_id = $a->request_id;
+//
+//        $all_requests = req::where('request_id', '=', $req_id)->get();
 
-        $req_id = $a->request_id;
-
-        $all_requests = req::where('request_id', '=', $req_id)->get();
-
-        return view('Requests.hardwarereq', compact('versions', 'types', 'all_requests', 'pros', 'sws'));
+        return view('Requests.hardwarereq', compact('versions', 'types','pros', 'sws'));
 
 
     }
@@ -42,25 +43,30 @@ class HardwareReqController extends Controller
     {
 
         $com = Input::get('request');
+        $view=Input::get('view');
+        $cancel=Input::get('cancel');
 
-        if (!$com) {
+        if ($cancel) {
+
             $request_id = Input::get('hid1');
             $sub_id = Input::get('hid2');
-            $take = requesth::where('request_id', '=', $request_id)->get();
+            $take = req::where('request_id', '=', $request_id)->where('sub_id', '=', $sub_id)->get();
             $rw = $take->first();
-            $status = $rw->request_status;
+            $status = $rw->status;
 
-            if ($status == 1) {
+            if ($status =='Not Allocated') {
                 $req1 = DB::table('reqs')->where('request_id', '=', $request_id)->where('sub_id', '=', $sub_id)->delete();
                 \Session::flash('flash_message', 'Request Cancelled');
                 return redirect('hardwarereq');
 
             } else {
-                \Session::flash('flash_message', 'Request Cannot Be Cancelled! Its Already Allocated To A Project!');
+                \Session::flash('flash_message_error', 'Request Cannot Be Cancelled! Its Already Allocated To A Project!');
                 return redirect('hardwarereq');
             }
 
-        } else {
+        }
+        if($com)
+        {
             $input = Request::all();
 
             //get table row counts
@@ -75,7 +81,8 @@ class HardwareReqController extends Controller
             //$user_id=Auth::user()->userID;
             $user_id = 8;
             $request_status = 1;
-
+            $All_status='Not Allocated';
+            $renewal=0;
 
 
             $item = $input['item'];
@@ -88,11 +95,14 @@ class HardwareReqController extends Controller
             $date_today = date('m/d/Y');
 
             $id = requesth::where('project_id', '=', $project_id)->get();
+            $req_start_date =DB::table('requesths')->where('project_id',$project_id)->pluck('required_from');
+            $req_end_date =DB::table('requesths')->where('project_id',$project_id)->pluck('required_upto');
             $a = $id->first();
             $b = $id->count();
 
+
             if (empty($project_id)) {
-                \Session::flash('flash_message', 'Prject_ID Cannot Be Empty');
+                \Session::flash('flash_message_error', 'Prject_ID Cannot Be Empty');
                 return redirect('hardwarereq');
             } else {
                 if ($b != 0) {
@@ -111,6 +121,11 @@ class HardwareReqController extends Controller
                         $req->item = $temp;
                         $req->os_version = $temp1;
                         $req->additional_information = $temp2;
+                        $req->status=$All_status;
+                        $req->required_from=$req_start_date;
+                        $req->required_upto=$req_end_date;
+                        $req->renewal=$renewal;
+
                         if ($temp != "Select Type") {
                             $req->save();
                         }
@@ -132,6 +147,11 @@ class HardwareReqController extends Controller
                         $req->device_type = $temp;
                         $req->model = $temp1;
                         $req->additional_information = $temp2;
+                        $req->status=$All_status;
+                        $req->required_from=$req_start_date;
+                        $req->required_upto=$req_end_date;
+                        $req->renewal=$renewal;
+
                         if ($temp != "Select Device") {
                             $req->save();
                         }
@@ -141,12 +161,13 @@ class HardwareReqController extends Controller
                     \Session::flash('flash_message', 'Request Sent Successfully');
                     return redirect('hardwarereq');
 
+
                 } else {
                     if (empty($start_date) || empty($end_date)) {
-                        \Session::flash('flash_message', 'Date Fields Cannot Be Empty');
+                        \Session::flash('flash_message_error', 'Date Fields Cannot Be Empty');
                         return redirect('hardwarereq');
-                    } elseif (strtotime($start_date) < strtotime($end_date)) {
-                        \Session::flash('flash_message', 'Invalid Dates');
+                    } elseif (strtotime($start_date) > strtotime($end_date)) {
+                        \Session::flash('flash_message_error', 'Invalid Dates');
                         return redirect('hardwarereq');
                     }
 
@@ -178,6 +199,11 @@ class HardwareReqController extends Controller
                             $req->item = $temp;
                             $req->os_version = $temp1;
                             $req->additional_information = $temp2;
+                            $req->status=$All_status;
+                            $req->required_from=$start_date;
+                            $req->required_upto=$end_date;
+                            $req->renewal=$renewal;
+
                             if ($temp != "Select Type") {
                                 $req->save();
                             }
@@ -198,6 +224,10 @@ class HardwareReqController extends Controller
                             $req->device_type = $temp;
                             $req->model = $temp1;
                             $req->additional_information = $temp2;
+                            $req->status=$All_status;
+                            $req->required_from=$start_date;
+                            $req->required_upto=$end_date;
+                            $req->renewal=$renewal;
                             if ($temp != "Select Device") {
                                 $req->save();
                             }
@@ -212,6 +242,18 @@ class HardwareReqController extends Controller
 
 
             }
+        }
+        if($view){
+
+            $project_id = Input::get('project_id');
+            $id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
+            $all_requests = req::where('request_id', '=', $id)->get();
+            $versions = Operating_system::all();
+            $pros = version::all();
+            $types = Type::all();
+            $sws = DB::table('software')->get();
+            \Session::flash('flash_view','');
+            return view('Requests.hardwarereq', compact('versions', 'types', 'pros', 'sws','all_requests'));
         }
 
 
