@@ -37,7 +37,7 @@
             <tbody id="tableBody">
                 <tr id="firstRow">
                 <td>
-                    <input style="width: 130px" type="text" id="inventory_code_t" name="inventory_code_t[]" class="form-control input-sm" value="{{$key}}" readonly>
+                    <input style="width: 130px" type="text" id="inventory_code_t" name="inventory_code[]" class="form-control input-sm" value="{{$key}}" readonly>
                 </td>
 
                 <td>

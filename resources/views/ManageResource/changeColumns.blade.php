@@ -112,7 +112,9 @@
             <div class="col-xs-4 col-md-2">
                 <select id="existing_attribute" name="existing_attribute[]" class="form-control" style="width: 250px" multiple="multiple">
                     @foreach($columns as $col)
+                        @if($col->table_column != 'inventory_code')
                    	    <option value='{{$col->table_column}}'>{{ $col->column_name }}</option>
+                   	    @endif
                     @endforeach
            </select>
             </div>

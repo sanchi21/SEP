@@ -22,7 +22,7 @@ class SoftwareController extends Controller {
     {
         $input = Request::all();
         $count = $input['quantity'];
-        $inventoryCode = $input['inventory_code_t'];
+        $inventoryCode = $input['inventory_code'];
         $name = $input['name_t'];
         $vendor = $input['vendor_t'];
         $noOfLicense = $input['no_of_license_t'];

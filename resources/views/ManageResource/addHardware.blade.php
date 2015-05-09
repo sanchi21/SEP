@@ -108,7 +108,6 @@
         </tbody>
     </table>
 
- <?php echo Form::text('quan') ?>
 </div>
 <br>
 <div align="right">
