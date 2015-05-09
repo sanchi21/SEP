@@ -30,7 +30,6 @@ class CreateReqsTable extends Migration {
             $table->integer('renewal');
             $table->primary(array('request_id', 'sub_id'));
             $table->foreign('request_id')->references('request_id')->on('requesths');
-            $table->foreign('');
             $table->timestamps();
 
 

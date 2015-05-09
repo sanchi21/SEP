@@ -95,7 +95,16 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('addHardDisk','AddResourcePortion@addHardDisk');
     Route::post('updateHardDisk','AddResourcePortion@updateHardDisk');
 
+    Route::get('renewal','RenewalController@index');
+    Route::post('requestRenewal', 'RenewalController@requestRenewal');
+    Route::post('cancelRenewal', 'RenewalController@cancelRequest');
+    Route::get('renewalAccept', 'RenewalController@adminView');
+    Route::post('renewalAccept', 'RenewalController@adminAccept');
 
+    Route::get('releaseResource', 'RenewalController@adminReleaseView');
+    Route::post('releaseResource', 'RenewalController@resourceRelease');
+
+    Route::post('searchResource', 'RenewalController@searchResource');
 
 
 //---------------------------------------------------------------------Srinithy
