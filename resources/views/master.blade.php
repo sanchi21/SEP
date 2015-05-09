@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Home</title>
+    <title>Zone 24x7 - Resource Allocation System</title>
 
 {{--styles--}}
  <link href="{{ asset('/includes/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -41,6 +41,8 @@
         <li class="nav-item"><img src="{{asset('/includes/images/icons/hardware.png')}}" alt="Hardware" style="width:20px;height:20px">&nbsp;&nbsp;Hardware</li>
                 <li class="nav-item"><a href=" {{ URL::route('hardware') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Hardware" style="width:18px;height:18px">&nbsp;&nbsp;New Hardware</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('hardware-edit-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Edit Hardware</a></li>
+                <li class="nav-item"><a href=" {{ URL::route('change-property/New') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Attributes</a></li>
+                <li class="nav-item"><a href=" {{ URL::route('change-options') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Drop Downs</a></li>
 
         <li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Software</li>
                 <li class="nav-item"><a href=" {{ URL::route('software-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;New Software</a></li>
@@ -98,11 +100,13 @@
                 {{Session::get('flash_message_error')}}
                 </div>
         @endif
+
+
        @yield('content')
       </div>
-      {{--<script>--}}
-        {{--$('div.alert').delay(3000).slideUp(300);--}}
-      {{--</script>--}}
+      <script>
+        $('div.alert').delay(4000).slideUp(300);
+      </script>
     </div>
 </div>
 

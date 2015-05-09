@@ -13,43 +13,6 @@
 
 Route::get('/', 'WelcomeController@index');
 
-Route::post('hardware',array('as'=>'hardware-post','uses'=>'ResourceController@store'));
-
-Route::get('hardware',array('as'=>'hardware','uses'=>'ResourceController@index'));
-Route::get('hardware-edit/All',array('as'=>'hardware-edit-get','uses'=>'ResourceController@editAll'));
-
-Route::post('hardware-edit/{id}',array('as'=>'hardware-edit-post','uses'=>'ResourceController@search')); //parthi search
-Route::get('hardware-edit/{id}',array('as'=>'hardware-edit','uses'=>'ResourceController@edit'));
-Route::post('hardware-edit','ResourceController@editSpecific');
-
-Route::get('hardware/{id}','ResourceController@hardware');
-Route::get('software',array('as'=>'software-get','uses'=>'SoftwareController@index'));
-Route::post('software','SoftwareController@store');
-Route::post('software-edit','SoftwareController@update');
-Route::get('software-edit',array('as'=>'software-edit-get','uses'=>'SoftwareController@edit'));
-
-//--------------------------------------------------------Parthi
-Route::get('addPortion','AddResourcePortion@index');
-Route::get('delete/{type}/{id}','AddResourcePortion@delete');
-
-Route::post('addPortion','AddResourcePortion@addOS');
-Route::post('updateOS','AddResourcePortion@updateOS');
-
-Route::post('addMake','AddResourcePortion@addMake');
-Route::post('updateMake','AddResourcePortion@updateMake');
-
-Route::post('addScreen','AddResourcePortion@addScreen');
-Route::post('updateScreen','AddResourcePortion@updateScreen');
-
-Route::post('addProvider','AddResourcePortion@addProvider');
-Route::post('updateProvider','AddResourcePortion@updateProvider');
-
-Route::post('addRam','AddResourcePortion@addRam');
-Route::post('updateRam','AddResourcePortion@updateRam');
-
-Route::post('addHardDisk','AddResourcePortion@addHardDisk');
-Route::post('updateHardDisk','AddResourcePortion@updateHardDisk');
-
 
 
 //--------------------------------------------------------------Abhay
@@ -83,6 +46,74 @@ Route::group(array('middleware' => ['auth']), function() {
         Route::post('addUser', array('as' => 'add-user-post', 'uses' => 'Authentication_Controller@postAddUser'));
     });
 //GET AddUser
+//--------------------------------------------------------Sanchayan
+
+    Route::post('hardware',array('as'=>'hardware-post','uses'=>'ResourceController@store'));
+
+    Route::get('hardware',array('as'=>'hardware','uses'=>'ResourceController@index'));
+    Route::get('hardware-edit/All',array('as'=>'hardware-edit-get','uses'=>'ResourceController@editAll'));
+
+    Route::post('hardware-edit/{id}',array('as'=>'hardware-edit-post','uses'=>'ResourceController@search')); //parthi search
+    Route::get('hardware-edit/{id}',array('as'=>'hardware-edit','uses'=>'ResourceController@edit'));
+    Route::get('hardware-change/{d}','ResourceController@editSpecific');
+    Route::post('hardware-update','ResourceController@update');
+
+    Route::get('hardware/{id}','ResourceController@hardware');
+    Route::get('software',array('as'=>'software-get','uses'=>'SoftwareController@index'));
+    Route::post('software','SoftwareController@store');
+    Route::post('software-edit/search','SoftwareController@search');
+    Route::post('software-edit/','SoftwareController@update');
+    Route::get('software-edit',array('as'=>'software-edit-get','uses'=>'SoftwareController@edit'));
+
+    Route::get('change-property/New',array('as'=>'change-property/New','uses'=>'TableController@index'));
+    Route::get('change-property/{id}','TableController@edit');
+    Route::post('change-property','TableController@store');
+    Route::post('delete-property','TableController@remove');
+
+    Route::get('change-options',array('as'=>'change-options','uses'=>'DropDownController@index'));
+    Route::post('change-options','DropDownController@handle');
+
+//--------------------------------------------------------Parthi
+    Route::get('addPortion',array('as'=>'addPortion','uses'=>'AddResourcePortion@index'));
+    Route::get('delete/{type}/{id}','AddResourcePortion@delete');
+
+    Route::post('addPortion','AddResourcePortion@addOS');
+    Route::post('updateOS','AddResourcePortion@updateOS');
+
+    Route::post('addMake','AddResourcePortion@addMake');
+    Route::post('updateMake','AddResourcePortion@updateMake');
+
+    Route::post('addScreen','AddResourcePortion@addScreen');
+    Route::post('updateScreen','AddResourcePortion@updateScreen');
+
+    Route::post('addProvider','AddResourcePortion@addProvider');
+    Route::post('updateProvider','AddResourcePortion@updateProvider');
+
+    Route::post('addRam','AddResourcePortion@addRam');
+    Route::post('updateRam','AddResourcePortion@updateRam');
+
+    Route::post('addHardDisk','AddResourcePortion@addHardDisk');
+    Route::post('updateHardDisk','AddResourcePortion@updateHardDisk');
+
+
+
+
+//---------------------------------------------------------------------Srinithy
+
+
+//Route::get('hardwarereq','HardwareReqController@v');
+    Route::get('hardwarereq',array('as' => 'hardwarereq','uses'=>'HardwareReqController@version'));
+    Route::post('hardwarereq', array('as' => 'requestRes','uses'=>'HardwareReqController@save'));
+//Route::post('hardwarereq', array('as' => 'DelRequest', 'uses' => 'HardwareReqController@DeleteRequest'));
+//Route::post('ftpreq', array('as' => 'DeleteRequestF', 'uses' => 'FtpController@DeleteRequestF'));
+//Route::post('hardwarereq','HardwareReqController@DeleteRequest');
+
+//Route::get('ftpreq','FtpController@view');
+    Route::post('ftpreq','FtpController@Ftp');
+    Route::get('ftpreq', array('as'=>'ftpreq','uses'=>'FtpController@FindU'));
+    Route::get('test','FtpController@getTest');
+
+
 
 //GET change password
 Route::get('changePassword', array('as' => 'account-change-password', 'uses' => 'Authentication_Controller@getChangePassword'));
@@ -131,22 +162,6 @@ Route::get('welcomeee',['middleware' => 'role', function()
 {
     return 'this page is limited';
 }]);;
-
-
-//---------------------------------------------------------------------Srinithy
-
-
-//Route::get('hardwarereq','HardwareReqController@v');
-Route::get('hardwarereq',array('as' => 'hardwarereq','uses'=>'HardwareReqController@version'));
-Route::post('hardwarereq', array('as' => 'requestRes','uses'=>'HardwareReqController@save'));
-//Route::post('hardwarereq', array('as' => 'DelRequest', 'uses' => 'HardwareReqController@DeleteRequest'));
-//Route::post('ftpreq', array('as' => 'DeleteRequestF', 'uses' => 'FtpController@DeleteRequestF'));
-//Route::post('hardwarereq','HardwareReqController@DeleteRequest');
-
-//Route::get('ftpreq','FtpController@view');
-Route::post('ftpreq','FtpController@Ftp');
-Route::get('ftpreq', array('as'=>'ftpreq','uses'=>'FtpController@FindU'));
-Route::get('test','FtpController@getTest');
 
 
 

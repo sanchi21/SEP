@@ -22,7 +22,7 @@
         <label style="width: 120px">Category</label>
     </td>
     <td>
-        <select id="category" name="category_t" class="form-control input-sm" style="width: 250px" onchange="javascript:location.href = this.value;">
+        <select id="category" name="category" class="form-control input-sm" style="width: 250px" onchange="javascript:location.href = this.value;">
             <option value="/hardware-edit/All" @if($id=="All") selected @endif>All</option>
             @foreach($types as $type)
                 <option value='/hardware-edit/{{$type->category}}' @if($id==$type->category) selected @endif>{{ $type->category }}</option>
@@ -34,14 +34,10 @@
             <label style="width: 120px">Sort by</label>
         </td>
         <td>
-            <select id="sort" name="sort_t" class="form-control input-sm" style="width: 250px">
-                <option value="inventory_code" @if($column=='inventory_code') selected @endif>Inventory Code</option>
-                <option value="make" @if($column=='make') selected @endif>Make</option>
-                <option value="value" @if($column=='value') selected @endif>Value</option>
-                <option value="insurance" @if($column=='insurance') selected @endif>Insurance</option>
-                <option value="warranty_exp" @if($column=='warranty_exp') selected @endif>Warranty</option>
-                <option value="ip_address" @if($column=='ip_address') selected @endif>IP Address</option>
-
+            <select id="sort" name="sort" class="form-control input-sm" style="width: 250px">
+                @foreach($columns as $c)
+                    <option value="{{$c->table_column}}" @if($c->table_column==$column) selected @endif>{{$c->column_name}}</option>
+                @endforeach
             </select>
         </td>
         <td>
@@ -50,28 +46,24 @@
         <td>
             &nbsp;<button type="submit" class="btn btn-primary" style="height: 30px;" name="descend" value="descend"><span class="glyphicon glyphicon-chevron-down"></span> </button>
         </td>
+
+        <td>
+        &nbsp;<button onclick="printContent('content12')" class="btn btn-primary" style="height: 30px; width: 30px"><span class="glyphicon glyphicon-print"></span></button>
+        </td>
 </tr>
 </table>
 {!! Form ::close() !!}
 </div>
 <br>
-<div align="right"><label><b>Displaying 30 items per page</b></label></div>
+<div align="right"><label><b>Max Display Per Page : 30 Items</b></label></div>
 
 <div class="span12" style="overflow:auto">
 
 <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
     <tr id="headRow" style="background-color: #e7e7e7;">
-        <th>Inventory&nbsp;Code</th>
-        <th>Category</th>
-        <th>Description</th>
-        <th>Serial&nbsp;No</th>
-        <th>IP&nbsp;Address&nbsp;</th>
-        <th>Make&nbsp;</th>
-        <th>Model</th>
-        <th>Purchase&nbsp;Date</th>
-        <th>Warranty&nbsp;Exp</th>
-        <th>Insurance</th>
-        <th >Value</th>
+        @foreach($columns as $c)
+            <th>{{$c->column_name}}</th>
+        @endforeach
         <th></th>
     </tr>
 
@@ -80,51 +72,24 @@
     @foreach($hardwares as $hardware)
     {!! Form ::open(['method' => 'POST', 'action' => ['ResourceController@editSpecific']]) !!}
     <tr>
+        @foreach($columns as $col)
         <td>
-            {{$hardware->inventory_code}}<input type="hidden" name="inventory_code_t" value="{{$hardware->inventory_code}}">
+            <?php $attribute = $col->table_column; ?>
+
+            {{$hardware->$attribute}}
+
+            @if($attribute == 'inventory_code')
+                    <input type="hidden" name="inventory_code" value="{{$hardware->inventory_code}}">
+            @elseif($attribute == 'type')
+                    {{$hardware->type}} <input type="hidden" name="type" value="{{$hardware->type}}">
+            @endif
         </td>
+        @endforeach
 
         <td>
-            {{$hardware->type}} <input type="hidden" name="type_t" value="{{$hardware->type}}">
-        </td>
-        <td>
-            {{$hardware->description}}
-        </td>
-
-        <td>
-            {{$hardware->serial_no}}
-        </td>
-
-        <td>
-            {{$hardware->ip_address}}
-        </td>
-
-        <td>
-            {{$hardware->make}}
-        </td>
-
-        <td>
-            {{$hardware->model}}
-        </td>
-
-        <td>
-            {{$hardware->purchase_date}}
-        </td>
-
-        <td>
-            {{$hardware->warranty_exp}}
-        </td>
-
-        <td>
-            {{$hardware->insurance}}
-        </td>
-
-        <td>
-            {{$hardware->value}}
-        </td>
-
-        <td>
-        <input type="submit" name="edit" value="Edit" class="btn btn-primary" style="height: 35px; vertical-align: center;width: 60px">
+        {{--{{str_replace('/','-',$hardware->inventory_code)}}--}}
+        <?php $temp = urlencode(base64_encode(str_replace('/','-',$hardware->inventory_code)))?>
+        <a href="/hardware-change/{{$temp}}"><input type="button" name="edit" value="Edit" class="btn btn-primary" style="height: 35px; vertical-align: center;width: 60px"></a>
         </td>
     </tr>
     {!! Form ::close() !!}
@@ -133,10 +98,61 @@
     </tbody>
 </table>
 
-
 </div>
+
+
+
+<div id="content12" name="content12" style="display: none">
+<table class="table table-bordered" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
+    <tr id="headRow" style="background-color: #e7e7e7;">
+        @foreach($columns as $c)
+            <th>{{$c->column_name}}</th>
+        @endforeach
+        <th></th>
+    </tr>
+
+    <tbody id="tableBody">
+
+    @foreach($hardwares as $hardware)
+
+    <tr>
+        @foreach($columns as $col)
+        <td>
+            <?php $attribute = $col->table_column; ?>
+
+            <label style="font-size: 12px;">{{$hardware->$attribute}}</label>
+
+            @if($attribute == 'inventory_code')
+                    <input type="hidden" name="inventory_code" value="{{$hardware->inventory_code}}">
+            @elseif($attribute == 'type')
+                    {{$hardware->type}} <input type="hidden" name="type" value="{{$hardware->type}}">
+            @endif
+        </td>
+        @endforeach
+
+    </tr>
+
+    @endforeach
+
+    </tbody>
+</table>
+</div>
+
+
+
+
 <div align="center">
     {!!$hardwares->render()!!}
     </div>
 @endsection
 @stop
+
+<script>
+    function printContent(print_content){
+        var restorepage = document.body.innerHTML;
+        var printcontent = document.getElementById(print_content).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+    }
+</script>

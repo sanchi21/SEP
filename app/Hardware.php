@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Type;
 
 class Hardware extends Model {
 
@@ -18,7 +19,24 @@ class Hardware extends Model {
         'model',
         'purchase_date',
         'warranty_exp',
-        'insurance'
+        'insurance',
+        'screen_size',
+        'device_type',
+        'client_name',
+        'CPU',
+        'RAM',
+        'hard_disk',
+        'OS',
+        'previous_user',
+        'phone_no',
+        'service_provider',
+        'data_limit',
+        'monthly_rental',
+        'location',
+        'classification',
+        'no_of_cpu',
+        'no_of_cores',
+        'host_server'
     ];
 
     protected function getTableColumns()
@@ -46,6 +64,7 @@ class Hardware extends Model {
         }
         else
         {
+            /*
             switch($type)
             {
                 case "Office-Equipment" : $newCode = "CMB/OEQ/0001" ; break;
@@ -62,6 +81,11 @@ class Hardware extends Model {
                 case "Sim" : $newCode = "CMB/SIM/0001" ; break;
                 case "Client-Device" : $newCode = "CMB/CDV/0001" ; break;
             }
+            */
+
+            $firstKey = Type::find($type);
+            $n_code = $firstKey->key;
+            $newCode = $n_code."/0001";
         }
         return $newCode;
     }

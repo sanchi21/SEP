@@ -15,6 +15,9 @@ class CreateTypesTable extends Migration {
 		Schema::create('types', function(Blueprint $table)
 		{
 			$table->string('category');
+            $table->string('key');
+
+            $table->primary('category');
 		});
 	}
 

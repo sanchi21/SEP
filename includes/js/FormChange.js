@@ -28,6 +28,7 @@ function addRows(val)
     //find the id of the table body
     var tab = document.getElementById("tableBody")
 
+
     if(val<curRows && val>0 && val<=10)
     {
         var diff = curRows - val;
@@ -68,10 +69,47 @@ function addRows(val)
             t1.setAttribute('class','form-control input-sm');
             t1.setAttribute('readOnly','true');
             t1.setAttribute('style','width:130px');
-            t1.setAttribute('name','inventory_code_t[]');
+            t1.setAttribute('name','inventory_code[]');
             t1.setAttribute('value',newCode);
             clone.insertCell(0).appendChild(t1);
             tab.appendChild(clone);
         }
     }
+}
+
+function addButton()
+{
+    //get the no of current rows (it includes the header as well)
+    var curRows = document.getElementById("hardwareTable").rows.length-1;
+
+    //find the required table id
+    var table = document.getElementById("hardwareTable");
+
+    //find the id of the table body
+    var tab = document.getElementById("tableBody")
+
+    var firstRow = document.getElementById("firstRow");
+    var clone = firstRow.cloneNode(true);
+
+    clone.deleteCell(0);
+    var t1=document.createElement("input");
+    t1.setAttribute('class','form-control input-sm');
+    t1.setAttribute('style','width:184px');
+    t1.setAttribute('name','attribute_name[]');
+    clone.insertCell(0).appendChild(t1);
+
+    tab.appendChild(clone);
+}
+
+function removeButton()
+{
+    //get the no of current rows (it includes the header as well)
+    var curRows = document.getElementById("hardwareTable").rows.length-1;
+
+    //find the required table id
+    var table = document.getElementById("hardwareTable");
+    var count = document.getElementById("hardwareTable").rows.length;
+
+    if(count>2)
+        table.deleteRow(-1);
 }
