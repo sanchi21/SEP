@@ -55,7 +55,7 @@ Route::group(array('middleware' => ['auth']), function() {
 
     Route::post('hardware-edit/{id}',array('as'=>'hardware-edit-post','uses'=>'ResourceController@search')); //parthi search
     Route::get('hardware-edit/{id}',array('as'=>'hardware-edit','uses'=>'ResourceController@edit'));
-    Route::post('hardware-edit','ResourceController@editSpecific');
+    Route::get('hardware-change/{d}','ResourceController@editSpecific');
     Route::post('hardware-update','ResourceController@update');
 
     Route::get('hardware/{id}','ResourceController@hardware');
@@ -65,7 +65,13 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('software-edit/','SoftwareController@update');
     Route::get('software-edit',array('as'=>'software-edit-get','uses'=>'SoftwareController@edit'));
 
+    Route::get('change-property/New',array('as'=>'change-property/New','uses'=>'TableController@index'));
+    Route::get('change-property/{id}','TableController@edit');
+    Route::post('change-property','TableController@store');
+    Route::post('delete-property','TableController@remove');
 
+    Route::get('change-options',array('as'=>'change-options','uses'=>'DropDownController@index'));
+    Route::post('change-options','DropDownController@handle');
 
 //--------------------------------------------------------Parthi
     Route::get('addPortion',array('as'=>'addPortion','uses'=>'AddResourcePortion@index'));

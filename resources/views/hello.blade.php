@@ -1,27 +1,34 @@
 
 
-<div class="well">
+<html>
+<body>
+
+<div>
+@foreach($columns as $c)
+<label>{{$c->column_name}}</label>
+<br>
+@endforeach
 
 <br>
 <br>
+
+@foreach($types as $t)
+<label>{{$t->category}}</label>
 <br>
-<br><br>
-<br>
-sdklmasodas
-sadasda
-sdas
-das
-da
-sd
-asd
+@endforeach
 
 <br>
 <br>
-<br>
 
-
-
+@foreach($arr as $a)
+    @foreach($a as $ab)
+        <label>{{$ab->value}}</label>
+        <br>
+    @endforeach
+@endforeach
 
 </div>
+</body>
+</html>
 
 
