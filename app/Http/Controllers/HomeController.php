@@ -4,6 +4,7 @@ use App\system_users;
 use DB;
 use  App\Hardware;
 use App\requesth;
+use App\Type;
 
 
 class HomeController extends Controller {
@@ -72,9 +73,14 @@ class HomeController extends Controller {
             ->get();
 
         //access hardware table
+        $types = Hardware::select('type')->groupBy('type')->get();
+
+        $count = Hardware::select('type',DB::raw('count(*) as count'))->groupBy('type')->get();
 
 
-        return view('home') ->with('countPendingResourceRequests',$count_pendingResourceRequests)
+
+
+        return view('home',compact('data')) ->with('countPendingResourceRequests',$count_pendingResourceRequests)
                             ->with('countTotalAvailableResources',$count_totalAvailableResources)
                             ->with('countSystemUsers',$count_systemUsers)
                             ->with('countPendingRenewalRequests',$count_pendingRenewalRequests)
@@ -86,8 +92,10 @@ class HomeController extends Controller {
                             ->with('countAllocatedHardware',$count_allocatedHardwares)
                             ->with('countAvailableHardware',$count_availableHardware)
                             ->with('countPendingHardwares',$count_pendingHardwares)
-                            ->with('recentRequests',$recentRequests);
-//                            ->with('hardwareTypes',$hardware->lists('type'));
+                            ->with('recentRequests',$recentRequests)
+                            ->with('types',$count->lists('type'))
+            ->with('count',$count->lists('count'));
+//                            ->with('count',$count->lists('count'));
 
 
 

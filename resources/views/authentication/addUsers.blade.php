@@ -7,6 +7,18 @@
  @extends('master')
  
  @section('content')
+
+
+<script>
+    function printContent(print_content){
+        var restorepage = document.body.innerHTML;
+        var printcontent = document.getElementById(print_content).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+    }
+</script>
+
 <script type="text/javascript">
                 $(document).ready(function() {
                     $('#activeUserNames').multiselect({
@@ -122,8 +134,15 @@
     </table>
 
   </div>
+
   <div role="tabpanel" class="tab-pane" id="ViewUsers">
     <br>
+    <div class="btn-group" style="text-align: right" role="group" aria-label="... ">
+    <button type="button" onclick="printContent('content')" class="btn btn-info" value="Print"><span class="glyphicon glyphicon-print"></span> Print</button>
+    </div>
+    <div id="content" name="content">
+
+
     <table class="table table-hover" style="width: 100%">
       <tr style="background-color: #e7e7e7">
           <th>User ID</th>
@@ -147,6 +166,9 @@
     </table>
 
     </div>
+
+    </div>
+
   <div role="tabpanel" class="tab-pane" id="ConnectUser">
 
 
