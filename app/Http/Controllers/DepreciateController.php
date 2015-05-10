@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Depreciation;
+use App\Hardware;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -11,21 +12,37 @@ use App\Http\Requests\AddDepreciateRequest;
 
 class DepreciateController extends Controller {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		return 'Depreciation';
-	}
 
-		/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
+    public function show($id)
+    {
+        $inventory_code = str_replace('-','/',$id);
+        $depreciation = Depreciation::find($inventory_code);
+        $method = $depreciation->method;
+        $depreciate = '';
+        $dVal = array();
+        $hardware = Hardware::find($inventory_code);
+
+        if($method == "Straight Line")
+            $depreciate = $this->straightLineDepreciation($inventory_code);
+        else
+        {
+            $depreciate = $this->declineDepreciation($inventory_code);
+        }
+
+        $previous = $hardware->value;
+
+        foreach ($depreciate as $dep)
+        {
+            $temp = $previous - $dep;
+            array_push($dVal,$temp);
+            $previous = $dep;
+        }
+
+
+        return view('ManageResource.depreciation',compact('depreciate','hardware','dVal'));
+    }
+
+
 	public function store(AddDepreciateRequest $request)
 	{
 		$input = Input::all();
@@ -54,48 +71,85 @@ class DepreciateController extends Controller {
         return Redirect::action('DepreciateController@index');
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
+    private function straightLineDepreciation($id)
+    {
+        $hardware = Hardware::find($id);
+        $value = $hardware->value;
+        $purchase_date = $hardware->purchase_date;
+        $time = strtotime($purchase_date);
+        $purchase_year = date("Y",$time);
+        $purchase_month = date("n",$time);
+        $current_year = date("Y");
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+        $asset = Depreciation::find($id);
+        $residual = $asset->residual;
+        $life_time = $asset->year;
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+        $depreciation = array();
+        $year = intval($purchase_year);
+        $range = intval($current_year);
+        $book_value = $value;
+
+        while($year<= $range)
+        {
+            $depreciate_value = ($value - $residual)/$life_time;
+
+            if($year == intval($purchase_year))
+                $depreciate_value = $depreciate_value * ((12 - $purchase_month) /12.0);
+
+            $asset_value = $book_value - $depreciate_value;
+
+            if($asset_value >= $residual)
+                $book_value = $asset_value;
+
+            $depreciation = array_add($depreciation,$year,intval($book_value));
+
+            $year++;
+        }
+
+        return $depreciation;
+
+    }
+
+    private function declineDepreciation($id)
+    {
+        $hardware = Hardware::find($id);
+        $value = $hardware->value;
+        $purchase_date = $hardware->purchase_date;
+        $time = strtotime($purchase_date);
+        $purchase_year = date("Y",$time);
+        $purchase_month = date("n",$time);
+        $current_year = date("Y");
+
+        $asset = Depreciation::find($id);
+        $rate = $asset->pecentage;
+        $residual = ($rate * $value) / 100.0;
+
+        $depreciation = array();
+        $year = intval($purchase_year);
+        $range = intval($current_year);
+        $book_value = $value;
+
+        while($year<= $range)
+        {
+            $depreciate_value = ($value * $rate) / 100.0;
+
+            if($year == intval($purchase_year))
+                $depreciate_value = $depreciate_value * ((12 - $purchase_month) /12.0);
+
+            $asset_value = $book_value - $depreciate_value;
+
+            if($asset_value >= $residual)
+                $book_value = $asset_value;
+
+            $depreciation = array_add($depreciation,$year,$book_value);
+
+            $year++;
+        }
+
+        return $depreciation;
+
+    }
 
 }

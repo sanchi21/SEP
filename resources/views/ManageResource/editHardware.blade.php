@@ -48,7 +48,7 @@
         </td>
 
         <td>
-        &nbsp;<button onclick="printContent('content12')" class="btn btn-primary" style="height: 30px; width: 30px"><span class="glyphicon glyphicon-print"></span></button>
+        &nbsp;<input type="button" onclick="printContent('content12')" class="btn btn-primary" style="height: 30px; width: 70px" value="Print">
         </td>
 </tr>
 </table>
@@ -102,8 +102,43 @@
 </div>
 
 
+                        {{-- Print --}}
 
 <div id="content12" name="content12" style="display: none">
+
+<div name = "report-header">
+        <table width="100%">
+            <tr>
+                <td width="50%"><img src="/includes/images/zone_logo.png" height="70px" width="200px"></td>
+                <td width="50%"></td>
+            </tr>
+            <tr>
+                <td width="50%"><h4>Zone24x7 (Private) Limited</h4></td>
+                <td width="50%" align="right"><h4>Date : {{date("d-m-Y")}}</h4></td>
+            </tr>
+
+            <tr>
+                <td width="50%"><h4>Nawala Road,</h4></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td width="50%"><h4>Koswatte,</h4></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td width="50%"><h4>Sri Lanka 10107</h4></td>
+                <td></td>
+            </tr>
+
+        </table>
+
+        <h2 align="center">{{$id}} Hardware Details</h2>
+
+    </div>
+<br>
+
 <table class="table table-bordered" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
     <tr id="headRow" style="background-color: #e7e7e7;">
         @foreach($columns as $c)

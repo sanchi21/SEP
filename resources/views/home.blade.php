@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('content')
-<?php header('Refresh: 10'); ?>
+<?php header('Refresh: 20'); ?>
 <h3 style="color: #354b60">Dashboard | Automatic Resource Allocation</h3>
 
 <table style="width: 100%">

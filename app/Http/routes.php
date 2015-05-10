@@ -75,7 +75,8 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::get('change-options',array('as'=>'change-options','uses'=>'DropDownController@index'));
     Route::post('change-options','DropDownController@handle');
 
-    Route::get('hardware-depreciate','DepreciateController@index');
+    Route::get('hardware-depreciate/{id}','DepreciateController@show');
+    Route::get('hardware-d','DepreciateController@index');
     Route::post('hardware-depreciate','DepreciateController@store');
 
 //--------------------------------------------------------Parthi
