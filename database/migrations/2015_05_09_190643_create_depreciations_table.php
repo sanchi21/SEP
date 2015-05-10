@@ -19,6 +19,8 @@ class CreateDepreciationsTable extends Migration {
             $table->double('residual');
             $table->double('percentage');
             $table->double('year');
+
+            $table->primary('inventory_code');
 		});
 	}
 
