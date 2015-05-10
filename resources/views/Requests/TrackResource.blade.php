@@ -5,7 +5,7 @@
 <div style="float:left; width:50%">
 <p style="color: darkred"><b>RESOURCE HSTORY</b></p>
 <table style="font-size: small;font-family: Arial ;width:50%">
-<form action="{{ URL::route('Track') }}" method="post">
+<form action="{{ URL::route('TrackResource') }}" method="post">
   <tr>
     <td>Resource Type</td>
     <td>

@@ -55,11 +55,15 @@ class AllocationController extends Controller {
         $request_id=Input::get('hidr');
         $sub_id=Input::get('hid3');
         $item=Input::get('hid4');
+        $device_type=Input::get('hid6');
         $serial=Input::get('serial');
         $date=Input::get('date');
         $remarks=Input::get('remarks');
         $status='Allocated';
         $status2='Not Allocated';
+
+        $check_device=Hardware::where('inventory_code', '=',$serial)->pluck('type');
+        $check_software=Software::where('inventory_code','=',$serial)->pluck('name');
 
         if((empty($serial) || empty($date))){
             \Session::flash('flash_message_error', 'Serial no and date fields cannot be empty');
@@ -68,50 +72,80 @@ class AllocationController extends Controller {
 
         else {
             if ($item != '') {
-                $hard = Hardware::find($serial);
-                $hard->status = $status;
-                $hard->save();
 
-                $r = DB::table('reqs')
-                    ->where('request_id', $request_id)
-                    ->where('sub_id', $sub_id)
-                    ->update(array('inventory_code' => $serial, 'assigned_date' => $date, 'remarks' => $remarks, 'status' => $status));
-
-                $user_id =DB::table('requesths')->where('request_id',$request_id)->pluck('user_id');
-                $user= User::where('id','=',$user_id);
-                $a=$user->count();
-                $user=$user->first();
-
-                Mail::send('Requests.AllocationSuccess', array('username'=>$user->username),function($message) use ($user)
-                {
-                    $message->to($user->email, $user->username)->subject('Resource Allocation');
-                });
-
-                \Session::flash('flash_message', 'Hardware Allocated Successfully');
-                return redirect('Allocate');
-
-            }
-            else {
-                $no_of_license = Software::where('inventory_code', '=', $serial)->get();
-                $get_first_row = $no_of_license->first();
-                $license_count = $get_first_row->no_of_license;
-                $get_count = Input::get('hid7');
-                if ($get_count <= $license_count) {
-
-                    $soft = Software::find($serial);
-                    $soft->status = $status;
-                    $soft->save();
+                if($item != $check_device){
+                    \Session::flash('flash_message_error', 'Requested hardware doest match with the allocation');
+                    return redirect('Allocate');
+                }
+                else {
+                    $hard = Hardware::find($serial);
+                    $hard->status = $status;
+                    $hard->save();
 
                     $r = DB::table('reqs')
                         ->where('request_id', $request_id)
                         ->where('sub_id', $sub_id)
                         ->update(array('inventory_code' => $serial, 'assigned_date' => $date, 'remarks' => $remarks, 'status' => $status));
 
-                    \Session::flash('flash_message', 'Software Allocated Successfully');
+                    $user_id = DB::table('requesths')->where('request_id', $request_id)->pluck('user_id');
+                    $user = User::where('id', '=', $user_id);
+                    $a = $user->count();
+                    $user = $user->first();
+
+                    Mail::send('Requests.AllocationSuccess', array('username' => $user->username), function ($message) use ($user) {
+                        $message->to($user->email, $user->username)->subject('Resource Allocation');
+                    });
+
+                    \Session::flash('flash_message', 'Hardware Allocated Successfully');
                     return redirect('Allocate');
-                } else {
-                    \Session::flash('flash_message_error', 'Less no of Licenses/ cannot allocate');
+                }
+            }
+            else {
+                $no_of_license = Software::where('inventory_code', '=', $serial)->get();
+                $get_first_row = $no_of_license->first();
+                $license_count = $get_first_row->no_of_license;
+                $get_count = Input::get('hid7');
+                $new_count=$license_count - $get_count;
+
+                if($device_type != $check_software){
+                    \Session::flash('flash_message_error', 'Requested software doest match with the allocation');
                     return redirect('Allocate');
+                }
+
+                else {
+                    if ($get_count <= $license_count) {
+
+                        $soft = Software::find($serial);   //update software table
+                        $soft->status = $status;
+                        $soft->no_of_license=$new_count;
+                        $soft->save();
+
+                        $r = DB::table('reqs')
+                            ->where('request_id', $request_id)
+                            ->where('sub_id', $sub_id)
+                            ->update(array('inventory_code' => $serial, 'assigned_date' => $date, 'remarks' => $remarks, 'status' => $status));
+
+
+                        //Email function
+                        $user_id = DB::table('requesths')->where('request_id', $request_id)->pluck('user_id');
+                        $user = User::where('id', '=', $user_id);
+                        $a = $user->count();
+                        $user = $user->first();
+
+                        Mail::send('Requests.AllocationSuccess', array('username' => $user->username), function ($message) use ($user) {
+                            $message->to($user->email, $user->username)->subject('Resource Allocation');
+                        });
+
+
+
+                        \Session::flash('flash_message', 'Software Allocated Successfully');
+                        return redirect('Allocate');
+                    }
+
+                    else {
+                        \Session::flash('flash_message_error', 'Less no of Licenses/ cannot allocate');
+                        return redirect('Allocate');
+                    }
                 }
             }
 
@@ -133,8 +167,8 @@ class AllocationController extends Controller {
         $type=Input::get('type');
         $inventory_code = Input::get('hid11');
 
-      $request_id =Input::get('r1');
-       // $request_id =1;
+        $request_id =Input::get('r1');
+        //$request_id =1;
         $Allocation_id =1;
         $device_status='Not Allocated';
 
@@ -147,7 +181,7 @@ class AllocationController extends Controller {
             $hardware_types=Hardware::where('status','=',$device_status)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
         }
         else{
-            $hardware_types=Software::where('status','=',$device_status)->where('name', 'LIKE', '%' . $type . '%')->paginate(30);
+            $hardware_types=Software::where('name', 'LIKE', '%' . $type . '%')->paginate(30);
         }
         \Session::flash('flash_search','');
         return view('Requests.Allocate')->with('hardware_types',$hardware_types)->with('results',$results)->with('ids',$ids)->with('ftp_account',$ftp_account)->with('inventory_code',$inventory_code);
@@ -156,9 +190,8 @@ class AllocationController extends Controller {
 
     Public function SendResource(){
         $inventory_code = Input::get('hid11');
-
-        //$request_id = 1;
         $request_id =Input::get('r2');
+        //$request_id =1;
         $Allocation_id =1;
         $device_status='Not Allocated';
         $resource_type=Input::get('resource_type');
@@ -172,7 +205,7 @@ class AllocationController extends Controller {
             $hardware_types=Hardware::where('status','=',$device_status)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
         }
         else{
-            $hardware_types=Software::where('status','=',$device_status)->where('name', 'LIKE', '%' . $type . '%')->paginate(30);
+            $hardware_types=Software::where('name', 'LIKE', '%' . $type . '%')->paginate(30);
         }
 
         \Session::flash('flash_get','');
@@ -197,7 +230,7 @@ class AllocationController extends Controller {
 
     }
 
-//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------Hardware Resource History-------------------------------------------------------------------------------------------------------------------------------------
 
     Public function getTrackResource(){
         return view('Requests.TrackResource');
@@ -240,5 +273,62 @@ class AllocationController extends Controller {
         return view('Requests.TrackResource')->with('hardware_types',$hardware_types)->with('history',$history)->with('get_serial_no',$get_serial_no);
 
     }
+
+//-------------------------------------------------------Hardware Maintenance---------------------------------------------------------------------------------------------------------------------------
+    Public function getHardwareMaintenance(){
+
+        $hardware=Hardware::all();
+        return view('Requests.HardwareMaintenance',compact('hardware'));
+    }
+
+    Public function SaveHardwareCost(){
+
+        $save=Input::get('save');
+        $view=Input::get('view');
+        $inventory_code=Input::get('hw');
+        $remarks=Input::get('remarks');
+        $date=Input::get('date');
+        $cost=Input::get('cost');
+        $pattern = '/^(?:0|[1-9]\d*)(?:\.\d{2})?$/';
+
+     if($save){
+
+        if ((empty($date) || empty($cost))) {
+                \Session::flash('flash_message_error', 'Date And Cost Fields Cannot Be Empty');
+                return redirect('HardwareMaintenance');
+        }
+
+        else {
+
+            if (preg_match($pattern, $cost) == '0') {
+                \Session::flash('flash_message_error', 'Invalid cost type');
+                return redirect('HardwareMaintenance');
+            }
+            else {
+                $insert = DB::table('maintenance')->insert(array('inventory_code' => $inventory_code,
+                        'remarks' => $remarks,
+                        'date' => $date,
+                        'cost' => $cost)
+                );
+                \Session::flash('flash_message', 'Maintenance Cost Added successfully');
+                return redirect('HardwareMaintenance');
+            }
+
+        }
+     }
+
+    if($view) {
+        $inventory_code=Input::get('hw');
+        $finds=DB::table('maintenance')->where('inventory_code', '=', $inventory_code)->get();
+        $total_cost=DB::table('maintenance')->where('inventory_code', '=',$inventory_code)->sum('cost');
+        $hardware=Hardware::all();
+        $stats=0;
+
+        \Session::flash('flash_total_c','');
+        return view('Requests.HardwareMaintenance')->with('hardware',$hardware)->with('finds',$finds)->with('total_cost',$total_cost)->with('$stats',$stats);
+    }
+
+    }
+
 
 }
