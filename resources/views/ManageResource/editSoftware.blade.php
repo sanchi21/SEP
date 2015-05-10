@@ -38,6 +38,10 @@
         <td>
             &nbsp;<button type="submit" class="btn btn-primary form-control" style="height: 30px;" name="descend" value="descend"><span class="glyphicon glyphicon-chevron-down"></span> </button>
         </td>
+
+        <td>
+            &nbsp;<input type="button" onclick="printContent('content12')" class="btn btn-primary" style="height: 30px; width: 70px" value="Print">
+        </td>
 </tr>
 </table>
 {!! Form ::close() !!}
@@ -115,5 +119,74 @@
 {!!$softwares->render()!!}
 </div>
 
+
+
+<div id="content12" name="content12" style="display: none">
+
+    <div name = "report-header">
+        <table width="100%">
+            <tr>
+                <td width="50%"><img src="/includes/images/zone_logo.png" height="70px" width="200px"></td>
+                <td width="50%"></td>
+            </tr>
+            <tr>
+                <td width="50%"><h4>Zone24x7 (Private) Limited</h4></td>
+                <td width="50%" align="right"><h4>Date : {{date("d-m-Y")}}</h4></td>
+            </tr>
+
+            <tr>
+                <td width="50%"><h4>Nawala Road,</h4></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td width="50%"><h4>Koswatte,</h4></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td width="50%"><h4>Sri Lanka 10107</h4></td>
+                <td></td>
+            </tr>
+
+        </table>
+
+        <h2 align="center">Software Details</h2>
+
+    </div>
+
+    <table class="table table-bordered" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
+
+    <tr style="background-color: #e7e7e7">
+        <th>Inventory&nbsp;Code</th>
+        <th>Name</th>
+        <th>Vendor</th>
+        <th>No&nbsp;of&nbsp;Licenses</th>
+    </tr>
+    <tbody id="tableBody">
+        @foreach($softwares as $software)
+            <tr>
+                <td><h5>{{$software->inventory_code}}</h5></td>
+                <td><h5>{{$software->name}}</h5></td>
+                <td><h5>{{$software->vendor}}</h5></td>
+                <td><h5>{{$software->no_of_license}}</h5></td>
+            </tr>
+        @endforeach
+    </tbody>
+    </table>
+<br>
+
+</div>
+
 @endsection
 @stop
+
+<script>
+    function printContent(print_content){
+        var restorepage = document.body.innerHTML;
+        var printcontent = document.getElementById(print_content).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+    }
+</script>

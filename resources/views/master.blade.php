@@ -35,7 +35,7 @@
 <body style="background-color: rgba(229, 228, 226, 0.5); height:100%; width: 100% " onload="init()">
 {{--f1f1f1--}}
 <ul class="navigation">
-@if(Auth::User()->permissions=="Administrator Full")
+@if(Auth::User()->username!="srinithy")
         <li class="nav-item"><a href=" {{ URL::route('home-admin-full') }}"><img src="{{asset('/includes/images/icons/home.png')}}" alt="Home" style="width:20px;height:20px">&nbsp;&nbsp;Home</a></li>
         <li class="nav-item"><a href=" {{ URL::route('add-user') }}"><img src="{{asset('/includes/images/icons/users.png')}}" alt="Manage Users" style="width:20px;height:20px">&nbsp;&nbsp;Manage Users</a></li>
         <li class="nav-item"><img src="{{asset('/includes/images/icons/hardware.png')}}" alt="Hardware" style="width:20px;height:20px">&nbsp;&nbsp;Hardware</li>
@@ -48,10 +48,18 @@
                 <li class="nav-item"><a href=" {{ URL::route('software-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;New Software</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('software-edit-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Edit Software</a></li>
         <li class="nav-item"><a href=" {{ URL::route('addPortion') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Options</a></li>
+
+        <li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Allocation</li>
+            <li class="nav-item"><a href=" {{ URL::route('ViewRequests') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Allocate</a></li>
+            <li class="nav-item"><a href=" {{ URL::route('TrackResource') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;TrackResource</a></li>
+            <li class="nav-item"><a href=" {{ URL::route('HardwareMaintenance') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Maintenance</a></li>
+
 @else
         <li class="nav-item"><img src="{{asset('/includes/images/icons/request.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Requests</li>
                 <li class="nav-item"><a href=" {{ URL::route('hardwarereq') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/resource.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;Resources</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('ftpreq') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/ftp.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;FTP Account</a></li>
+                <li class="nav-item"><a href=" {{ URL::route('Connectivity') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/ftp.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Connectivity</a></li>
+
    @endif
   </ul>
 <input type="checkbox" id="nav-trigger" class="nav-trigger"/>
@@ -66,7 +74,7 @@
         <label for="nav-trigger"></label>
     </div>
     <ul class="nav navbar-nav navbar-right">
-          <li><a href="#" style="color: #ffffff">User Role : {{Auth::User()->permissions}}</a></li>
+          <li><a href="#" style="color: #ffffff"></a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> {{Auth::User()->username }} <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
@@ -111,7 +119,7 @@
 </div>
 
 </div>
-
+   @include('master-footer')
 {{--<script src="http://listjs.com/no-cdn/list.js"></script>--}}
 </body>
 </html>

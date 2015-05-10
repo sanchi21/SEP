@@ -16,6 +16,7 @@ return [
 	*/
 
 	'driver' => 'eloquent',
+//    'driver' => 'ldap',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -57,6 +58,7 @@ return [
 	| they have less time to be guessed. You may change this as needed.
 	|
 	*/
+    'username_field' => 'username',
 
 	'password' => [
 		'email' => 'emails.password',

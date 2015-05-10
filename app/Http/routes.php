@@ -27,6 +27,8 @@ Route::group(array('middleware' => ['auth']), function() {
     //GET projectManagerHomePage
     Route::get('homep',array('as'=>'home-project-manager','uses'=>'HomeController@getHomeProjectManager'));
 
+    Route::get('statistic',array('as'=>'statistic','uses'=>'HomeController@getStatistic'));
+
 
     //Administrator Group
     Route::group(array('middleware' => ['role']), function() {
@@ -72,6 +74,10 @@ Route::group(array('middleware' => ['auth']), function() {
 
     Route::get('change-options',array('as'=>'change-options','uses'=>'DropDownController@index'));
     Route::post('change-options','DropDownController@handle');
+
+    Route::get('hardware-depreciate/{id}','DepreciateController@show');
+    Route::get('hardware-d','DepreciateController@index');
+    Route::post('hardware-depreciate','DepreciateController@store');
 
 //--------------------------------------------------------Parthi
     Route::get('addPortion',array('as'=>'addPortion','uses'=>'AddResourcePortion@index'));
@@ -128,7 +134,7 @@ Route::group(array('middleware' => ['auth']), function() {
 //Route::post('hardwarereq','HardwareReqController@DeleteRequest');
 
     Route::get('Allocate','AllocationController@view');
-    Route::post('Allocate/ViewRequests', array('as' => 'ViewRequests', 'uses' => 'AllocationController@ViewRequests'));
+    Route::post('Allocate', array('as' => 'ViewRequests', 'uses' => 'AllocationController@ViewRequests'));
     Route::post('Allocate/ResourceAllocation', array('as' => 'ResourceAllocation', 'uses' => 'AllocationController@ResourceAllocation'));
     Route::post('Allocate/SearchResource', array('as' => 'SearchResource', 'uses' => 'AllocationController@SearchResource'));
     Route::post('Allocate/SendResource', array('as' => 'SendResource', 'uses' => 'AllocationController@SendResource'));
@@ -140,13 +146,14 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::get('ftpreq', array('as'=>'ftpreq','uses'=>'FtpController@FindU'));
 
     Route::get('Connectivity','FtpController@ViewConnectivity');
-    Route::post('Connectivity', array('as' => 'Res','uses'=>'FtpController@SendConnRequest'));
+    Route::post('Connectivity', array('as' => 'Connectivity','uses'=>'FtpController@SendConnRequest'));
 
     Route::get('TrackResource','AllocationController@getTrackResource');
-    Route::post('TrackResource/s', array('as' => 'Track','uses'=>'AllocationController@Track'));
+    Route::post('TrackResource', array('as' => 'TrackResource','uses'=>'AllocationController@Track'));
     Route::post('TrackResource/FindHistory', array('as' => 'FindHistory','uses'=>'AllocationController@FindHistory'));
 
-
+    Route::get('HardwareMaintenance','AllocationController@getHardwareMaintenance');
+    Route::post('HardwareMaintenance', array('as' => 'HardwareMaintenance','uses'=>'AllocationController@SaveHardwareCost'));
 
 
 

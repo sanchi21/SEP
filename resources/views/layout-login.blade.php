@@ -65,6 +65,7 @@ Secure Payment Solutions</h1>
      <span class="sr-only">Next</span>
    </a>
  </div>
+
 @yield('content')
  </body>
 

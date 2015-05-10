@@ -64,25 +64,6 @@ class Hardware extends Model {
         }
         else
         {
-            /*
-            switch($type)
-            {
-                case "Office-Equipment" : $newCode = "CMB/OEQ/0001" ; break;
-                case "Communication-Equipment" : $newCode = "CMB/COM/0001" ; break;
-                case "Development-Device" : $newCode = "CMB/DEV/0001" ; break;
-                case "Network-Equipment" : $newCode = "CMB/NTE/0001" ; break;
-                case "Desktop" : $newCode = "CMB/DSK/0001" ; break;
-                case "Monitor" : $newCode = "CMB/MON/0001" ; break;
-                case "Laptop" : $newCode = "CMB/LAP/0001" ; break;
-                case "Server" : $newCode = "CMB/SVR/0001" ; break;
-                case "Virtual-Server" : $newCode = "CMB/VIR/0001" ; break;
-                case "Power-Equipment" : $newCode = "CMB/PWR/0001" ; break;
-                case "Dongle" : $newCode = "CMB/DON/0001" ; break;
-                case "Sim" : $newCode = "CMB/SIM/0001" ; break;
-                case "Client-Device" : $newCode = "CMB/CDV/0001" ; break;
-            }
-            */
-
             $firstKey = Type::find($type);
             $n_code = $firstKey->key;
             $newCode = $n_code."/0001";
