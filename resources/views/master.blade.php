@@ -36,23 +36,30 @@
 {{--f1f1f1--}}
 <ul class="navigation">
 @if(Auth::User()->username!="srinithy")
-        <li class="nav-item"><a href=" {{ URL::route('home-admin-full') }}"><img src="{{asset('/includes/images/icons/home.png')}}" alt="Home" style="width:20px;height:20px">&nbsp;&nbsp;Home</a></li>
-        <li class="nav-item"><a href=" {{ URL::route('add-user') }}"><img src="{{asset('/includes/images/icons/users.png')}}" alt="Manage Users" style="width:20px;height:20px">&nbsp;&nbsp;Manage Users</a></li>
-        <li class="nav-item"><img src="{{asset('/includes/images/icons/hardware.png')}}" alt="Hardware" style="width:20px;height:20px">&nbsp;&nbsp;Hardware</li>
-                <li class="nav-item"><a href=" {{ URL::route('hardware') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Hardware" style="width:18px;height:18px">&nbsp;&nbsp;New Hardware</a></li>
-                <li class="nav-item"><a href=" {{ URL::route('hardware-edit-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Edit Hardware</a></li>
-                <li class="nav-item"><a href=" {{ URL::route('change-property/New') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Attributes</a></li>
-                <li class="nav-item"><a href=" {{ URL::route('change-options') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Drop Downs</a></li>
+        <li class="nav-item"><a href=" {{ URL::route('home-admin-full') }}"><img src="{{asset('/includes/images/icons/70370.png')}}" alt="Home" style="width:20px;height:20px">&nbsp;&nbsp;Home</a></li>
+        <li class="nav-item"><a href=" {{ URL::route('add-user') }}"><img src="{{asset('/includes/images/icons/user.png')}}" alt="Manage Users" style="width:20px;height:20px">&nbsp;&nbsp;Manage Users</a></li>
+        {{--<li class="nav-item"><img src="{{asset('/includes/images/icons/hardware.png')}}" alt="Hardware" style="width:20px;height:20px">&nbsp;&nbsp;Hardware</li>--}}
+                <li class="nav-item"><a href=" {{ URL::route('hardware') }}"><img src="{{asset('/includes/images/icons/add.png')}}" alt="New Hardware" style="width:18px;height:18px">&nbsp;&nbsp;New Hardware</a></li>
+                <li class="nav-item"><a href=" {{ URL::route('hardware-edit-get') }}"><img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Edit Hardware</a></li>
+                <li class="nav-item"><a href=" {{ URL::route('change-property/New') }}"><img src="{{asset('/includes/images/icons/add_attr.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Attributes</a></li>
+                <li class="nav-item"><a href=" {{ URL::route('change-options') }}"><img src="{{asset('/includes/images/icons/drop_down.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Drop Downs</a></li>
 
-        <li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Software</li>
-                <li class="nav-item"><a href=" {{ URL::route('software-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/add.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;New Software</a></li>
-                <li class="nav-item"><a href=" {{ URL::route('software-edit-get') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Edit Software</a></li>
-        <li class="nav-item"><a href=" {{ URL::route('addPortion') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Options</a></li>
+        {{--<li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Software</li>--}}
+        <li class="nav-item"><a href=" {{ URL::route('software-get') }}"><img src="{{asset('/includes/images/icons/add_sw.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;New Software</a></li>
+        <li class="nav-item"><a href=" {{ URL::route('software-edit-get') }}"><img src="{{asset('/includes/images/icons/edit_sw.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Edit Software</a></li>
+        {{--<li class="nav-item"><a href=" {{ URL::route('addPortion') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Options</a></li>--}}
 
-        <li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Allocation</li>
-            <li class="nav-item"><a href=" {{ URL::route('ViewRequests') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Allocate</a></li>
-            <li class="nav-item"><a href=" {{ URL::route('TrackResource') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;TrackResource</a></li>
+        {{--<li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Allocation</li>--}}
+            <li class="nav-item"><a href=" {{ URL::route('ViewRequests') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Allocate</a></li>
+            <li class="nav-item"><a href=" {{ URL::route('TrackResource') }}"><img src="{{asset('/includes/images/icons/track.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;TrackResource</a></li>
             <li class="nav-item"><a href=" {{ URL::route('HardwareMaintenance') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Maintenance</a></li>
+
+        <li class="nav-item"><a href=" {{ URL::route('renewalAccept') }}"><img src="{{asset('/includes/images/icons/renew.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Renewal&nbsp;Requests</a></li>
+        <li class="nav-item"><a href=" {{ URL::route('releaseResource') }}"><img src="{{asset('/includes/images/icons/release.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Release&nbsp;Resources</a></li>
+        <li class="nav-item"><a href=" {{ URL::route('employeeAllocation') }}"><img src="{{asset('/includes/images/icons/allocate_i.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Employee&nbsp;Allocate</a></li>
+                {{--<li class="nav-item"><a href=" {{ URL::route('addPortion') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Options</a></li>--}}
+
+
 
 @else
         <li class="nav-item"><img src="{{asset('/includes/images/icons/request.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Requests</li>
@@ -60,6 +67,7 @@
                 <li class="nav-item"><a href=" {{ URL::route('ftpreq') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/ftp.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;FTP Account</a></li>
                 <li class="nav-item"><a href=" {{ URL::route('Connectivity') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/ftp.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Connectivity</a></li>
 
+                <li class="nav-item"><a href=" {{ URL::route('renewal') }}">&nbsp;&nbsp;&nbsp;&nbsp;<img src="{{asset('/includes/images/icons/renew.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Renew&nbsp;Project</a></li>
    @endif
   </ul>
 <input type="checkbox" id="nav-trigger" class="nav-trigger"/>

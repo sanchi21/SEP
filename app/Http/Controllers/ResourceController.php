@@ -267,10 +267,8 @@ class ResourceController extends Controller {
 
 
             if ($status) {
-                DB::commit();
                 \Session::flash('flash_message', 'Hardware '.$inventory_code.' updated successfully!');
             } else {
-                DB::rollback();
                 \Session::flash('flash_message_error', 'Hardware update failed!');
             }
 

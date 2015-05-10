@@ -101,13 +101,13 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('addHardDisk','AddResourcePortion@addHardDisk');
     Route::post('updateHardDisk','AddResourcePortion@updateHardDisk');
 
-    Route::get('renewal','RenewalController@index');
+    Route::get('renewal',array('as'=>'renewal','uses'=>'RenewalController@index'));
     Route::post('requestRenewal', 'RenewalController@requestRenewal');
     Route::post('cancelRenewal', 'RenewalController@cancelRequest');
-    Route::get('renewalAccept', 'RenewalController@adminView');
+    Route::get('renewalAccept',array('as'=>'renewalAccept','uses'=>'RenewalController@adminView'));
     Route::post('renewalAccept', 'RenewalController@adminAccept');
 
-    Route::get('releaseResource', 'RenewalController@adminReleaseView');
+    Route::get('releaseResource',array('as'=>'releaseResource','uses'=>'RenewalController@adminReleaseView'));
     Route::post('releaseResourceProject', 'RenewalController@resourceReleaseProject');
     Route::post('releaseResourceEmployee', 'RenewalController@resourceReleaseEmployee');
 
@@ -115,7 +115,7 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('searchResource', 'RenewalController@searchResource');
 
     Route::get('employeeAllocation', 'RenewalController@employeeAllocationView');
-    Route::post('employeeAllocation', 'RenewalController@employeeAllocation');
+    Route::get('employeeAllocation',array('as'=>'employeeAllocation','uses'=>'RenewalController@employeeAllocation'));
     Route::post('searchHardware', 'RenewalController@searchHardware');
 
     Route::get('viewAllocations', 'RenewalController@viewAllocation');

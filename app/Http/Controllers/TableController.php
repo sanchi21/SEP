@@ -263,20 +263,5 @@ class TableController extends Controller {
         });
     }
 
-//    public function store()
-//    {
-//        $data_all = Input::all();
-//
-//        $users=$input['user'];
-//
-//        $hardware = Hardware::find('CMB/DSK/0001');
-//        $colName = $data_all['attribute'];
-//        $colType = $data_all['type'];
-//
-//        $hardware->$colName = "Test";
-//        $hardware->save();
-//
-//        return 'success';
-//    }
 
 }
