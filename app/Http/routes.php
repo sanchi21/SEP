@@ -102,9 +102,19 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('renewalAccept', 'RenewalController@adminAccept');
 
     Route::get('releaseResource', 'RenewalController@adminReleaseView');
-    Route::post('releaseResource', 'RenewalController@resourceRelease');
+    Route::post('releaseResourceProject', 'RenewalController@resourceReleaseProject');
+    Route::post('releaseResourceEmployee', 'RenewalController@resourceReleaseEmployee');
+
 
     Route::post('searchResource', 'RenewalController@searchResource');
+
+    Route::get('employeeAllocation', 'RenewalController@employeeAllocationView');
+    Route::post('employeeAllocation', 'RenewalController@employeeAllocation');
+    Route::post('searchHardware', 'RenewalController@searchHardware');
+
+    Route::get('viewAllocations', 'RenewalController@viewAllocation');
+
+
 
 
 //---------------------------------------------------------------------Srinithy

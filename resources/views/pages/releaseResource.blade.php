@@ -3,7 +3,7 @@
 @section('content')
 
 <br>
-<h2 style="color: #9A0000">Release Resources</h2>
+<h2 style="color: #9A0000">Project Resource Release</h2>
 
 <br>
 <br>
@@ -15,9 +15,9 @@
 
 
             <tr id="headRow" style="background-color: #e7e7e7">
+            <th>Project Code</th>
+            <th>Inventory Code</th>
             <th>Name</th>
-            <th>Assigned Date</th>
-            <th>Additional Info</th>
             <th>Required Upto</th>
 
  @foreach($allocated as $all)
@@ -26,21 +26,25 @@
        {{--<td>{{$all->request_id}}</td>--}}
        {{--<td>{{$all->sub_id}}</td>--}}
 
-        {!! Form ::open(['method' => 'POST', 'url' => 'releaseResource']) !!}
+        {!! Form ::open(['method' => 'POST', 'url' => 'releaseResourceProject']) !!}
 
             @if($all->item=='')
 
+
+             <td>{{$all->project_id}}</td>
+             <td>{{$all->inventory_code}}</td>
              <td><input type="text" class="form-control input-sm" value="{{$all->device_type}}" name="name" style="width: 300px" readonly></td>
-             <td>{{$all->assigned_date}}</td>
-             <td>{{$all->additional_information}}</td>
+
+
 
 
 
             @else
 
+             <td>{{$all->project_id}}</td>
+             <td>{{$all->inventory_code}}</td>
              <td><input type="text" class="form-control input-sm" value="{{$all->item}}" name="name" style="width: 300px" readonly></td>
-             <td>{{$all->assigned_date}}</td>
-             <td>{{$all->additional_information}}</td>
+
 
 
 
@@ -50,6 +54,7 @@
              <td> <input class="btn btn-danger" type="submit" name="release" value="Release"></td>
                <input type="hidden" value="{{$all->request_id}}" name="rid">
                <input type="hidden" value="{{$all->sub_id}}" name="sid">
+               <input type="hidden" value="{{$all->inventory_code}}" name="inventory">
 
         {!! Form::close() !!}
 
@@ -62,5 +67,61 @@
 
     </tbody>
     </table>
+
+    <br>
+
+
+    <h2 style="color: #9A0000">Individual Resource Release</h2>
+
+    <br>
+    <br>
+
+
+    <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+
+
+
+                <tr id="headRow" style="background-color: #e7e7e7">
+                <th>Inventory Code</th>
+                <th>Type</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Allocated To</th>
+
+
+     @foreach($hardwares as $all)
+
+        <tr>
+           {{--<td>{{$all->request_id}}</td>--}}
+           {{--<td>{{$all->sub_id}}</td>--}}
+
+            {!! Form ::open(['method' => 'POST', 'url' => 'releaseResourceEmployee']) !!}
+
+
+
+
+                 <td>{{$all->inventory_code}}</td>
+                 <td>{{$all->resource_type}}</td>
+                 <td>{{$all->make}}</td>
+                 <td>{{$all->model}}</td>
+                 <td>{{$all->user_name}}</td>
+
+
+
+                   <td> <input class="btn btn-danger" type="submit" name="release" value="Release"></td>
+                   <input type="hidden" value="{{$all->inventory_code}}" name="inventory">
+
+            {!! Form::close() !!}
+
+
+          </td>
+          </tr>
+
+        @endforeach
+
+
+        </tbody>
+        </table>
 
 @stop
