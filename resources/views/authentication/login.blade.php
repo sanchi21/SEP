@@ -41,7 +41,7 @@
             <td colspan="2">
             <div class="input-group" style="width: 100%">
               <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"></span> </span>
-                 <input type="text" placeholder="email" id="email" class="form-control" name="email"{{ (Input::old('email')) ? ' value=' . e(Input::old('email')) . ' ' : '' }} style="width: 100%; background-color: #e7e7e7">
+                 <input type="text" placeholder="username" id="email" class="form-control" name="email"{{ (Input::old('email')) ? ' value=' . e(Input::old('email')) . ' ' : '' }} style="width: 100%; background-color: #e7e7e7">
             </div>
                             @if (count($errors) > 0)
 

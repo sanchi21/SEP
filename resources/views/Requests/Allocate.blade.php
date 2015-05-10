@@ -1,7 +1,7 @@
 @extends('master')
 @section('content')
 <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
-<?php $req = 0 ?>
+<?php $req=0  ?>
 
 <div>
 <table class="table table-hover" style="font-size: small;font-family: Arial ;width:30%">
@@ -33,7 +33,7 @@
 
 
   <div style="float:left; width:50%">
-         @if(Session::has('flash_av') || Session::has('flash_get'))
+         @if(Session::has('flash_av') || Session::has('flash_get') ||Session::has('flash_search') )
          {{--<input type="hidden" value="{{$request_id}}" name="hidr">--}}
           <table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial ;width:85%" >
               <tbody>
@@ -154,7 +154,7 @@
           <input type="hidden" value="{{$result->device_type}}" name="hid6">
           <input type="hidden" value="{{$result->model}}" name="hid7">
           <input type="hidden" value="{{$result->additional_information}}" name="hid8">
-          {{--<input type="hidden" value="{{$result->request_id}}" name="hidr">--}}
+          <input type="hidden" value="{{$result->request_id}}" name="hidr">
           <?php $req = $result->request_id ?>
 
           <td> {!! Form::submit('Allocate',['class'=>'btn btn-primary form-control','name'=>'Allocate']) !!}</td>
@@ -167,24 +167,24 @@
               </tbody>
               </table>
 
-         <table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial ;width:30%" >
-         <tbody>
-         @foreach($ftp_account as $ftp)
-         <form action="{{ URL::route('ViewFtp') }}" method="post">
-         <input type="hidden" value="{{$ftp->request_id}}" name="hid9">
-         <input type="hidden" value="{{$ftp->sub_id}}" name="hid10">
-         <tr>
-             <td><p style="color: darkred">FTP Account</p></td>
-         </tr>
-         <tr>
-            <td>Account {{$ftp->sub_id}}</td>
-            <td><button type="submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Assign</button></td>
-         </tr>
-         {!! Form::token() !!}
-         </form>
- @endforeach
-        </tbody>
-        </table>
+         {{--<table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial ;width:30%" >--}}
+         {{--<tbody>--}}
+         {{--@foreach($ftp_account as $ftp)--}}
+         {{--<form action="{{ URL::route('ViewFtp') }}" method="post">--}}
+         {{--<input type="hidden" value="{{$ftp->request_id}}" name="hid9">--}}
+         {{--<input type="hidden" value="{{$ftp->sub_id}}" name="hid10">--}}
+         {{--<tr>--}}
+             {{--<td><p style="color: darkred">FTP Account</p></td>--}}
+         {{--</tr>--}}
+         {{--<tr>--}}
+            {{--<td>Account {{$ftp->sub_id}}</td>--}}
+            {{--<td><button type="submit" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Assign</button></td>--}}
+         {{--</tr>--}}
+         {{--{!! Form::token() !!}--}}
+         {{--</form>--}}
+ {{--@endforeach--}}
+        {{--</tbody>--}}
+        {{--</table>--}}
 
     @endif
   </div>
@@ -218,7 +218,7 @@
 </br>
 
  <table class="table table-hover" style="font-size: small;font-family: Arial ;width:50%">
-       @if(Session::has('flash_search'))
+       @if(Session::has('flash_search') || Session::has('flash_get'))
          @foreach($hardware_types as $search)
          <form action="{{ URL::route('SendResource') }}" method="post">
          @if($search->type != '')
@@ -266,8 +266,11 @@
 
        @endif
  </table>
+ </div>
 
-  </div>
+
+
+
 
 
 @endsection

@@ -147,8 +147,8 @@ class Authentication_Controller extends Controller {
     {
         // validate the info, create rules for the inputs
         $rules = array(
-            'email', // make sure the email is an actual email
-            'password' // password can only be alphanumeric and has to be greater than 3 characters
+            'email' =>'required', // make sure the email is an actual email
+            'password'  =>'required' // password can only be alphanumeric and has to be greater than 3 characters
         );
 
         // run the validation rules on the inputs from the form
@@ -220,8 +220,8 @@ class Authentication_Controller extends Controller {
 
 
             } else {
-//                return 'auth failed ';
-//
+
+                \Session::flash('flash_message','No record match');
 //                // validation not successful, send back to form
 //                \Session::flash('flash_message','No record match or account is not activated');
                 return Redirect::route('account-login');

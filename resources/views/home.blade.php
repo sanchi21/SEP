@@ -6,7 +6,7 @@
 
 <table style="width: 100%">
     <tr>
-        <td style="width: 4px"></td>
+        <td style="width: 40px"></td>
         <td background = "{{asset('/includes/images/dashboardIcons/dashboardIcons1.jpg')}}"  style="width: 243px;height: 120px; background-repeat: no-repeat; padding-left:5px; color: white; font-size: 33px">
             <b>
                     {{ $countPendingResourceRequests }}
@@ -17,14 +17,15 @@
         <td background = "{{asset('/includes/images/dashboardIcons/dashboardIcons3.jpg')}}"  style="width: 243px;height: 120px; background-repeat: no-repeat; padding-left:5px; color: white; font-size: 33px">
             <b>
                     {{ $countTotalAvailableResources }}
-                    <p style="font-size: 14px; opacity: 0.7">Available Resources</p>
+                    <p style="font-size: 14px; opacity: 0.7"><a href=" {{ URL::route('hardware-edit-get') }}" style="color: white">Available Resources</a></p>
+
             </b>
         </td>
         <td style="width: 4px"></td>
         <td background = "{{asset('/includes/images/dashboardIcons/dashboardIcons2.jpg')}}" style="width: 243px;height: 120px; background-repeat: no-repeat; padding-left:5px; color: white; font-size: 33px">
             <b>
                 {{ $countSystemUsers }}
-                <p style="font-size: 14px; opacity: 0.7">User Registration</p>
+                <p style="font-size: 14px; opacity: 0.7"><a href=" {{ URL::route('add-user') }}" style="color: white">User Registration</a></p>
 
             </b>
         </td>
@@ -36,13 +37,7 @@
             </b>
         </td>
         <td style="width: 4px"></td>
-        <td background = "{{asset('/includes/images/dashboardIcons/dashboardIcons5.jpg')}}"  style="width: 243px;height: 120px; background-repeat: no-repeat; padding-left:5px; color: white; font-size: 33px">
-            <b>
-                    20
-                    <p style="font-size: 14px; opacity: 0.7">Resource value</p>
-            </b>
-        </td>
-        <td style="width: 4px"></td>
+
     </tr>
 </table>
 <br>
@@ -53,7 +48,7 @@
         <tr>
             <td style="width: 40; vertical-align: top">
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#graph" aria-controls="home" role="tab" data-toggle="tab"><p style="font-size: 12px"><span class="glyphicon glyphicon-signal"></span> Graph </p> </a></li>
+                <li role="presentation" class="active"><a href="#graph" aria-controls="home" role="tab" data-toggle="tab"><p style="font-size: 12px"><span class="glyphicon glyphicon-signal"></span> No of Resources </p> </a></li>
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="graph">
@@ -65,7 +60,7 @@
             <td style="width: 1%"></td>
             <td style="width: 24%; vertical-align: top">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#ResourceStatus" aria-controls="home" role="tab" data-toggle="tab"><p style="font-size: 12px"><span class="glyphicon glyphicon-cd"></span> Resource Status </p> </a></li>
+                    <li role="presentation" class="active"><a href="#ResourceStatus" aria-controls="home" role="tab" data-toggle="tab"><p style="font-size: 12px"><span class="glyphicon glyphicon-cd"></span> Resource analysis </p> </a></li>
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="ResourceStatus">
@@ -126,7 +121,7 @@
         (function(){
             var ctx = document.getElementById('statistic').getContext('2d');
             var chart = {
-                labels:['january','february','march','april','may','june'],
+                labels:['communication','desktop','laptop','monitor'],
                 datasets:[ {
 
 
@@ -137,10 +132,10 @@
                                       pointStrokeColor: "#fff",
                                       pointHighlightFill: "#fff",
                                       pointHighlightStroke: "rgba(151,187,205,1)",
-                                      data: [28, 48, 40, 19, 86, 27, 90]
+                                      data: [12, 20, 25, 10]
                                   }]
             };
-            new Chart(ctx).Line(chart);
+            new Chart(ctx).Bar(chart);
         })();
 
         (function(){
