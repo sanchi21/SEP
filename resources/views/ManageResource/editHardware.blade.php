@@ -62,7 +62,8 @@
 <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
     <tr id="headRow" style="background-color: #e7e7e7;">
         @foreach($columns as $c)
-            <th>{{$c->column_name}}</th>
+            <?php $tm = str_replace(' ','&nbsp;', $c->column_name) ?>
+            <th>{{$tm}}</th>
         @endforeach
         <th></th>
     </tr>
@@ -106,7 +107,8 @@
 <table class="table table-bordered" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
     <tr id="headRow" style="background-color: #e7e7e7;">
         @foreach($columns as $c)
-            <th>{{$c->column_name}}</th>
+            <?php $tm = str_replace(' ','&nbsp;', $c->column_name) ?>
+            <th>{{$tm}}</th>
         @endforeach
         <th></th>
     </tr>

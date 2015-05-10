@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Column;
+use App\Depreciation;
 use App\DropDown;
 use App\Hardware;
 use App\Http\Requests;
@@ -210,6 +211,13 @@ class ResourceController extends Controller {
     {
         $id = urldecode(base64_decode($d));
         $inventory_code = str_replace('-','/',$id);//Input::get('inventory_code');
+        $resource = Depreciation::find($inventory_code);
+        $depreciation = false;
+
+        if(is_null($resource))
+            $depreciation = true;
+        else
+            $depreciation = false;
 
         $hardware = Hardware::find($inventory_code);
         $type = $hardware->type;
@@ -217,7 +225,7 @@ class ResourceController extends Controller {
         $dropValues = $this->getDropDownValues($columns);
         $count = count($dropValues);
 
-        return view('ManageResource.editHardwareForm',compact('hardware','type','columns','dropValues','count'));
+        return view('ManageResource.editHardwareForm',compact('hardware','type','columns','dropValues','count','depreciation'));
     }
 
     public function getDropDownValues($columns)
