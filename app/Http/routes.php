@@ -27,6 +27,8 @@ Route::group(array('middleware' => ['auth']), function() {
     //GET projectManagerHomePage
     Route::get('homep',array('as'=>'home-project-manager','uses'=>'HomeController@getHomeProjectManager'));
 
+    Route::get('statistic',array('as'=>'statistic','uses'=>'HomeController@getStatistic'));
+
 
     //Administrator Group
     Route::group(array('middleware' => ['role']), function() {

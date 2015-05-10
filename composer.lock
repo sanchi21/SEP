@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "17b7c416be7b0c94b8df93a1f0e58ba2",
+    "hash": "acf030dc613666369060cdb0c6b4b000",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -574,16 +574,16 @@
         },
         {
             "name": "khill/lavacharts",
-            "version": "2.5.2",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kevinkhill/lavacharts.git",
-                "reference": "f72e94c799a9abc8e54c4b48c496fe9fbf3c1d82"
+                "reference": "494e8c784ea250d29842456d58eeba8de48217ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kevinkhill/lavacharts/zipball/f72e94c799a9abc8e54c4b48c496fe9fbf3c1d82",
-                "reference": "f72e94c799a9abc8e54c4b48c496fe9fbf3c1d82",
+                "url": "https://api.github.com/repos/kevinkhill/lavacharts/zipball/494e8c784ea250d29842456d58eeba8de48217ac",
+                "reference": "494e8c784ea250d29842456d58eeba8de48217ac",
                 "shasum": ""
             },
             "require": {
@@ -622,20 +622,20 @@
                 "google",
                 "graphs"
             ],
-            "time": "2015-05-08 03:26:12"
+            "time": "2015-04-28 20:18:04"
         },
         {
             "name": "laravel/framework",
-            "version": "5.0.30",
+            "version": "v5.0.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "c7ffbf1fd4895ac4cdac551265d635d995346d97"
+                "reference": "06a09429322cf53e5bd4587db1060f02a291562e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/c7ffbf1fd4895ac4cdac551265d635d995346d97",
-                "reference": "c7ffbf1fd4895ac4cdac551265d635d995346d97",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/06a09429322cf53e5bd4587db1060f02a291562e",
+                "reference": "06a09429322cf53e5bd4587db1060f02a291562e",
                 "shasum": ""
             },
             "require": {
@@ -748,7 +748,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-05-08 19:11:13"
+            "time": "2015-04-21 01:44:32"
         },
         {
             "name": "league/flysystem",
@@ -952,21 +952,21 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.19.0",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "68868e0b02d2d803d0052a59d4e5003cccf87320"
+                "reference": "99e2f69f7bdc2cc4334b2d00f1e0ba450623ea36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/68868e0b02d2d803d0052a59d4e5003cccf87320",
-                "reference": "68868e0b02d2d803d0052a59d4e5003cccf87320",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/99e2f69f7bdc2cc4334b2d00f1e0ba450623ea36",
+                "reference": "99e2f69f7bdc2cc4334b2d00f1e0ba450623ea36",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
-                "symfony/translation": "~2.6"
+                "symfony/translation": "2.6.*"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.0"
@@ -995,7 +995,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2015-05-09 03:23:44"
+            "time": "2015-03-26 03:05:57"
         },
         {
             "name": "nikic/php-parser",

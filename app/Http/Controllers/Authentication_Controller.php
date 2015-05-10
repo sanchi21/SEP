@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Input;
 use Auth;
 use URL;
 
+use adLDAP;
+use Ccovey\LdapAuth;
+use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Auth\Authenticatable as UserContract;
+
 
 
 
@@ -142,8 +147,8 @@ class Authentication_Controller extends Controller {
     {
         // validate the info, create rules for the inputs
         $rules = array(
-            'email'    => 'required|email', // make sure the email is an actual email
-            'password' => 'required|min:3' // password can only be alphanumeric and has to be greater than 3 characters
+            'email', // make sure the email is an actual email
+            'password' // password can only be alphanumeric and has to be greater than 3 characters
         );
 
         // run the validation rules on the inputs from the form
@@ -159,18 +164,41 @@ class Authentication_Controller extends Controller {
             $remember = (Input::has('remember')) ? true : false;
 
             $auth = Auth::attempt(array(
-                'email'     => Input::get('email'),
+//                'username'     => Input::get('email'),
+                'email'     => Input::get('email'),   //local database login
                 'password'  => Input::get('password'),
-                'active'     => 1
+                //'active'     => 1
             ), $remember);
 
 
 
-            // attempt to do the login
-            if ($auth) {
 
-                // validation successful!
-                //return Redirect::intended('/');
+
+            // attempt to do the login
+            if ($auth)
+            {
+
+//                $username = 'abhayan';
+//                require_once 'vendor/strebl/adldap/lib/adLDAP/classes/adLDAPUsers.php';
+//                $adldap = new adLDAP\adLDAP();
+//                $adldap->user();
+//
+//
+//                if($adldap->user()->inGroup($username,"ProjectManager"))
+//                {
+//                    $ldap_user_info = $adldap->user()->info($username);
+//                    $ldap_user_name = $ldap_user_info[0]["mail"][0];
+//                    return $ldap_user_name;
+//                }
+//                else
+//                {
+//                    echo 'failed';
+//                }
+
+
+//
+//                // validation successful!
+//                //return Redirect::intended('/');
                 if(Auth::user()->permissions=='Administrator Full')
                 {
                     return Redirect::route('home-admin-full');
@@ -183,14 +211,21 @@ class Authentication_Controller extends Controller {
                 {
                     return Redirect::route('hardwarereq');
                 }
+//                if(Input::get('email')!="srinithy") {
+//                    return Redirect::route('home-admin-full');
+//                }else
+//                {
+//                    return Redirect::route('home-project-manager');
+//                }
 
 
             } else {
-
-                // validation not successful, send back to form
-                \Session::flash('flash_message','No record match or account is not activated');
+//                return 'auth failed ';
+//
+//                // validation not successful, send back to form
+//                \Session::flash('flash_message','No record match or account is not activated');
                 return Redirect::route('account-login');
-//                return Redirect::intended('/');
+////                return Redirect::intended('/');
 
             }
 
@@ -392,6 +427,8 @@ class Authentication_Controller extends Controller {
             return Redirect::route('add-user');
         }
     }
+
+
 
     public function accountDeactivate()
     {
