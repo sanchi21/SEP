@@ -11,7 +11,7 @@ class AddDepreciateRequest extends Request {
 	 */
 	public function authorize()
 	{
-		return true;
+		return false;
 	}
 
 	/**

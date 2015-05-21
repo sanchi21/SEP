@@ -88,7 +88,7 @@
 
         </table>
 
-        <h2 align="center">Report title</h2>
+        <h2 align="center">Individual Employee Allocation</h2>
 
     </div>
 

@@ -74,6 +74,7 @@ function addRows(val)
             clone.insertCell(0).appendChild(t1);
             tab.appendChild(clone);
         }
+
     }
 }
 

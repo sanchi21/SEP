@@ -4,10 +4,10 @@
 @section('content')
 <style>
 .table>tbody>tr>td {
-    padding: 3px;
+    padding: 2px;
+    border-spacing: 0px;
 }
 </style>
-
 
 <h2 style="color: #9A0000">New Hardware Resource</h2>
 <br>
@@ -56,7 +56,7 @@
     </div>
 </div>
 
-<div class="span12" style="overflow:auto; min-height: 320px">
+<div class="span12" style="overflow:auto; min-height: 240px">
 
     <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
         <tr id="headRow" style="background-color: #e7e7e7">
@@ -95,7 +95,7 @@
                         <input type="number" name='{{$c->table_column}}[]' value='{{$c->min}}' class="form-control input-sm" min='{{$c->min}}' max='{{$c->max}}' style="width:70px">
                     @elseif($c->column_type == 'date' || $c->column_type == 'datetime')
                         {{--{!! Form :: text($c->table_column.'[]',null,['style'=>'width:135px','class'=>'form-control input-sm'])!!}--}}
-                        <input type="date" name="{{$c->table_column}}[]" class="form-control input-sm" placeholder="mm/dd/yyyy" style="width:135px">
+                        <input type="date"  name="{{$c->table_column}}[]" class="form-control input-sm datepick" placeholder="mm/dd/yyyy" style="width:135px">
                     @endif
 
                 @endif

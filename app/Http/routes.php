@@ -76,7 +76,7 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('change-options','DropDownController@handle');
 
     Route::get('hardware-depreciate/{id}','DepreciateController@show');
-    Route::get('hardware-d','DepreciateController@index');
+//    Route::get('hardware-d','DepreciateController@index');
     Route::post('hardware-depreciate','DepreciateController@store');
 
 //--------------------------------------------------------Parthi
@@ -114,8 +114,9 @@ Route::group(array('middleware' => ['auth']), function() {
 
     Route::post('searchResource', 'RenewalController@searchResource');
 
-    Route::get('employeeAllocation', 'RenewalController@employeeAllocationView');
-    Route::get('employeeAllocation',array('as'=>'employeeAllocation','uses'=>'RenewalController@employeeAllocation'));
+//    Route::get('employeeAllocation', 'RenewalController@employeeAllocationView');
+    Route::get('employeeAllocation',array('as'=>'employeeAllocation','uses'=>'RenewalController@employeeAllocationView'));
+    Route::post('employeeAllocation', 'RenewalController@employeeAllocation');
     Route::post('searchHardware', 'RenewalController@searchHardware');
 
     Route::get('viewAllocations', 'RenewalController@viewAllocation');

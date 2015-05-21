@@ -92,9 +92,9 @@ class AllocationController extends Controller {
                     $a = $user->count();
                     $user = $user->first();
 
-                    Mail::send('Requests.AllocationSuccess', array('username' => $user->username), function ($message) use ($user) {
-                        $message->to($user->email, $user->username)->subject('Resource Allocation');
-                    });
+//                    Mail::send('Requests.AllocationSuccess', array('username' => $user->username), function ($message) use ($user) {
+//                        $message->to($user->email, $user->username)->subject('Resource Allocation');
+//                    });
 
                     \Session::flash('flash_message', 'Hardware Allocated Successfully');
                     return redirect('Allocate');
@@ -127,14 +127,14 @@ class AllocationController extends Controller {
 
 
                         //Email function
-                        $user_id = DB::table('requesths')->where('request_id', $request_id)->pluck('user_id');
-                        $user = User::where('id', '=', $user_id);
-                        $a = $user->count();
-                        $user = $user->first();
-
-                        Mail::send('Requests.AllocationSuccess', array('username' => $user->username), function ($message) use ($user) {
-                            $message->to($user->email, $user->username)->subject('Resource Allocation');
-                        });
+//                        $user_id = DB::table('requesths')->where('request_id', $request_id)->pluck('user_id');
+//                        $user = User::where('id', '=', $user_id);
+//                        $a = $user->count();
+//                        $user = $user->first();
+//
+//                        Mail::send('Requests.AllocationSuccess', array('username' => $user->username), function ($message) use ($user) {
+//                            $message->to($user->email, $user->username)->subject('Resource Allocation');
+//                        });
 
 
 

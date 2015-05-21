@@ -3,7 +3,7 @@
  @section('content')
 
 
-<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+{{--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">--}}
    {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">--}}
    {{--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>--}}
    {{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>--}}
@@ -41,9 +41,9 @@
 
             <div class="col-xs-2 col-md-2">
             <div id="datepicker_start" class="input-append">
-                <input type="text" id="start" name="start_date" data-format="yyyy-MM-dd" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
+                <input type="text" id="start" name="start_date" data-format="yyyy-MM-dd" class="rounded" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
                 <span class="add-on" style="height: 30px;">
-                <i class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                <i class="glyphicon glyphicon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                 </span>
             </div>
             <script type="text/javascript">
@@ -65,9 +65,9 @@
 
             <div class="col-xs-2 col-md-2">
                 <div id="datepicker_end" class="input-append">
-                    <input type="text" id="start" name="end_date" data-format="yyyy-MM-dd" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
+                    <input type="text" id="start" name="end_date" data-format="yyyy-MM-dd" class="rounded" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
                     <span class="add-on" style="height: 30px;">
-                    <i class="icon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                    <i class="glyphicon glyphicon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                     </span>
                 </div>
 

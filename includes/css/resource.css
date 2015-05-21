@@ -131,7 +131,7 @@ select.rounded:focus {
 .nav-item {
     /* non-critical appearance styles */
     width: 200px;
-    height: 30px;
+    height: 36px;
     display: block;
     padding: 0.5em;
     /*background: linear-gradient(135deg, rgba(0,0,0,0) 0%,rgba(0,0,0,0.65) 100%);*/
@@ -160,12 +160,15 @@ select.rounded:focus {
     text-decoration: none;
     color: #666;
     transition: color 0.2s, background 0.5s;
+    /*transition: all .1s ease-in-out;*/
 }
 
 .nav-item a:hover {
     color: #9A0000;
     /*background: linear-gradient(135deg, rgba(0,0,0,0) 0%,rgba(75,20,20,0.65) 100%);*/
+    /*transform: scale(1.05);*/
 }
+
 
 /* Site Wrapper - Everything that isn't navigation */
 .site-wrap {
@@ -176,7 +179,7 @@ select.rounded:focus {
     position: relative;
     top: 0;
     bottom: 100%;
-    left: 0;
+    left: 40;
     z-index: 1;
 
     /* non-critical apperance styles */

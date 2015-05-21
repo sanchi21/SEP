@@ -43,7 +43,7 @@ class DepreciateController extends Controller {
     }
 
 
-	public function store(AddDepreciateRequest $request)
+	public function store()
 	{
 		$input = Input::all();
         $inventory_code = $input['inventory_code_dep'];
@@ -68,7 +68,7 @@ class DepreciateController extends Controller {
         else
             \Session::flash('flash_message_error', 'Could not set depreciation!');
 
-        return Redirect::action('DepreciateController@index');
+        return Redirect::action('ResourceController@editAll');
 	}
 
 

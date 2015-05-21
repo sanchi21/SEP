@@ -10,7 +10,7 @@
         <td background = "{{asset('/includes/images/dashboardIcons/dashboardIcons1.jpg')}}"  style="width: 243px;height: 120px; background-repeat: no-repeat; padding-left:5px; color: white; font-size: 33px">
             <b>
                     {{ $countPendingResourceRequests }}
-                    <p style="font-size: 14px; opacity: 0.7">New Requests</p>
+                    <p style="font-size: 14px; opacity: 0.7"><a href=" {{ URL::route('ViewRequests') }}" style="color: white">New Requests</a></p>
             </b>
         </td>
         <td style="width: 4px"></td>
