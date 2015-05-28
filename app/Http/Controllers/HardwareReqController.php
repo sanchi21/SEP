@@ -86,7 +86,7 @@ class HardwareReqController extends Controller
 
 
             $item = $input['item'];
-            $os_version = $input['os_version'];
+           // $os_version = $input['os_version'];
             $additional_information = $input['additional_information'];
             $device_type = $input['device_type'];
             $model = $input['model'];
@@ -113,13 +113,13 @@ class HardwareReqController extends Controller
                         $subId = $max_subID + 1;
 
                         $temp = $item[$i];
-                        $temp1 = $os_version[$i];
+                       // $temp1 = $os_version[$i];
                         $temp2 = $additional_information[$i];
                         $req = new req;
                         $req->request_id = $req_id;
                         $req->sub_id = $subId;
                         $req->item = $temp;
-                        $req->os_version = $temp1;
+                       // $req->os_version = $temp1;
                         $req->additional_information = $temp2;
                         $req->status=$All_status;
                         $req->required_from=$req_start_date;
@@ -191,13 +191,13 @@ class HardwareReqController extends Controller
                         for ($i = 0; $i < $rows1; $i++) {
 
                             $temp = $item[$i];
-                            $temp1 = $os_version[$i];
+                            //$temp1 = $os_version[$i];
                             $temp2 = $additional_information[$i];
                             $req = new req;
                             $req->request_id = $new_reqID;
                             $req->sub_id = $subId;
                             $req->item = $temp;
-                            $req->os_version = $temp1;
+                            //$req->os_version = $temp1;
                             $req->additional_information = $temp2;
                             $req->status=$All_status;
                             $req->required_from=$start_date;

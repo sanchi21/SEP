@@ -1,37 +1,13 @@
 @extends('master')
 
- @section('content')
+@section('content')
 
 
-{{--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">--}}
-   {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">--}}
-   {{--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>--}}
-   {{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>--}}
-
-
-  {{--<script>--}}
-       {{--$(document).ready(function(){--}}
-           {{--$("button").click(function(){--}}
-               {{--$("#Table3").toggle();--}}
-
-           {{--});--}}
-       {{--});--}}
-       {{--</script>--}}
-
-      {{--<div >--}}
-        {{--@if(Session::has('flash_message'))--}}
-         {{--<div class="alert alert-info">--}}
-         {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>--}}
-         {{--{{Session::get('flash_message')}}</div>--}}
-        {{--@endif--}}
-       {{--</div>--}}
 <h2 style="color: #9A0000">Request</h2>
 
 <form action="{{ URL::route('requestRes') }}" method="post">
     <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">
     {{--<b><h3 style="color: darkred">Request</h3></b>--}}
-
-
 
 <div class="well">
     <div class="row">
@@ -120,17 +96,14 @@
     <table id="dataTable" class="table table-hover" style="font-size: small;font-family: Arial" >
     <tbody>
     <tr>
-  	<p>
-  	<td >
-  	    <label>Select</label>
-  		<input type='checkbox' />
-  	</td>
+     <td>
+
+         <input type='checkbox' />
+     </td>
+
   	<td>
-  	<!-- get item values in to dropdown  -->
   	{!! Form::label('item','Item') !!}
-
-
-  	  <select class="form-control" name="item[]">
+    <select class="form-control" name="item[]">
   	              <option>Select Type</option>
                   @foreach($types as $type)
                       <option>
@@ -139,23 +112,22 @@
                   @endforeach
               </select>
   	</td>
-  	<td>
-  	<!--get versions into dropdown -->
-  	{!! Form::label('os_version','OS') !!}
-  	<select class="form-control" name="os_version[]" >
-                     @foreach($versions as $version)
-                        <option>
-                          {{$version->OS_Name}}
-                        </option>
-                     @endforeach
-                  </select>
-  	</td>
+  	{{--<td>--}}
+  	{{--<!--get versions into dropdown -->--}}
+  	{{--{!! Form::label('os_version','OS') !!}--}}
+  	{{--<select class="form-control" name="os_version[]" >--}}
+                     {{--@foreach($versions as $version)--}}
+                        {{--<option>--}}
+                          {{--{{$version->OS_Name}}--}}
+                        {{--</option>--}}
+                     {{--@endforeach--}}
+                  {{--</select>--}}
+  	{{--</td>--}}
   	<td>
   	<!-- text area to get additional information-->
   	{!! Form::label('additional_information','Additional_Information')!!}
   	{!! Form::textarea('additional_information[]',null,['class'=>'form-control','style'=>'height:33px']) !!}
   	</td>
-  	</p>
     </tr>
    </tbody>
    </table>
@@ -181,12 +153,12 @@
 
    {{--</p>--}}
 
-   <table id="Table2" class="table table-hover" style="font-size: 15px;">
+   <table id="Table2" class="table table-hover" style="font-size: small;font-family: Arial">
    <tbody>
    <tr>
    <p>
    <td>
-       <label>Select</label>
+
       <input type='checkbox' />
    </td>
    <td>
@@ -237,7 +209,7 @@
          <td align="left">{!! Form::label('request_id','Request_ID') !!} </td>
          <td align="left">{!! Form::label('sub_id','Sub_ID') !!} </td>
          <td align="left">{!! Form::label('item','Item') !!} </td>
-         <td align="left">{!! Form::label('os_version','OS') !!} </td>
+         {{--<td align="left">{!! Form::label('os_version','OS') !!} </td>--}}
          <td align="left">{!! Form::label('device_type','Device_Type')!!} </td>
          <td align="left">{!! Form::label('model','Model')!!} </td>
          <td align="left">{!! Form::label('additional_information','Additional_Information')!!} </td>
@@ -252,7 +224,7 @@
        <td>{{$all->request_id}}</td>
        <td>{{$all->sub_id}}</td>
        <td>{{$all->item}}</td>
-       <td>{{$all->os_version}}</td>
+       {{--<td>{{$all->os_version}}</td>--}}
        <td>{{$all->device_type}}</td>
        <td>{{$all->model}}</td>
        <td>{{$all->additional_information}}</td>
@@ -261,8 +233,6 @@
        {!! Form::token() !!}
        <td> {!! Form::submit('Cancel',['class'=>'btn btn-danger form-control','name'=>'cancel']) !!}</td>
 
-
-      </td>
       </tr>
       </form>
     @endforeach
