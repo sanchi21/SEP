@@ -26,37 +26,38 @@
          <div class="alert alert-danger" id="error_msg" style="display: none">
          <label id="msg"></label>
          </div>
-<div class="well">
-    <div class="row">
-        <div class="col-xs-4 col-md-2">
-            <label style="font-size: 20px" name="category">Category</label>
+<div class="span12" style="overflow:auto; min-height: 120px">
+    <div class="well">
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                <label style="font-size: 20px" name="category">Category</label>
+            </div>
+
+
+            <div class="col-xs-4 col-md-4">
+
+                <select id="category" name="category" class="form-control" style="width: 250px" onchange="javascript:location.href = this.value;">
+    	            @foreach($types as $type)
+        	       	    <option value='/hardware/{{$type->category}}' @if($id==$type->category) selected @endif>{{ $type->category }}</option>
+        	        @endforeach
+                </select>
+
+                <a href="{{ URL::route('change-property/New') }}">New&nbsp;Category</a>
+
+            </div>
+
+            <div class="col-xs-4 col-md-2">
+                <label style="font-size:20px" name="quantity">Quantity</label>
+            </div>
+
+            <div class="col-xs-4 col-md-2">
+                <input type="number" name="quantity" value="1" class="form-control" min="1" max="25" onchange="addRows(this.value)" onkeyup="addRows(this.value)" id="quantity" style="width:70px">
+            </div>
+
         </div>
-
-
-        <div class="col-xs-4 col-md-4">
-
-            <select id="category" name="category" class="form-control" style="width: 250px" onchange="javascript:location.href = this.value;">
-    	        @foreach($types as $type)
-    	       	    <option value='/hardware/{{$type->category}}' @if($id==$type->category) selected @endif>{{ $type->category }}</option>
-    	        @endforeach
-            </select>
-
-            <a href="{{ URL::route('change-property/New') }}">New&nbsp;Category</a>
-
-        </div>
-
-        <div class="col-xs-4 col-md-2">
-            <label style="font-size:20px" name="quantity">Quantity</label>
-        </div>
-
-        <div class="col-xs-4 col-md-2">
-            <input type="number" name="quantity" value="1" class="form-control" min="1" max="25" onchange="addRows(this.value)" onkeyup="addRows(this.value)" id="quantity" style="width:70px">
-        </div>
-
     </div>
-</div>
 
-<div class="span12" style="overflow:auto; min-height: 240px">
+
 
     <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
         <tr id="headRow" style="background-color: #e7e7e7">
@@ -109,8 +110,8 @@
     </table>
 
 </div>
-<br>
-<div align="right">
+
+<div class="panel-body" align="right">
 {{--{!! Form::submit('Insert',['class' => 'btn btn-primary form-control']) !!}--}}
 {!! Form::submit('Insert',['class' => 'btn btn-primary form-control','onclick'=>'javascript:return validation()']) !!}
 {{--{!! Form ::token()!!}--}}

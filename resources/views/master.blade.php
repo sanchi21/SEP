@@ -24,7 +24,13 @@
  <script type="text/javascript" src="{{ asset('/includes/js/validate.js') }}"></script>
  {{--scritps--}}
 
-
+<style>
+.well
+{
+    background-color: #ffffff;
+    padding: 12px;
+}
+</style>
 
 
 
@@ -35,7 +41,7 @@
 
 
 </head>
-<body style="background-color: rgba(229, 228, 226, 0.5); height:100%; width: 100% " onload="d()">
+<body style="background-color: rgba(229, 228, 226, 0.5); height:100%; width: 97% " onload="d()">
 {{--f1f1f1--}}
 <ul class="navigation">
 @if(Auth::User()->username!="srinithy")

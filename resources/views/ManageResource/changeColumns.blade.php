@@ -5,6 +5,25 @@
     .table>tbody>tr>td {
         padding: 3px;
     }
+
+    .dropdown-menu {
+    max-height: 370px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    }
+
+    .multiselect-container>li>a>label {
+        padding: 0px 20px 0px 10px;
+        }
+
+    .btn .caret {
+    margin-left:120px;
+    }
+
+    .btn
+    {
+    text-align: left;
+    }
 </style>
 
 <script type="text/javascript">
@@ -46,7 +65,7 @@
             <label id="msg"></label>
         </div>
 
-<div class="container">
+<div class="panel-body">
 <div class="well">
     <div class="row">
         <div class="col-xs-4 col-md-2">
@@ -116,7 +135,7 @@
                    	    <option value='{{$col->table_column}}'>{{ $col->column_name }}</option>
                    	    @endif
                     @endforeach
-           </select>
+                </select>
             </div>
 
         </div>
@@ -141,7 +160,7 @@
             </td>
 
             <td>
-                <select id="attribute_type" name="attribute_type[]" class="form-control input-sm" style="width: 184px">
+                <select id="attribute_type" name="attribute_type[]" class="form-control input-sm" style="width: 184px" onchange="change()">
                     <option value="bigInteger">BIG INTEGER</option>
                     <option value="date">DATE</option>
                     <option value="dateTime">DATETIME</option>
@@ -172,9 +191,9 @@
 
             <td>
                 <select id="attribute_validation" name="attribute_validation[]" class="form-control input-sm" style="width: 184px">
-                    <option value="None">None</option>
+                    {{--<option value="0">None</option>--}}
                     @foreach($validation as $valid)
-                    <option value="{{$valid->valid_display}}">{{$valid->valid_display}}</option>
+                    <option value="{{$valid->id}}" id="{{$valid->id}}">{{$valid->valid_display}}</option>
                     @endforeach
                 </select>
             </td>
@@ -189,7 +208,7 @@
 </div>
 <br>
 
-<div class="container" align="right">
+<div class="panel-body" align="right">
 @if($id=="New")
 <a href="#" class="btn btn-danger" style="width: 85px" data-toggle="modal" data-target="#basicModal" disabled>Delete</a>
 @else
@@ -258,5 +277,55 @@
     {
         var check = confirm("Do you want to permanently delete this?");
         return check;
+    }
+</script>
+
+<script>
+    function change()
+    {
+        var type = document.getElementById("attribute_type").value;
+        resetList();
+        if(type == "bigInteger" || type == "smallInteger" || type == "tinyInteger" || type == "integer" || type == "mediumInteger" || type == "double" || type == "float")
+        {
+            document.getElementById('2').disabled = true;
+            document.getElementById('3').disabled = true;
+            document.getElementById('5').disabled = true;
+            document.getElementById('7').disabled = true;
+            document.getElementById('8').disabled = true;
+            document.getElementById('9').disabled = true;
+        }
+        else if(type == 'string')
+        {
+            document.getElementById('2').disabled = true;
+            document.getElementById('4').disabled = true;
+            document.getElementById('6').disabled = true;
+            document.getElementById('9').disabled = true;
+        }
+        else if(type == 'date' || type == 'dateTime')
+        {
+            document.getElementById('1').disabled = true;
+            document.getElementById('3').disabled = true;
+            document.getElementById('4').disabled = true;
+            document.getElementById('5').disabled = true;
+            document.getElementById('6').disabled = true;
+            document.getElementById('7').disabled = true;
+            document.getElementById('8').disabled = true;
+            document.getElementById('9').disabled = true;
+            document.getElementById('10').disabled = true;
+        }
+    }
+
+    function resetList()
+    {
+        document.getElementById('1').disabled = false;
+        document.getElementById('2').disabled = false;
+        document.getElementById('3').disabled = false;
+        document.getElementById('4').disabled = false;
+        document.getElementById('5').disabled = false;
+        document.getElementById('6').disabled = false;
+        document.getElementById('7').disabled = false;
+        document.getElementById('8').disabled = false;
+        document.getElementById('9').disabled = false;
+        document.getElementById('10').disabled = false;
     }
 </script>

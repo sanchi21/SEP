@@ -2,7 +2,39 @@
 @extends('master')
 
 @section('content')
+<script type="text/javascript">
+                $(document).ready(function() {
+                    $('#existing_attribute').multiselect({
+                    enableCaseInsensitiveFiltering: true,
+                    buttonWidth: '200px'
+                    });
+                });
+</script>
+<style>
+.dropdown-menu {
+max-height: 370px;
+overflow-y: auto;
+overflow-x: hidden;
+}
+.hideextra { white-space: nowrap; overflow: hidden; text-overflow:ellipsis; }
+.multiselect-container>li>a>label {
+    padding: 0px 20px 0px 10px;
+    }
+
+.btn .caret {
+margin-left:70px;
+}
+.btn
+    {
+    text-align: left;
+    }
+</style>
+
+
 <h2 style="color: #9A0000">Hardware Resource</h2>
+<div align="right">
+&nbsp;<input type="button" onclick="printContent('content12')" class="btn btn-primary" style="height: 30px; width: 70px" value="Print">
+</div>
 <br>
 
 <div class="well">
@@ -19,10 +51,10 @@
     &nbsp;&nbsp;&nbsp;
     </td>
     <td>
-        <label style="width: 120px">Category</label>
+        <label style="width: 90px">Category</label>
     </td>
     <td>
-        <select id="category" name="category" class="form-control input-sm" style="width: 250px" onchange="javascript:location.href = this.value;">
+        <select id="category" name="category" class="form-control input-sm" style="width: 200px" onchange="javascript:location.href = this.value;">
             <option value="/hardware-edit/All" @if($id=="All") selected @endif>All</option>
             @foreach($types as $type)
                 <option value='/hardware-edit/{{$type->category}}' @if($id==$type->category) selected @endif>{{ $type->category }}</option>
@@ -31,10 +63,10 @@
     </td>
 
         <td>&nbsp;&nbsp;&nbsp;
-            <label style="width: 120px">Sort by</label>
+            <label style="width: 90px">Sort by</label>
         </td>
         <td>
-            <select id="sort" name="sort" class="form-control input-sm" style="width: 250px">
+            <select id="sort" name="sort" class="form-control input-sm" style="width: 200px">
                 @foreach($columns as $c)
                     <option value="{{$c->table_column}}" @if($c->table_column==$column) selected @endif>{{$c->column_name}}</option>
                 @endforeach
@@ -47,17 +79,26 @@
             &nbsp;<button type="submit" class="btn btn-primary" style="height: 30px;" name="descend" value="descend"><span class="glyphicon glyphicon-chevron-down"></span> </button>
         </td>
 
+        <td>&nbsp;&nbsp;&nbsp;
+            <label style="width: 90px">Columns</label>
+        </td>
         <td>
-        &nbsp;<input type="button" onclick="printContent('content12')" class="btn btn-primary" style="height: 30px; width: 70px" value="Print">
+            <select id="existing_attribute" name="existing_attribute[]" class="form-control input-sm" style="width: 180px; min-height: 30px" multiple="multiple">
+                @foreach($columns as $col)
+                    @if($col->table_column != 'inventory_code')
+                   	    <option value='{{$col->table_column}}'>{{ $col->column_name }}</option>
+                   	@endif
+                @endforeach
+            </select>
         </td>
 </tr>
 </table>
 {!! Form ::close() !!}
 </div>
-<br>
+
 <div align="right"><label><b>Max Display Per Page : 30 Items</b></label></div>
 
-<div class="span12" style="overflow:auto">
+<div class="span12" style="overflow:auto; min-height: 300px;height: 500px">
 
 <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
     <tr id="headRow" style="background-color: #e7e7e7;">
@@ -75,6 +116,7 @@
     <tr>
         @foreach($columns as $col)
         <td>
+            <div class="hideextra">
             <?php $attribute = $col->table_column; ?>
 
             {{$hardware->$attribute}}
@@ -84,6 +126,7 @@
             @elseif($attribute == 'type')
                     {{$hardware->type}} <input type="hidden" name="type" value="{{$hardware->type}}">
             @endif
+        </div>
         </td>
         @endforeach
 

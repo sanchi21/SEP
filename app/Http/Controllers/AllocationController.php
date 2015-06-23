@@ -197,6 +197,8 @@ class AllocationController extends Controller {
         $resource_type=Input::get('resource_type');
         $type=Input::get('type');
 
+        $sub = Input::get('sub');
+
         $results = req::where('request_id', '=',$request_id)->where('status','=',$device_status)->get();
         $ids = requesth::where('request_status', '=',$Allocation_id)->get();
         $ftp_account=file::where('request_id', '=',$request_id)->get();
@@ -209,7 +211,7 @@ class AllocationController extends Controller {
         }
 
         \Session::flash('flash_get','');
-        return view('Requests.Allocate')->with('hardware_types',$hardware_types)->with('results',$results)->with('ids',$ids)->with('ftp_account',$ftp_account)->with('inventory_code', $inventory_code);
+        return view('Requests.Allocate')->with('hardware_types',$hardware_types)->with('results',$results)->with('ids',$ids)->with('ftp_account',$ftp_account)->with('inventory_code', $inventory_code)->with('sub', $sub);
 
     }
 

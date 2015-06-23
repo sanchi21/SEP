@@ -21,7 +21,7 @@
         </div>
     @endif
 
-<div class="container" style="overflow:auto; min-height: 200px">
+<div class="panel-body" style="overflow:auto; min-height: 200px">
 
     <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
         <tr id="headRow" style="background-color: #e7e7e7">

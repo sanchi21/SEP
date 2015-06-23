@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Column;
 use App\Type;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class TableController extends Controller {
 
@@ -53,6 +55,7 @@ class TableController extends Controller {
         $existing_attributes = '';
         $attribute_name = null;
         $isDropdown = 0;
+        $err = '';
 
         if(isset($input['existing_attribute']))
             $existing_attributes = $input['existing_attribute'];
@@ -67,6 +70,7 @@ class TableController extends Controller {
         $attribute_validation = $input['attribute_validation'];
 
         $status = true;
+        DB::beginTransaction();
 
         if($category == 'New') {
             $type = new Type();
@@ -123,6 +127,14 @@ class TableController extends Controller {
             for ($x = 0; $x < $count; $x++) {
                 $col = array();
                 $attr_name = str_replace(' ','_',strtolower($attribute_name[$x]));
+                $col_name = Column::where('table_column',$attr_name)->get();
+                if(!is_null($col_name))
+                {
+                    $status = false;
+                    $err = $attr_name.' Duplicate Column Name. ';
+                    break;
+                }
+
                 $column2 = new Column();
                 $column2->category = $new_category;
                 $column2->table_column = $attr_name;
@@ -132,6 +144,8 @@ class TableController extends Controller {
                 $column2->max = $attribute_max[$x];
                 $column2->validation = $attribute_validation[$x];
                 $column2->dropDown = $attribute_drop[$x];
+
+
 
                 if($attribute_drop[$x] == 1)
                     $isDropdown++;
@@ -152,6 +166,7 @@ class TableController extends Controller {
 
         if($status)
         {
+            DB::commit();
             if($isDropdown>0)
             {
                 \Session::flash('flash_message', 'Settings Saved Successfully! Define Values to New Attributes');
@@ -164,7 +179,8 @@ class TableController extends Controller {
         }
         else
         {
-            \Session::flash('flash_message_error', 'Settings could not be changed!');
+            DB::rollback();
+            \Session::flash('flash_message_error', $err.'Settings could not be changed!');
         }
 
         return Redirect::action('TableController@index');

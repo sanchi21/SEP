@@ -50,58 +50,54 @@
 
 
 <div align="right"><label><b>Displaying 10 items per page</b></label></div>
+
+
+<div class="panel-body">
+    <table class="table table-hover" width="100%">
+            <tr style="background-color: #e7e7e7">
+                <td width="10%">
+                    <label style="color: #9A0000">Inventory&nbsp;Code</label>
+                </td>
+
+                <td width="30%">
+                    <label>Name</label>
+                </td>
+
+                <td width="30%">
+                    <label>Vendor</label>
+                </td>
+
+                <td width="10%">
+                    <label>No&nbsp;of&nbsp;License</label>
+                </td>
+
+                <td width="20%"></td>
+
+            </tr>
+            </table>
 @foreach($softwares as $software)
 {!! Form ::open(['method' => 'POST', 'action' => ['SoftwareController@update']]) !!}
 
-<div class="panel-body">
-
-    <table class="table table-hover" id="hardwareTable">
+    <table class="table table-hover" id="hardwareTable" width="100%" cellpadding="1px" cellspacing="1px">
         <tbody id="tableBody">
-        <tr style="background-color: #e7e7e7">
-            <td>
-                <label style="color: #9A0000">Inventory&nbsp;Code</label>
-            </td>
-
-            <td>
+        <tr>
+            <td width="10%">
                 <label>{{$software->inventory_code}}</label><input type="hidden" name="inventory_code_t" value="{{$software->inventory_code}}">
             </td>
-        </tr>
 
-        <tr>
-            <td>
-                <label>Name</label>
+            <td width="30%">
+            <input type="text" name="name_t" class="form-control input-sm" value="{{$software->name}}" size="50px">
             </td>
 
-            <td>
-            <input type="text" name="name_t" class="rounded" value="{{$software->name}}" size="50px">
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <label>Vendor</label>
+            <td width="30%">
+            <input type="text" name="vendor_t" class="form-control input-sm" value="{{$software->vendor}}" size="50px">
             </td>
 
-            <td>
-            <input type="text" name="vendor_t" class="rounded" value="{{$software->vendor}}" size="50px">
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <label>No&nbsp;of&nbsp;License</label>
+            <td width="10%">
+                <input type="number" name="no_of_license_t" class="form-control input-sm" value="{{$software->no_of_license}}" min="1"  size="50px">
             </td>
 
-            <td>
-                <input type="number" name="no_of_license_t" class="rounded" value="{{$software->no_of_license}}" min="1"  size="50px">
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-            </td>
-
-            <td>
+            <td width="20%">
             <input type="submit" name="delete" class="btn btn-primary form-control" value="Delete&nbsp;">&nbsp;&nbsp;
             <input type="submit" name="update" class="btn btn-primary form-control" value="Update">
             </td>
@@ -110,11 +106,10 @@
         </tbody>
     </table>
 
-</div>
 {!! Form ::close() !!}
-<br/>
-<line></line>
+
 @endforeach
+</div>
 <div align="center">
 {!!$softwares->render()!!}
 </div>
