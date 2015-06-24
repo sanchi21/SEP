@@ -2,6 +2,12 @@
 @extends('master')
 
 @section('content')
+<br>
+    <br>
+    <br>
+    <br>
+        <br>
+        <br>
 
  @if($errors->any())
                   <div class="alert alert-danger" id="error_msg">
@@ -13,165 +19,194 @@
                   </div>
                   @endif
 
+<div>
 
-<br>
-<h2 style="color: #9A0000">Renew Resources</h2>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Renew Resources</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Pending Requests</a></li>
 
+  </ul>
 
-<br>
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">
 
-            {!! Form ::open(['method' => 'POST', 'url' => 'searchResource']) !!}
-
-            <table class="table table-hover" id="search" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff">
-            <tbody>
-
-
-
-                    <td style="width: 130px">Search</td>
-
-
-
-                    {{--<td style="width: 130px">--}}
-                            {{--<select id="category" name="prCode" class="form-control input-sm" style="width: 250px">--}}
-                                {{--@foreach($prCode as $pr)--}}
-                                    {{--<option value='{{$pr->id}}'>{{ $pr->os_version }}</option>--}}
-                                {{--@endforeach--}}
-                            {{--</select>--}}
-
-                            <td style="width: 130px">
+    <br>
+    <br>
+    <br>
+    <h2 style="color: #9A0000">Renew Resources</h2>
 
 
+    <br>
 
-                            <input type="text" class="form-control input-sm" name="resourceName" style="width: 300px">
-                            <td>
-                            <button type="submit" name ="search" class="btn btn-primary" style="height: 30px;"><span class="glyphicon glyphicon-search"></span> </button>
-                            </td>
+                {!! Form ::open(['method' => 'POST', 'url' => 'searchResource']) !!}
 
-
-                            </td>
-                    </td>
-
-            </tbody>
-            </table>
-            {!! Form ::close() !!}
-
-            <br>
-
-
-<table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
-<tbody>
+                <table class="table table-hover" id="search" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff">
+                <tbody>
 
 
 
-            <tr id="headRow" style="background-color: #e7e7e7">
-            <th>Name</th>
-             <th>Project Code</th>
-            <th>Assigned Date</th>
-            <th>Required Upto</th>
+                        <td style="width: 130px">Search</td>
 
 
 
- @foreach($allocated as $all)
+                        {{--<td style="width: 130px">--}}
+                                {{--<select id="category" name="prCode" class="form-control input-sm" style="width: 250px">--}}
+                                    {{--@foreach($prCode as $pr)--}}
+                                        {{--<option value='{{$pr->id}}'>{{ $pr->os_version }}</option>--}}
+                                    {{--@endforeach--}}
+                                {{--</select>--}}
 
-    <tr>
-       {{--<td>{{$all->request_id}}</td>--}}
-       {{--<td>{{$all->sub_id}}</td>--}}
+                                <td style="width: 130px">
 
-        {!! Form ::open(['method' => 'POST', 'url' => 'requestRenewal']) !!}
 
-            @if($all->item=='')
 
-             <td><input type="text" class="form-control input-sm" value="{{$all->device_type}}" name="name" style="width: 300px" readonly></td>
-             <td>{{$all->project_id}}</td>
-             <td>{{$all->assigned_date}}
-             <input type="hidden" name="chkDate" value="{{$all->assigned_date}}">
+                                <input type="text" class="form-control input-sm" name="resourceName" style="width: 300px">
+                                <td>
+                                <button type="submit" name ="search" class="btn btn-primary" style="height: 30px;"><span class="glyphicon glyphicon-search"></span> </button>
+                                </td>
+
+
+                                </td>
+                        </td>
+
+                </tbody>
+                </table>
+                {!! Form ::close() !!}
+
+                <br>
+
+
+    <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+
+
+
+                <tr id="headRow" style="background-color: #e7e7e7">
+                <th>Name</th>
+                 <th>Project Code</th>
+                <th>Assigned Date</th>
+                <th>Required Upto</th>
+
+
+
+     @foreach($allocated as $all)
+
+        <tr>
+           {{--<td>{{$all->request_id}}</td>--}}
+           {{--<td>{{$all->sub_id}}</td>--}}
+
+            {!! Form ::open(['method' => 'POST', 'url' => 'requestRenewal']) !!}
+
+                @if($all->item=='')
+
+                 <td><input type="text" class="form-control input-sm" value="{{$all->device_type}}" name="name" style="width: 300px" readonly></td>
+                 <td>{{$all->project_id}}</td>
+                 <td>{{$all->assigned_date}}
+                 <input type="hidden" name="chkDate" value="{{$all->assigned_date}}">
+                 </td>
+
+                @else
+
+                 <td><input type="text" class="form-control input-sm" value="{{$all->item}}" name="name" style="width: 300px" readonly></td>
+                 <td>{{$all->project_id}}</td>
+                 <td>{{$all->assigned_date}}
+                 <input type="hidden" name="chkDate" value="{{$all->assigned_date}}">
+                 </td>
+
+
+
+
+                 @endif
+
+                   <td><input type="text" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->required_upto}}" style="width: 300px"></td>
+
+
+
+                 <td> <input class="btn btn-default" type="submit" name="renewRequest" value="Request"></td>
+                   <input type="hidden" value="{{$all->request_id}}" name="rid">
+                   <input type="hidden" value="{{$all->sub_id}}" name="sid">
+
+            {!! Form::close() !!}
+
+
+          </td>
+          </tr>
+
+        @endforeach
+
+
+        </tbody>
+        </table>
+
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="profile">
+     <br>
+       <br>
+       <br>
+
+
+
+       <h2 style="color: #9A0000">Pending Renewal Requests</h2>
+       <br>
+       <br>
+
+
+       <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
+       <tbody>
+
+
+
+                   <tr id="headRow" style="background-color: #e7e7e7">
+                   <th>Name</th>
+                   <th>Project Code</th>
+                   <th>Requested Upto</th>
+
+        @foreach($requests as $all)
+
+           <tr>
+
+
+               {!! Form ::open(['method' => 'POST', 'url' => 'cancelRenewal']) !!}
+
+
+
+
+                    <td>{{$all->name}}</td>
+                    <td>{{$all->project_id}}</td>
+
+
+
+                      <td ><input type="text" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->req_upto}}" style="width: 300px" readonly></td>
+                    <td> <input class="btn btn-danger" type="submit" name="cancelRequest" value="Cancel"></td>
+                      <input type="hidden" value="{{$all->id}}" name="reqID">
+                      <input type="hidden" value="{{$all->sid}}" name="SubID">
+
+               {!! Form::close() !!}
+
+
              </td>
+             </tr>
 
-            @else
-
-             <td><input type="text" class="form-control input-sm" value="{{$all->item}}" name="name" style="width: 300px" readonly></td>
-             <td>{{$all->project_id}}</td>
-             <td>{{$all->assigned_date}}
-             <input type="hidden" name="chkDate" value="{{$all->assigned_date}}">
-             </td>
+           @endforeach
 
 
+           </tbody>
+           </table>
 
 
-             @endif
+    </div>
 
-               <td><input type="text" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->required_upto}}" style="width: 300px"></td>
+  </div>
 
-
-
-             <td> <input class="btn btn-default" type="submit" name="renewRequest" value="Request"></td>
-               <input type="hidden" value="{{$all->request_id}}" name="rid">
-               <input type="hidden" value="{{$all->sub_id}}" name="sid">
-
-        {!! Form::close() !!}
-
-
-      </td>
-      </tr>
-
-    @endforeach
-
-
-    </tbody>
-    </table>
-
-
-   <br>
-   <br>
-   <br>
-
-
-
-   <h2 style="color: #9A0000">Pending Renewal Requests</h2>
-   <br>
-   <br>
-
-
-   <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
-   <tbody>
-
-
-
-               <tr id="headRow" style="background-color: #e7e7e7">
-               <th>Name</th>
-               <th>Project Code</th>
-               <th>Requested Upto</th>
-
-    @foreach($requests as $all)
-
-       <tr>
-
-
-           {!! Form ::open(['method' => 'POST', 'url' => 'cancelRenewal']) !!}
+</div>
 
 
 
 
-                <td>{{$all->name}}</td>
-                <td>{{$all->project_id}}</td>
 
 
-
-                  <td ><input type="text" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->req_upto}}" style="width: 300px" readonly></td>
-                <td> <input class="btn btn-danger" type="submit" name="cancelRequest" value="Cancel"></td>
-                  <input type="hidden" value="{{$all->id}}" name="reqID">
-                  <input type="hidden" value="{{$all->sid}}" name="SubID">
-
-           {!! Form::close() !!}
-
-
-         </td>
-         </tr>
-
-       @endforeach
-
-
-       </tbody>
-       </table>
 
     @stop

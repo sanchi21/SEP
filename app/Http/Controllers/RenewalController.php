@@ -14,8 +14,18 @@ use Illuminate\Support\Facades\DB;
 use Request;
 use App\Renewal;
 use App\EmployeeAllocation;
+use Illuminate\Support\Facades\Mail;
 
 class RenewalController extends Controller {
+
+
+
+    public function great()
+
+    {
+        echo 'hello';
+
+    }
 
 
 	public function index()
@@ -207,6 +217,7 @@ class RenewalController extends Controller {
 
         $renew->status = 0;
 
+
         $status1 = DB::table('reqs')->where('request_id', $id)
                                     ->where('sub_id',$sid)
                                     ->update(array('renewal'=>1));
@@ -216,11 +227,27 @@ class RenewalController extends Controller {
         $status = $renew->save() ? true : false;
 
         if($status && $status1)
+        {
+
+            Mail::send('emails.renewalConfirmation', array('renewalDate'=>$renewal_date, 'user'=>'srinihty'),function($messsage)
+            {
+                $messsage->to('sabhayans@gmail.com','Abhayan')->subject('Resource Renewal');
+            });
+
             \Session::flash('flash_message','New Renewal date requested successfully!');
-        else
-            \Session::flash('flash_message_error','Renewal request failed');
+
+            return Redirect::action('RenewalController@index');
+
+        }
+
+
+        else{
+        \Session::flash('flash_message_error','Renewal request failed');
 
         return Redirect::action('RenewalController@index');
+
+    }
+
     }
 
     public function adminReleaseView()
@@ -254,7 +281,7 @@ class RenewalController extends Controller {
 
         $status2 = DB::table('reqs')->where('request_id', $id)
             ->where('sub_id',$sid)
-            ->update(array('status'=>"Not Allocated"));
+            ->update(array('status'=>"Cleared"));
 
         if($status1 && $status2)
             \Session::flash('flash_message','Resource was successfully released');
