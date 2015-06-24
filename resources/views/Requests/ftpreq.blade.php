@@ -26,22 +26,8 @@
          });
      });
      </script>
-     {{--<script src="/js/Bootstrap/Select/bootstrap-select.js"></script>--}}
-
- {{--</head>--}}
- {{--<body>--}}
 
 {!! Form::open() !!}
-
-    {{--<div >--}}
-         {{--@if(Session::has('flash_message'))--}}
-          {{--<div class="alert alert-info">--}}
-          {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>--}}
-          {{--{{Session::get('flash_message')}}</div>--}}
-         {{--@endif--}}
-        {{--</div>--}}
-
-
 
  <h3 style="color: maroon">Request For Account And Folder</h3></br>
 
@@ -83,6 +69,31 @@
 </tbody>
 </table>
 
+<table class="table table-hover">
+@if(Session::has('flash_permission'))
+  @foreach($set_users as $su)
+  <tr>
+     <td> <label name="sf">{{$su->user_name}}</label></td>
+      <input type="hidden" value="{{$su->user_name}}" name="hid3[]">
+     <td>
+         <select class="form-control" name="permission[]" style="width: 250px">
+             <option>Read</option>
+             <option>Write</option>
+         </select>
+     </td>
+   </tr>
+   <input type="hidden" value="{{$su->request_id}}" name="hid1">
+   <input type="hidden" value="{{$su->sub_id}}" name="hid2">
+  @endforeach
+  <tr>
+      <td  style="width: 15%">{!! Form::submit('Save',['class'=>'btn btn-info form-control','name'=>'set']) !!}</td>
+  </tr>
+@endif
+
+</table>
+
+
+
 <div class="form-group" style="width: 10%;margin-left: 0.25cm">
  {!! Form::button('View',['class'=>'btn btn-info form-control','name'=>'view']) !!}
  </div>
@@ -116,7 +127,7 @@
        <td align="left">{!! Form::label('sub_id','Sub_ID') !!} </td>
        <td align="left">{!! Form::label('user_id','User ID') !!} </td>
        <td align="left">{!! Form::label('user_name','User name') !!} </td>
-       <td align="left">{!! Form::label('type','Type') !!} </td>
+       <td align="left">{!! Form::label('permission','Permission') !!} </td>
 
 
   </tr>
@@ -128,7 +139,7 @@
      <td>{{$s->sub_id}}</td>
      <td>{{$s->user_id}}</td>
      <td>{{$s->user_name}}</td>
-     <td>{{$s->type}}</td>
+     <td>{{$s->permision}}</td>
 
    </tr>
   @endforeach
