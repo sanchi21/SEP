@@ -2,15 +2,32 @@
 @extends('master')
 
  @section('content')
- <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+ {{--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">--}}
 <script type="text/javascript">
                 $(document).ready(function() {
                     $('#user').multiselect({
                     enableFiltering: true,
-                    buttonWidth: '350px'
+                    buttonWidth: '250px'
                     });
                 });
 </script>
+
+<style>
+.dropdown-menu {
+max-height: 370px;
+overflow-y: auto;
+overflow-x: hidden;
+}
+.hideextra { white-space: nowrap; overflow: hidden; text-overflow:ellipsis; }
+.multiselect-container>li>a>label {
+    padding: 0px 20px 0px 10px;
+    }
+
+.btn .caret {
+margin-left:70px;
+}
+
+</style>
 
  {{--<head>--}}
   {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">--}}
@@ -26,24 +43,12 @@
          });
      });
      </script>
-     {{--<script src="/js/Bootstrap/Select/bootstrap-select.js"></script>--}}
-
- {{--</head>--}}
- {{--<body>--}}
 
 {!! Form::open() !!}
 
-    {{--<div >--}}
-         {{--@if(Session::has('flash_message'))--}}
-          {{--<div class="alert alert-info">--}}
-          {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>--}}
-          {{--{{Session::get('flash_message')}}</div>--}}
-         {{--@endif--}}
-        {{--</div>--}}
+ <h2 style="color: maroon">Request For Account And Folder</h2></br>
 
-
-
- <h3 style="color: maroon">Request For Account And Folder</h3></br>
+<div class="panel-body" style="min-height: 500px">
 
  <select class="form-control" name="project_id" style="width: 25%">
       @foreach($pros as $pro)
@@ -55,21 +60,25 @@
 
 </br>
 
- <table class="table table-hover" >
+<div class="well">
+ <table width="100%">
  <tbody>
- <td> <h4>Request for FTP Account</h4></td>
- <td style="width: 15%">{!! Form::submit('Send',['class'=>'btn btn-info form-control','name'=>'ftp']) !!}</td>
+ <td width="30%"> <h4>Request for FTP Account</h4></td>
+ <td width="5%"></td>
+ <td width="25%"></td>
+ <td>{!! Form::submit('Send',['class'=>'btn btn-primary form-control','name'=>'ftp']) !!}</td>
  </tbody>
  </table>
- </br>
+</div>
 
-<table class="table table-hover" >
+<div class="well">
+<table width="100%">
 <tbody>
 <tr>
-<td style="width: 30%"><h4>Request For Shared Folder </h4></td>
-<td><h4>{!! Form::label('Users','Users:') !!}</h4></td>
-<td >
-<select id="user" name="user[]" multiple="multiple" style="height:33px">
+<td width="30%"><h4>Request For Shared Folder </h4></td>
+<td width="5%"><h4>{!! Form::label('Users','Users:') !!}</h4></td>
+<td width="25%">
+<select id="user" name="user[]" multiple="multiple" style="width: 180px; min-height: 30px">
              @foreach($sys_users as $user)
                      <option>
                        {{$user->username}}
@@ -78,10 +87,36 @@
      </select>
 
 </td>
-<td  style="width: 15%">{!! Form::submit('Send',['class'=>'btn btn-info form-control','name'=>'folder']) !!}</td>
+<td>{!! Form::submit('Send',['class'=>'btn btn-primary form-control','name'=>'folder']) !!}</td>
 </tr>
 </tbody>
 </table>
+</div>
+
+<table class="table table-hover">
+@if(Session::has('flash_permission'))
+  @foreach($set_users as $su)
+  <tr>
+     <td> <label name="sf">{{$su->user_name}}</label></td>
+      <input type="hidden" value="{{$su->user_name}}" name="hid3[]">
+     <td>
+         <select class="form-control" name="permission[]" style="width: 250px">
+             <option>Read</option>
+             <option>Write</option>
+         </select>
+     </td>
+   </tr>
+   <input type="hidden" value="{{$su->request_id}}" name="hid1">
+   <input type="hidden" value="{{$su->sub_id}}" name="hid2">
+  @endforeach
+  <tr>
+      <td  style="width: 25%">{!! Form::submit('Save',['class'=>'btn btn-info form-control','name'=>'set']) !!}</td>
+  </tr>
+@endif
+
+</table>
+
+
 
 <div class="form-group" style="width: 10%;margin-left: 0.25cm">
  {!! Form::button('View',['class'=>'btn btn-info form-control','name'=>'view']) !!}
@@ -116,7 +151,7 @@
        <td align="left">{!! Form::label('sub_id','Sub_ID') !!} </td>
        <td align="left">{!! Form::label('user_id','User ID') !!} </td>
        <td align="left">{!! Form::label('user_name','User name') !!} </td>
-       <td align="left">{!! Form::label('type','Type') !!} </td>
+       <td align="left">{!! Form::label('permission','Permission') !!} </td>
 
 
   </tr>
@@ -128,7 +163,7 @@
      <td>{{$s->sub_id}}</td>
      <td>{{$s->user_id}}</td>
      <td>{{$s->user_name}}</td>
-     <td>{{$s->type}}</td>
+     <td>{{$s->permision}}</td>
 
    </tr>
   @endforeach
@@ -138,7 +173,7 @@
 
 
  {!! Form::close() !!}
-
+</div>
 
  {{--<script src="//code.jquery.com/jquery.js"></script>--}}
  {{--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>--}}

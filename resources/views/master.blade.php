@@ -82,11 +82,11 @@
 {{--}--}}
 {{--</style>--}}
         {{--<li class="nav-item"><img src="{{asset('/includes/images/icons/request.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Requests</li>--}}
-                <li class="nav-item"><a href=" {{ URL::route('hardwarereq') }}"><img src="{{asset('/includes/images/icons/resource.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;Resources</a></li>
-                <li class="nav-item"><a href=" {{ URL::route('ftpreq') }}"><img src="{{asset('/includes/images/icons/ftp.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;FTP Account</a></li>
-                <li class="nav-item"><a href=" {{ URL::route('Connectivity') }}"><img src="{{asset('/includes/images/icons/ftp.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Connectivity</a></li>
+                <li class="nav-item" id="hardwarereq"><a id="hardwarereq_a" href=" {{ URL::route('hardwarereq') }}"><img src="{{asset('/includes/images/icons/resource.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;Resources</a></li>
+                <li class="nav-item" id="ftpreq"><a id="ftpreq_a" href=" {{ URL::route('ftpreq') }}"><img src="{{asset('/includes/images/icons/ftp.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;FTP Account</a></li>
+                <li class="nav-item" id="Connectivity"><a id="Connectivity_a" href=" {{ URL::route('Connectivity') }}"><img src="{{asset('/includes/images/icons/connect.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Connectivity</a></li>
 
-                <li class="nav-item"><a href=" {{ URL::route('renewal') }}"><img src="{{asset('/includes/images/icons/renew.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Renew&nbsp;Project</a></li>
+                <li class="nav-item" id="renewal"><a id="renewal_a" href=" {{ URL::route('renewal') }}"><img src="{{asset('/includes/images/icons/renew.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Renew&nbsp;Project</a></li>
    @endif
   </ul>
 <input type="checkbox" id="nav-trigger" class="nav-trigger"/>
@@ -100,15 +100,28 @@
         <img src="{{ asset('/includes/images/zone_logo.png') }}" style="width: 168px; height: 50.6px">
         <label for="nav-trigger"></label>
     </div>
+
     <ul class="nav navbar-nav navbar-right">
-          <li><a href="#" style="color: #ffffff"></a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> {{Auth::User()->username }} <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="{{ URL::route('account-change-password') }}">Change Password</a></li>
-                <li><a href="{{ URL::route('sign-out') }}">Logout</a></li>
-              </ul>
-            </li>
+    <li>
+        @if(\Illuminate\Support\Facades\Request::is('hardware-edit/*'))
+        <a href="#" style="color: #ffffff;font-size: 20px" role="button"  onclick="printContent('content12')"><span class="glyphicon glyphicon-print"></span></a>
+        {{--<input type="button" onclick="printContent('content12')" class="btn btn-primary" style="height: 32px; width: 20px; margin-top: 8px">--}}
+        @endif
+    </li>
+    <li>
+        <a href="{{ URL::route('sign-out') }}" style="color: #ffffff;font-size: 20px"><span class="glyphicon glyphicon-log-out"></span></a>
+    </li>
+    <li>
+        <a href="#" style="color: #ffffff;font-size: 16px"> {{Auth::User()->username }}</a>
+    </li>
+          {{--<li><a href="#" style="color: #ffffff"></a></li>--}}
+            {{--<li class="dropdown">--}}
+              {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #ffffff" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> {{Auth::User()->username }} <span class="caret"></span></a>--}}
+              {{--<ul class="dropdown-menu" role="menu">--}}
+                {{--<li><a href="{{ URL::route('account-change-password') }}">Change Password</a></li>--}}
+                {{--<li><a href="{{ URL::route('sign-out') }}">Logout</a></li>--}}
+              {{--</ul>--}}
+            {{--</li>--}}
           </ul>
   </div>
 </nav>

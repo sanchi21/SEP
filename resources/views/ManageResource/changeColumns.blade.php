@@ -20,10 +20,10 @@
     margin-left:120px;
     }
 
-    .btn
-    {
-    text-align: left;
-    }
+    /*.btn*/
+    /*{*/
+    /*text-align: left;*/
+    /*}*/
 </style>
 
 <script type="text/javascript">
@@ -292,7 +292,12 @@
             document.getElementById('5').disabled = true;
             document.getElementById('7').disabled = true;
             document.getElementById('8').disabled = true;
-            document.getElementById('9').disabled = true;
+            document.getElementById('10').disabled = true;
+            document.getElementById('11').disabled = true;
+            document.getElementById('12').disabled = true;
+            document.getElementById('13').disabled = true;
+            document.getElementById('14').disabled = true;
+            document.getElementById('15').disabled = true;
         }
         else if(type == 'string')
         {
@@ -312,6 +317,11 @@
             document.getElementById('8').disabled = true;
             document.getElementById('9').disabled = true;
             document.getElementById('10').disabled = true;
+            document.getElementById('11').disabled = true;
+            document.getElementById('12').disabled = true;
+            document.getElementById('13').disabled = true;
+            document.getElementById('14').disabled = true;
+            document.getElementById('15').disabled = true;
         }
     }
 
@@ -327,5 +337,10 @@
         document.getElementById('8').disabled = false;
         document.getElementById('9').disabled = false;
         document.getElementById('10').disabled = false;
+        document.getElementById('11').disabled = false;
+        document.getElementById('12').disabled = false;
+        document.getElementById('13').disabled = false;
+        document.getElementById('14').disabled = false;
+        document.getElementById('15').disabled = false;
     }
 </script>

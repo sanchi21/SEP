@@ -32,9 +32,7 @@ margin-left:70px;
 
 
 <h2 style="color: #9A0000">Hardware Resource</h2>
-<div align="right">
-&nbsp;<input type="button" onclick="printContent('content12')" class="btn btn-primary" style="height: 30px; width: 70px" value="Print">
-</div>
+
 <br>
 
 <div class="well">
@@ -112,6 +110,7 @@ margin-left:70px;
     <tbody id="tableBody">
 
     @foreach($hardwares as $hardware)
+    @if($hardware->type == $id || $id=='All')
     {!! Form ::open(['method' => 'POST', 'action' => ['ResourceController@editSpecific']]) !!}
     <tr>
         @foreach($columns as $col)
@@ -137,6 +136,7 @@ margin-left:70px;
         </td>
     </tr>
     {!! Form ::close() !!}
+    @endif
     @endforeach
 
     </tbody>

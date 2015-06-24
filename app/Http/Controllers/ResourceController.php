@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use App\Type;
 use Illuminate\Support\Facades\Input;
+use League\Flysystem\Exception;
 use Request;
+use Illuminate\Support\Facades\Schema;
 use App\Http\Requests\AddHardwareRequest;
 
 class ResourceController extends Controller {
@@ -53,13 +55,17 @@ class ResourceController extends Controller {
         $columns = Column::where('category', $category)->get();
         $status = true;
 
-        foreach($columns as $cols)
-        {
-            if($cols->table_column != 'cid')
-            {
-                $temp = $input[$cols->table_column];
-                array_push($contents, $temp);
+        try {
+            foreach ($columns as $cols) {
+                if ($cols->table_column != 'cid') {
+                    $temp = $input[$cols->table_column];
+                    array_push($contents, $temp);
+                }
             }
+        }
+        catch(\Exception $e)
+        {
+            return Redirect::back()->withErrors($e->getMessage());
         }
 
         for ($i = 0; $i < $quantity; $i++)
@@ -70,40 +76,37 @@ class ResourceController extends Controller {
             $hardware = new Hardware();
             $status = true;
 
-            DB::beginTransaction();
+            try {
+                DB::beginTransaction();
 
-            foreach($contents as $attribute)
-            {
-                if($x == 0)
-                {
-                    $resource->inventory_code = $attribute[$i];
-                    $hardware->inventory_code = $attribute[$i];
-                    $hardware->type = $category;
+                foreach ($contents as $attribute) {
+                    if ($x == 0) {
+                        $resource->inventory_code = $attribute[$i];
+                        $hardware->inventory_code = $attribute[$i];
+                        $hardware->type = $category;
+                    } else {
+                        $t = $columns[$x]->table_column;
+                        $hardware->$t = $attribute[$i];
+                    }
+                    $x++;
                 }
-                else
-                {
-                    $t = $columns[$x]->table_column;
-                    $hardware->$t = $attribute[$i];
+
+                if ($resource->save()) {
+                    $status = $hardware->save() ? true : false;
+                } else {
+                    $status = false;
                 }
-                $x++;
-            }
 
-            if ($resource->save()) {
-                $status = $hardware->save() ? true : false;
+                if ($status) {
+                    DB::commit();
+                } else {
+                    DB::rollback();
+                    break;
+                }
             }
-            else
+            catch(\Exception $e)
             {
-                $status = false;
-            }
-
-            if ($status)
-            {
-                DB::commit();
-            }
-            else
-            {
-                DB::rollback();
-                break;
+                return Redirect::back()->withErrors($e->getMessage());
             }
         }
 
@@ -121,7 +124,15 @@ class ResourceController extends Controller {
         $types = Type::all();
         $id = "All";
         $column = 'inventory_code';
-        $columns = Column::select('table_column','column_name','cid')->groupBy('table_column')->orderBy('cid')->get();
+
+        try
+        {
+            $columns = Column::select('table_column', 'column_name', 'cid')->groupBy('table_column')->orderBy('cid')->get();
+        }
+        catch(\Exception $e)
+        {
+            return Redirect::back()->withErrors($e->getMessage());
+        }
 
         return view('ManageResource.editHardware',compact('hardwares','types','id','column','columns'));
     }
@@ -130,15 +141,20 @@ class ResourceController extends Controller {
     {
         $types = Type::all();
         $column = "inventory_code";
-        $columns = Column::where('category', $id)->get();
-        if($id == 'All')
+
+        try
         {
-            $hardwares = Hardware::paginate(30);
-            $columns = Column::all();
+            $columns = Column::where('category', $id)->get();
+            if ($id == 'All') {
+                $hardwares = Hardware::paginate(30);
+                $columns = Column::all();
+            } else {
+                $hardwares = Hardware::where('type', $id)->paginate(30);
+            }
         }
-        else
+        catch(\Exception $e)
         {
-            $hardwares = Hardware::where('type', $id)->paginate(30);
+            return Redirect::back()->withErrors($e->getMessage());
         }
 
         return view('ManageResource.editHardware',compact('hardwares','types','id','column','columns'));
@@ -147,61 +163,66 @@ class ResourceController extends Controller {
 
     public function search()
     {
-        $key = Input::get('search_t');
-        $type = Input::get('category');
-        $id = substr($type,15);
-        $ascend = Input::get('ascend');
-        $descend = Input::get('descend');
-        $column = Input::get('sort');
-        $columns = Column::select('table_column','column_name','cid')->groupBy('table_column')->orderBy('cid')->get();
+        try {
+            $key = Input::get('search_t');
+            $type = Input::get('category');
+            $id = substr($type, 15);
+            $ascend = Input::get('ascend');
+            $descend = Input::get('descend');
+            $column = Input::get('sort');
+            $columns = Column::select('table_column', 'column_name', 'cid')->groupBy('table_column')->orderBy('cid')->get();
 
-        $types = Type::all();
+            if($id!='All')
+                $columns = Column::select('table_column', 'column_name', 'cid')->where('category',$id)->groupBy('table_column')->orderBy('cid')->get();
 
-        if($ascend=='ascend')
-        {
-            if($id=='All')
-                $hardwares = DB::table('Hardware')->orderBy($column,'asc')->paginate(30);
-            else
-                $hardwares = DB::table('Hardware')->where('type',$id)->orderBy($column,'asc')->paginate(30);
-        }
-        elseif($descend=='descend')
-        {
-            if($id=='All')
-                $hardwares = DB::table('Hardware')->orderBy($column,'desc')->paginate(30);
-            else
-                $hardwares = DB::table('Hardware')->where('type',$id)->orderBy($column,'desc')->paginate(30);
-        }
-        else
-        {
-            $hardwares = Hardware::where('inventory_code', 'LIKE', '%' . $key . '%')->
-            orWhere(function ($query) use ($key) {
-                    $query->where('serial_no', 'LIKE', '%' . $key . '%');
-                })->
-            orWhere(function ($query) use ($key) {
-                    $query->where('description', 'LIKE', '%' . $key . '%');
-                })->
-            orWhere(function ($query) use ($key) {
-                    $query->where('ip_address', 'LIKE', '%' . $key . '%');
-                })->
-            orWhere(function ($query) use ($key) {
-                    $query->where('make', 'LIKE', '%' . $key . '%');
-                })->
-            orWhere(function ($query) use ($key) {
-                    $query->where('model', 'LIKE', '%' . $key . '%');
-                })->
-            orWhere(function ($query) use ($key) {
-                    $query->where('purchase_date', 'LIKE', '%' . $key . '%');
-                })->
-            orWhere(function ($query) use ($key) {
-                    $query->where('warranty_exp', 'LIKE', '%' . $key . '%');
-                })->
-            orWhere(function ($query) use ($key) {
-                    $query->where('insurance', 'LIKE', '%' . $key . '%');
-                })->
-            orWhere(function ($query) use ($key) {
+            $types = Type::all();
+
+            if ($ascend == 'ascend') {
+                if ($id == 'All')
+                    $hardwares = DB::table('Hardware')->orderBy($column, 'asc')->paginate(30);
+                else
+                    $hardwares = DB::table('Hardware')->where('type', $id)->orderBy($column, 'asc')->paginate(30);
+            } elseif ($descend == 'descend') {
+                if ($id == 'All')
+                    $hardwares = DB::table('Hardware')->orderBy($column, 'desc')->paginate(30);
+                else
+                    $hardwares = DB::table('Hardware')->where('type', $id)->orderBy($column, 'desc')->paginate(30);
+            } else {
+
+                $hardwares = Hardware::where('inventory_code', 'LIKE', '%' . $key . '%')->
+                orWhere(function ($query) use ($key) {
+                        $query->where('serial_no', 'LIKE', '%' . $key . '%');
+                    })->
+                orWhere(function ($query) use ($key) {
+                        $query->where('description', 'LIKE', '%' . $key . '%');
+                    })->
+                orWhere(function ($query) use ($key) {
+                        $query->where('ip_address', 'LIKE', '%' . $key . '%');
+                    })->
+                orWhere(function ($query) use ($key) {
+                        $query->where('make', 'LIKE', '%' . $key . '%');
+                    })->
+                orWhere(function ($query) use ($key) {
+                        $query->where('model', 'LIKE', '%' . $key . '%');
+                    })->
+                orWhere(function ($query) use ($key) {
+                        $query->where('purchase_date', 'LIKE', '%' . $key . '%');
+                    })->
+                orWhere(function ($query) use ($key) {
+                        $query->where('warranty_exp', 'LIKE', '%' . $key . '%');
+                    })->
+                orWhere(function ($query) use ($key) {
+                        $query->where('insurance', 'LIKE', '%' . $key . '%');
+                    })->
+                orWhere(function ($query) use ($key) {
                     $query->where('value', 'LIKE', '%' . $key . '%');
                 })->
-            paginate(30);
+                paginate(30);
+            }
+        }
+        catch(\Exception $e)
+        {
+            return Redirect::back()->withErrors($e->getMessage());
         }
 
         return view('ManageResource.editHardware',compact('hardwares','types','id','column','columns'));
@@ -209,21 +230,27 @@ class ResourceController extends Controller {
 
     public function editSpecific($d)
     {
-        $id = urldecode(base64_decode($d));
-        $inventory_code = str_replace('-','/',$id);//Input::get('inventory_code');
-        $resource = Depreciation::find($inventory_code);
-        $depreciation = false;
-
-        if(is_null($resource))
-            $depreciation = true;
-        else
+        try {
+            $id = urldecode(base64_decode($d));
+            $inventory_code = str_replace('-', '/', $id);//Input::get('inventory_code');
+            $resource = Depreciation::find($inventory_code);
             $depreciation = false;
 
-        $hardware = Hardware::find($inventory_code);
-        $type = $hardware->type;
-        $columns = Column::where('category', $type)->get();
-        $dropValues = $this->getDropDownValues($columns);
-        $count = count($dropValues);
+            if (is_null($resource))
+                $depreciation = true;
+            else
+                $depreciation = false;
+
+            $hardware = Hardware::find($inventory_code);
+            $type = $hardware->type;
+            $columns = Column::where('category', $type)->get();
+            $dropValues = $this->getDropDownValues($columns);
+            $count = count($dropValues);
+        }
+        catch(\Exception $e)
+        {
+            return Redirect::back()->withErrors($e->getMessage());
+        }
 
         return view('ManageResource.editHardwareForm',compact('hardware','type','columns','dropValues','count','depreciation'));
     }
@@ -231,14 +258,19 @@ class ResourceController extends Controller {
     public function getDropDownValues($columns)
     {
         $dropValues = array();
-        foreach($columns as $c)
-        {
-            if($c->dropDown == '1')
-            {
-                $temp = DropDown::where('table_column',$c->table_column)->get();
-                array_push($dropValues,$temp);
+        try {
+            foreach ($columns as $c) {
+                if ($c->dropDown == '1') {
+                    $temp = DropDown::where('table_column', $c->table_column)->get();
+                    array_push($dropValues, $temp);
+                }
             }
         }
+        catch(\Exception $e)
+        {
+            return Redirect::back()->withErrors($e->getMessage());
+        }
+
         return $dropValues;
     }
 
@@ -246,37 +278,42 @@ class ResourceController extends Controller {
     {
         $input = Request::all();
         $status = true;
-        $delete = Input::get('delete');
-        $inventory_code = $input['inventory_code'];
-        $type = Input::get('type');
-        $columns = Column::where('category', $type)->where('table_column','<>','inventory_code')->get();
 
-        $hardware = Hardware::find($inventory_code);
+        try {
 
-        if ($delete!="Delete")
-        {
-            foreach ($columns as $col)
-            {
-                $attribute = $col->table_column;
-                $temp = $input[$attribute];
+            $delete = Input::get('delete');
+            $inventory_code = $input['inventory_code'];
+            $type = Input::get('type');
+            $columns = Column::where('category', $type)->where('table_column', '<>', 'inventory_code')->get();
 
-                $hardware->$attribute = $temp;
-            }
+            $hardware = Hardware::find($inventory_code);
 
-            $status = $hardware->save() ? true : false;
+            if ($delete != "Delete") {
+                foreach ($columns as $col) {
+                    $attribute = $col->table_column;
+                    $temp = $input[$attribute];
+
+                    $hardware->$attribute = $temp;
+                }
+
+                $status = $hardware->save() ? true : false;
 
 
-            if ($status) {
-                \Session::flash('flash_message', 'Hardware '.$inventory_code.' updated successfully!');
+                if ($status) {
+                    \Session::flash('flash_message', 'Hardware ' . $inventory_code . ' updated successfully!');
+                } else {
+                    \Session::flash('flash_message_error', 'Hardware update failed!');
+                }
+
             } else {
-                \Session::flash('flash_message_error', 'Hardware update failed!');
+                $this->remove($inventory_code);
             }
-
         }
-        else
+        catch(\Exception $e)
         {
-            $this->remove($inventory_code);
+            return Redirect::back()->withErrors($e->getMessage());
         }
+
         return Redirect::action('ResourceController@editAll');
 
     }
@@ -284,15 +321,21 @@ class ResourceController extends Controller {
     public function remove($inventory_code)
     {
         $status = true;
-        $hardware = Hardware::find($inventory_code);
+        try {
+            $hardware = Hardware::find($inventory_code);
 
-        DB::beginTransaction();
+            DB::beginTransaction();
 
-        if ($hardware->delete())
-            if (Resource::find($inventory_code)->delete())
-                $status = true;
-            else
-                $status = false;
+            if ($hardware->delete())
+                if (Resource::find($inventory_code)->delete())
+                    $status = true;
+                else
+                    $status = false;
+        }
+        catch(\Exception $e)
+        {
+            return Redirect::back()->withErrors($e->getMessage());
+        }
 
         if ($status)
         {

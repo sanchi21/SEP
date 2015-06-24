@@ -49,6 +49,11 @@ function validate(value,validation)
     var ipFormat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     var phonenoFormat = /^\d{10}$/;
     var emailFormat = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    var serialFormat = /^[0-9]{2}-[0-9]{5}-[0-9]{6}$/;
+    var alphaNumeric = /^[a-zA-Z0-9]*$/;
+    var alphaDash = /^[a-zA-Z0-9-_]+$/;
+    var screen = /^[0-9]*"$/;
+    var proccesor = /^[0-9].[0-9] [a-zA-Z]{3}$/;
 
 
     if(validation == 1)
@@ -152,6 +157,61 @@ function validate(value,validation)
         else
             return true;
     }
+    else if(validation == 11)
+    {
+        if(value != "") {
+            if (!value.match(serialFormat))
+                return false;
+            else
+                return true;
+        }
+        else
+            return true;
+    }
+    else if(validation == 12)
+    {
+        if(value != "") {
+            if (!value.match(alphaDash))
+                return false;
+            else
+                return true;
+        }
+        else
+            return true;
+    }
+    else if(validation == 13)
+    {
+        if(value != "") {
+            if (!value.match(proccesor))
+                return false;
+            else
+                return true;
+        }
+        else
+            return true;
+    }
+    else if(validation == 14)
+    {
+        if(value != "") {
+            if (!value.match(alphaNumeric))
+                return false;
+            else
+                return true;
+        }
+        else
+            return true;
+    }
+    else if(validation == 15)
+    {
+        if(value != "") {
+            if (!value.match(screen))
+                return false;
+            else
+                return true;
+        }
+        else
+            return true;
+    }
 }
 
 function getErrorMsg(num)
@@ -168,6 +228,12 @@ function getErrorMsg(num)
         case 8 : return "Field is required and it should be a text!" ; break;
         case 9 : return "Field is required and it should be an integer!" ; break;
         case 10 : return "Invalid phone number!" ; break;
+        case 11 : return "Invalid serial number!" ; break;
+        case 12 : return "Field should be alphanumeric and may contain dashes!" ; break;
+        case 13 : return "Invalid pattern! Should be of X.X AAA pattern" ; break;
+        case 14 : return "Field should be alphanumeric!" ; break;
+        case 15 : return "Invalid serial pattern! Should be of X\" pattern" ; break;
+
     }
 }
 

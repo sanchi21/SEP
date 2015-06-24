@@ -3,12 +3,6 @@
 
 @section('content')
 <br>
-    <br>
-    <br>
-    <br>
-        <br>
-        <br>
-
  @if($errors->any())
                   <div class="alert alert-danger" id="error_msg">
                      <ul style="list-style: none">
@@ -19,7 +13,8 @@
                   </div>
                   @endif
 
-<div>
+<h2 style="color: #9A0000">Renewal</h2>
+<div class="panel-body">
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
@@ -32,22 +27,19 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="home">
 
-    <br>
-    <br>
-    <br>
-    <h2 style="color: #9A0000">Renew Resources</h2>
+    {{--<h2 style="color: #9A0000">Renew Resources</h2>--}}
 
 
     <br>
 
                 {!! Form ::open(['method' => 'POST', 'url' => 'searchResource']) !!}
 
-                <table class="table table-hover" id="search" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff">
+                <table  id="search" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff">
                 <tbody>
 
 
 
-                        <td style="width: 130px">Search</td>
+                        <td width="10%">Search</td>
 
 
 
@@ -58,13 +50,13 @@
                                     {{--@endforeach--}}
                                 {{--</select>--}}
 
-                                <td style="width: 130px">
+                                <td width="25%">
 
 
 
                                 <input type="text" class="form-control input-sm" name="resourceName" style="width: 300px">
                                 <td>
-                                <button type="submit" name ="search" class="btn btn-primary" style="height: 30px;"><span class="glyphicon glyphicon-search"></span> </button>
+                                <button type="submit" name ="search" class="btn btn-primary" style="height: 30px;width: 30px"><span class="glyphicon glyphicon-search"></span> </button>
                                 </td>
 
 
@@ -84,10 +76,11 @@
 
 
                 <tr id="headRow" style="background-color: #e7e7e7">
-                <th>Name</th>
+                <th>Type</th>
                  <th>Project Code</th>
                 <th>Assigned Date</th>
                 <th>Required Upto</th>
+                <th></th>
 
 
 
@@ -100,16 +93,16 @@
             {!! Form ::open(['method' => 'POST', 'url' => 'requestRenewal']) !!}
 
                 @if($all->item=='')
-
-                 <td><input type="text" class="form-control input-sm" value="{{$all->device_type}}" name="name" style="width: 300px" readonly></td>
+                    <input type="hidden" class="form-control input-sm" value="{{$all->device_type}}" name="name">
+                 <td>(S) {{$all->device_type}}</td>
                  <td>{{$all->project_id}}</td>
                  <td>{{$all->assigned_date}}
                  <input type="hidden" name="chkDate" value="{{$all->assigned_date}}">
                  </td>
 
                 @else
-
-                 <td><input type="text" class="form-control input-sm" value="{{$all->item}}" name="name" style="width: 300px" readonly></td>
+                    <input type="hidden" class="form-control input-sm" value="{{$all->item}}" name="name">
+                 <td>(H) {{$all->item}}</td>
                  <td>{{$all->project_id}}</td>
                  <td>{{$all->assigned_date}}
                  <input type="hidden" name="chkDate" value="{{$all->assigned_date}}">
@@ -120,7 +113,7 @@
 
                  @endif
 
-                   <td><input type="text" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->required_upto}}" style="width: 300px"></td>
+                   <td><input type="date" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->required_upto}}" style="width: 300px"></td>
 
 
 
@@ -143,16 +136,12 @@
 
     </div>
     <div role="tabpanel" class="tab-pane" id="profile">
-     <br>
-       <br>
-       <br>
 
 
 
-       <h2 style="color: #9A0000">Pending Renewal Requests</h2>
-       <br>
-       <br>
 
+       {{--<h2 style="color: #9A0000">Pending Renewal Requests</h2>--}}
+      <br>
 
        <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
        <tbody>
@@ -179,7 +168,7 @@
 
 
 
-                      <td ><input type="text" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->req_upto}}" style="width: 300px" readonly></td>
+                      <td ><input type="date" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->req_upto}}" style="width: 300px" readonly></td>
                     <td> <input class="btn btn-danger" type="submit" name="cancelRequest" value="Cancel"></td>
                       <input type="hidden" value="{{$all->id}}" name="reqID">
                       <input type="hidden" value="{{$all->sid}}" name="SubID">

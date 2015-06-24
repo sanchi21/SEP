@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 use App\HardwareReq;
 use App\Type;
+use App\Item;
 use App\requesth;
 use App\version;
 use App\req;
@@ -22,7 +23,7 @@ class HardwareReqController extends Controller
 
         $versions = Operating_system::all();
         $pros = version::all();
-        $types = Type::all();
+        $types = Item::all();
         $sws = DB::table('software')->get();
         //$user_id=Auth::user()->userID;
 //        $user_id = 8;
@@ -79,7 +80,7 @@ class HardwareReqController extends Controller
 
             $project_id = $input['project_id'];
             //$user_id=Auth::user()->userID;
-            $user_id = 8;
+            $user_id = Auth::User()->id;
             $request_status = 1;
             $All_status='Not Allocated';
             $renewal=0;

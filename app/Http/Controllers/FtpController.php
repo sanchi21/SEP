@@ -96,10 +96,12 @@ class FtpController extends Controller {
     public function Ftp()
     {
         $ftp = Input::get('ftp');
+        $folder=Input::get('folder');
+        $set=Input::get('set');
         $input = Request::all();
         $project_id = $input['project_id'];
 
-        if (!$ftp) {
+        if ($folder) {
             if (empty($project_id)) {
                 \Session::flash('flash_message', 'Prject_ID cannot be empty');
                 return redirect('ftpreq');
@@ -131,9 +133,19 @@ class FtpController extends Controller {
                         $sf->type ='Shared Folder';
                         $sf->save();
                     }
+                    $set_users=sfuser::where('sub_id', '=', $subId)->get();
+                    $sys_users=User::all();
+                    $pros=version::all();
+                    $ftp=file::all();
+                    $sf=sfuser::all();
+                    $req=req::all();
+                    \Session::flash('flash_permission','');
+                    return view('Requests.ftpreq')->with('sys_users',$sys_users)->with('pros',$pros)->with('ftp',$ftp)->with('sf',$sf)->with('req',$req)->with('set_users',$set_users);
 
-                      \Session::flash('flash_message', 'Shared Folder Request Sent');
-                       return redirect('ftpreq');
+
+
+//                      \Session::flash('flash_message', 'Shared Folder Request Sent');
+//                       return redirect('ftpreq');
 
                 }
 
@@ -147,6 +159,32 @@ class FtpController extends Controller {
                  }
 
         }
+
+        if($set){
+
+            $input = Request::all();
+            $sf_users=$input['hid3'];
+            $permission=$input['permission'];
+            $rid=$input['hid1'];
+            $sid=$input['hid2'];
+
+            $size=sizeof($sf_users);
+
+            for($a=0; $a<$size;$a++) {
+                $temp = $sf_users[$a];
+                $temp2=$permission[$a];
+                $r = DB::table('sfusers')
+                    ->where('request_id', $rid)
+                    ->where('sub_id', $sid)
+                    ->where('user_name',$temp)
+                    ->update(array('permision' => $temp2));
+
+            }
+            \Session::flash('flash_message', 'Permissions successfully set');
+            return redirect('ftpreq');
+
+        }
+
         else {
 
             if (empty($project_id)) {
