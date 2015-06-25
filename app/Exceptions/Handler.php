@@ -36,7 +36,9 @@ class Handler extends ExceptionHandler {
 	 */
 	public function render($request, Exception $e)
 	{
-		return parent::render($request, $e);
+//        return redirect()->home()->with('notification', $e->getMessage() );
+//        return response()->view('errors.404', [], 404);
+        return parent::render($request, $e);
 	}
 
 }
