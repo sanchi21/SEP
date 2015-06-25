@@ -28,12 +28,15 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::get('statistic',array('as'=>'statistic','uses'=>'HomeController@getStatistic'));
 
     //Project Manager Group
-    Route::group(array('middleware' => ['rolePM']), function() {
-        //GET projectManagerHomePage
-        Route::get('homep', array('as' => 'home-project-manager', 'uses' => 'HomeController@getHomeProjectManager'));
-    });
-
-
+//    Route::group(array('middleware' => ['rolePM']), function() {
+//        //GET projectManagerHomePage
+//        Route::get('homep', array('as' => 'home-project-manager', 'uses' => 'HomeController@getHomeProjectManager'));
+//    });
+    Route::get('homep', array('as' => 'home-project-manager', 'uses' => 'HomeController@getHomeProjectManager'));
+//GET adminFullHomePage
+    Route::get('home',array('as'=>'home-admin-full','uses'=>'HomeController@getHomeAdminFull'));
+    //GET AddUser
+    Route::get('addUser', array('as' => 'add-user', 'uses' => 'Authentication_Controller@getAddUser'));
     //Administrator Group
     Route::group(array('middleware' => ['role']), function() {
         //CSRF protection group
@@ -50,10 +53,10 @@ Route::group(array('middleware' => ['auth']), function() {
             Route::post('addUser', array('as' => 'add-user-post', 'uses' => 'Authentication_Controller@postAddUser'));
         });
 
-        //GET adminFullHomePage
-        Route::get('home',array('as'=>'home-admin-full','uses'=>'HomeController@getHomeAdminFull'));
-        //GET AddUser
-        Route::get('addUser', array('as' => 'add-user', 'uses' => 'Authentication_Controller@getAddUser'));
+//        //GET adminFullHomePage
+//        Route::get('home',array('as'=>'home-admin-full','uses'=>'HomeController@getHomeAdminFull'));
+//        //GET AddUser
+//        Route::get('addUser', array('as' => 'add-user', 'uses' => 'Authentication_Controller@getAddUser'));
     });
 
 

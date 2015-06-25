@@ -15,7 +15,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @var string
 	 */
-	protected $table = 'active_users';
+	protected $table = 'system_users';
 
 	/**
 	 * The attributes that are mass assignable.

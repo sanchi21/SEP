@@ -16,6 +16,7 @@
  {{--styles--}}
 
  {{--scritps--}}
+
  <script src="{{ asset('/includes/js/jquery.min.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrap.min.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrap-multiselect.js') }}"></script>
