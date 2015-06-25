@@ -8,11 +8,11 @@
 return array(
     'account_suffix' => "@zone24.com",
 
-    'domain_controllers' => array("192.168.1.11"), // An array of domains may be provided for load balancing.
+    'domain_controllers' => array("192.168.1.15"), // An array of domains may be provided for load balancing.
 
     'base_dn' => 'DC=zone24,DC=com',
 
-    'admin_username' => 'abhayan',
+    'admin_username' => 'abhay',
 
     'admin_password' => 'Iagree123',
     'real_primary_group' => true, // Returns the primary group (an educated guess).
