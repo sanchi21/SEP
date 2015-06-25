@@ -20,34 +20,43 @@ Route::get('/', 'WelcomeController@index');
 Route::group(array('middleware' => ['auth']), function() {
     //GET sign out
     Route::get('sign-out',array('as'=>'sign-out','uses'=>'Authentication_Controller@getSignOut'));
-    //GET adminFullHomePage
-    Route::get('home',array('as'=>'home-admin-full','uses'=>'HomeController@getHomeAdminFull'));
+
     //GET adminPartialHome
     Route::get('homeal',array('as'=>'home-admin-limited','uses'=>'HomeController@getHomeAdminLimited'));
-    //GET projectManagerHomePage
-    Route::get('homep',array('as'=>'home-project-manager','uses'=>'HomeController@getHomeProjectManager'));
+
 
     Route::get('statistic',array('as'=>'statistic','uses'=>'HomeController@getStatistic'));
+
+    //Project Manager Group
+    Route::group(array('middleware' => ['rolePM']), function() {
+        //GET projectManagerHomePage
+        Route::get('homep', array('as' => 'home-project-manager', 'uses' => 'HomeController@getHomeProjectManager'));
+    });
 
 
     //Administrator Group
     Route::group(array('middleware' => ['role']), function() {
+        //CSRF protection group
+        Route::group(array('before' => 'csrf'), function () {
+            //POST change password
+            Route::post('changePassword', array('as' => 'account-change-password-post', 'uses' => 'Authentication_Controller@postChangePassword'));
+            //POST delete account
+            Route::post('user/delete', array('as' => 'postDelete', 'uses' => 'Authentication_Controller@postDelete'));
+            //POST delete account
+            Route::post('user/deactivate', array('as' => 'accountDeactivate', 'uses' => 'Autheantication_Controller@accountDeactivate'));
+            //POST update permission
+            Route::post('user/permission', array('as' => 'permissionUpdate', 'uses' => 'Authentication_Controller@postUpdatePermission'));
+            //POST AddUser
+            Route::post('addUser', array('as' => 'add-user-post', 'uses' => 'Authentication_Controller@postAddUser'));
+        });
+
+        //GET adminFullHomePage
+        Route::get('home',array('as'=>'home-admin-full','uses'=>'HomeController@getHomeAdminFull'));
+        //GET AddUser
         Route::get('addUser', array('as' => 'add-user', 'uses' => 'Authentication_Controller@getAddUser'));
     });
-    //CSRF protection group
-    Route::group(array('before' => 'csrf'), function () {
-        //POST change password
-        Route::post('changePassword', array('as' => 'account-change-password-post', 'uses' => 'Authentication_Controller@postChangePassword'));
-        //POST delete account
-        Route::post('user/delete', array('as' => 'postDelete', 'uses' => 'Authentication_Controller@postDelete'));
-        //POST delete account
-        Route::post('user/deactivate', array('as' => 'accountDeactivate', 'uses' => 'Authentication_Controller@accountDeactivate'));
-        //POST update permission
-        Route::post('user/permission', array('as' => 'permissionUpdate', 'uses' => 'Authentication_Controller@postUpdatePermission'));
-        //POST AddUser
-        Route::post('addUser', array('as' => 'add-user-post', 'uses' => 'Authentication_Controller@postAddUser'));
-    });
-//GET AddUser
+
+
 //--------------------------------------------------------Sanchayan
 
     Route::post('hardware',array('as'=>'hardware-post','uses'=>'ResourceController@store'));

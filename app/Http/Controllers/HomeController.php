@@ -5,6 +5,8 @@ use DB;
 use  App\Hardware;
 use App\requesth;
 use App\Type;
+use Auth;
+use adLDAP\adLDAP;
 
 
 class HomeController extends Controller {
@@ -41,6 +43,12 @@ class HomeController extends Controller {
 	}
     public function getHomeAdminFull()
     {
+
+
+
+
+
+
         //count pending resource requests
         $count_pendingResourceRequests = DB::table('reqs')->where('status', 'Not Allocated')->count();
 
@@ -77,6 +85,13 @@ class HomeController extends Controller {
 
         $count = Hardware::select('type',DB::raw('count(*) as count'))->groupBy('type')->get();
 
+        //last logon
+        $lastLogonUsers = DB::table('system_users')->orderBy('updated_at','desc')->take(5)->get();
+
+        //current user
+//        $currentUser = DB::table('system_users')->where('username','=',Auth::User()->username)->get();
+
+
 
 
 
@@ -94,7 +109,9 @@ class HomeController extends Controller {
                             ->with('countPendingHardwares',$count_pendingHardwares)
                             ->with('recentRequests',$recentRequests)
                             ->with('types',$count->lists('type'))
-            ->with('count',$count->lists('count'));
+                            ->with('lastLogonUsers',$lastLogonUsers)
+//                            ->with('currentUser',$currentUser)
+                            ->with('count',$count->lists('count'));
 //                            ->with('count',$count->lists('count'));
 
 

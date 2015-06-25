@@ -15,7 +15,7 @@ class role {
 	public function handle($request, Closure $next)
 	{
 
-        if (Auth::user() && Auth::user()->permissions == "Administrator Full" )
+        if (Auth::user() && Auth::User()->primarygroup=='AdminFull' )
         {
             return $next($request);
         }

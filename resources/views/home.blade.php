@@ -2,6 +2,10 @@
 
 @section('content')
 <?php header('Refresh: 20'); ?>
+
+{{--@foreach($currentUser as $currentUser)--}}
+    {{--<p style="font-size: 13px; text-align: right">Recent Activity {{$currentUser->updated_at}} </p>--}}
+{{--@endforeach--}}
 <h3 style="color: #354b60">Dashboard | Automatic Resource Allocation</h3>
 
 <table style="width: 100%">
@@ -33,7 +37,7 @@
         <td background = "{{asset('/includes/images/dashboardIcons/dashboardIcons6.jpg')}}"  style="width: 243px;height: 120px; background-repeat: no-repeat; padding-left:5px; color: white; font-size: 33px">
             <b>
                     {{ $countPendingRenewalRequests }}
-                    <p style="font-size: 14px; opacity: 0.7">Renewal Requests</p>
+                    <p style="font-size: 14px; opacity: 0.7"><a href="{{ URL::route('renewalAccept') }}" style="color: white">Renewal Requests</a></p>
             </b>
         </td>
         <td style="width: 4px"></td>
@@ -46,18 +50,6 @@
     <table style="width: 100%">
 
         <tr>
-            <td style="width: 40; vertical-align: top">
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#graph" aria-controls="home" role="tab" data-toggle="tab"><p style="font-size: 12px"><span class="glyphicon glyphicon-signal"></span> No of Resources </p> </a></li>
-            </ul>
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="graph">
-                     <canvas id='statistic' style="width:100%; height:300"></canvas>
-                </div>
-            </div>
-
-            </td>
-            <td style="width: 1%"></td>
             <td style="width: 24%; vertical-align: top">
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#ResourceStatus" aria-controls="home" role="tab" data-toggle="tab"><p style="font-size: 12px"><span class="glyphicon glyphicon-cd"></span> Resource analysis </p> </a></li>
@@ -77,6 +69,33 @@
                     </div>
                 </div>
             </td>
+            <td style="width: 1%"></td>
+            <td style="width: 40; vertical-align: top">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#lastAccountActivities" aria-controls="home" role="tab" data-toggle="tab"><p style="font-size: 12px"><span class="glyphicon glyphicon-time"></span> Last account activities </p> </a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="lastAccountActivities">
+                    <table class="table table-striped" style="font-size: 12px">
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <th>Last Logon At</th>
+                        </tr>
+                        @foreach($lastLogonUsers as $lastLogonUser)
+                            <tr>
+                                <td>{{$lastLogonUser->id}}</td>
+                                <td>{{$lastLogonUser->username}}</td>
+                                <td>{{ $lastLogonUser->updated_at }}</td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+
+            </td>
+
+
             <td style="width: 1%"></td>
             <td style="width: 34%; vertical-align: top">
                 <ul class="nav nav-tabs" role="tablist">
@@ -118,25 +137,25 @@
     <script src="/includes/js/draw.min.js"></script>
 
     <script>
-        (function(){
-            var ctx = document.getElementById('statistic').getContext('2d');
-            var chart = {
-                labels:['communication','desktop','laptop','monitor'],
-                datasets:[ {
+        {{--(function(){--}}
+            {{--var ctx = document.getElementById('statistic').getContext('2d');--}}
+            {{--var chart = {--}}
+                {{--labels:['communication','desktop','laptop','monitor'],--}}
+                {{--datasets:[ {--}}
 
 
                                       {{--label: {{ json_encode($hardwareTypes)}},--}}
-                                      fillColor: "rgba(151,187,205,0.2)",
-                                      strokeColor: "rgba(151,187,205,1)",
-                                      pointColor: "rgba(151,187,205,1)",
-                                      pointStrokeColor: "#fff",
-                                      pointHighlightFill: "#fff",
-                                      pointHighlightStroke: "rgba(151,187,205,1)",
-                                      data: [12, 20, 25, 10]
-                                  }]
-            };
-            new Chart(ctx).Bar(chart);
-        })();
+                                      {{--fillColor: "rgba(151,187,205,0.2)",--}}
+                                      {{--strokeColor: "rgba(151,187,205,1)",--}}
+                                      {{--pointColor: "rgba(151,187,205,1)",--}}
+                                      {{--pointStrokeColor: "#fff",--}}
+                                      {{--pointHighlightFill: "#fff",--}}
+                                      {{--pointHighlightStroke: "rgba(151,187,205,1)",--}}
+                                      {{--data: [12, 20, 25, 10]--}}
+                                  {{--}]--}}
+            {{--};--}}
+            {{--new Chart(ctx).Bar(chart);--}}
+        {{--})();--}}
 
         (function(){
              var ctx = document.getElementById('statistic_2').getContext('2d');

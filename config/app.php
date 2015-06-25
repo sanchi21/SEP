@@ -40,7 +40,7 @@ return [
 	|
 	*/
 
-	'timezone' => 'UTC',
+	'timezone' => 'Asia/Colombo',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -115,8 +115,8 @@ return [
 		 * Laravel Framework Service Providers...
 		 */
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
-		'Illuminate\Auth\AuthServiceProvider',
-//        'Ccovey\LdapAuth\LdapAuthServiceProvider',
+//		'Illuminate\Auth\AuthServiceProvider',
+        'Ccovey\LdapAuth\LdapAuthServiceProvider',
 		'Illuminate\Bus\BusServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
 		'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
