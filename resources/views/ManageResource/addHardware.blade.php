@@ -101,7 +101,9 @@
 
                 @endif
                 </td>
-                <?php $columns_to_validate = $columns_to_validate.($c->table_column).'-'.($c->validation).'/'; ?>
+                <?php
+                if($c->dropDown != '1')
+                    $columns_to_validate = $columns_to_validate.($c->table_column).'-'.($c->validation).'/'; ?>
             @endforeach
             <input type="hidden" name="columns_valid" value="{{$columns_to_validate}}" id="columns_valid">
         </tr>

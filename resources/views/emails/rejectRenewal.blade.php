@@ -1,14 +1,14 @@
 
-Renewal Request
+Resource Renewal
 <br>
 --------------------------
 <br>
 Project Code : {{$prCode}}
 <br>
-Project Manager : {{$user}}
+Hello {{$user}},
 <br>
 
-{{$user}} has requested to renew {{$item}}(Inventory Code :{{$inventory}}) upto {{$renewalDate}}
+Your renewal request for {{$item}}(Inventory Code :{{$inventory}}) has been rejected.
 <br>
 
 -----------------------------------------------------------------------------------------------------

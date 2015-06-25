@@ -98,7 +98,7 @@
             </td>
 
             <td width="20%">
-            <input type="submit" name="delete" class="btn btn-primary form-control" value="Delete&nbsp;">&nbsp;&nbsp;
+            <input type="submit" name="delete" class="btn btn-danger form-control" value="Delete&nbsp;" style="width: 80px">&nbsp;&nbsp;
             <input type="submit" name="update" class="btn btn-primary form-control" value="Update">
             </td>
         </tr>

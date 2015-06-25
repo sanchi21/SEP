@@ -5,6 +5,7 @@
 
 <h2 style="color: #9A0000">Request</h2>
 
+<div class="panel-body">
 <form action="{{ URL::route('requestRes') }}" method="post">
     <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">
     {{--<b><h3 style="color: darkred">Request</h3></b>--}}
@@ -77,32 +78,43 @@
 </div>
 
     </br>
-<div class="well">
+<div>
     <div class="row">
             <div class="col-xs-4 col-md-4">
                 <h3>Hardware</h3>
             </div>
 
         <div class="col-xs-2 col-md-2">
-            <h3><input type="button" value="+"  class="sbtn" style="width: 35px" onClick="add_Row('dataTable')" />&nbsp;
-            <input type="button" value="-" class="sbtn" style="width: 35px" onClick="delete_Row('dataTable')" /></h3>
+            <h3><input type="button" value="+"  class="sbtn" style="width: 35px;height: 35px" onClick="add_Row('dataTable')" />&nbsp;
+            <input type="button" value="-" class="sbtn" style="width: 35px;height: 35px" onClick="delete_Row('dataTable')" /></h3>
         </div>
     </div>
 </div>
 
     </p>
 
-
-    <table id="dataTable" class="table table-hover" style="font-size: small;font-family: Arial" >
+    <table class="table table-hover" width="100%" style="margin-bottom: 1px">
+    <tr id="headRow" style="background-color: #e7e7e7;">
+            <th width="3%"></th>
+            <th width="27%">Item</th>
+            <th width="70%">Additional Information</th>
+        </tr>
+    </table>
+    <table id="dataTable" class="table table-hover" width="100%">
     <tbody>
     <tr>
-     <td>
-
-         <input type='checkbox' />
+    <style>
+    input[type="checkbox"]{
+      width: 30px; /*Desired width*/
+      height: 30px; /*Desired height*/
+    }
+    </style>
+     <td width="3%">
+         <input type='checkbox' class="form-control"/>
      </td>
 
-  	<td>
-  	{!! Form::label('item','Item') !!}
+  	<td width="27%">
+  	{{--{!! Form::label('item','Item') !!}--}}
     <select class="form-control" name="item[]">
   	              <option>Select Type</option>
                   @foreach($types as $type)
@@ -125,7 +137,7 @@
   	{{--</td>--}}
   	<td>
   	<!-- text area to get additional information-->
-  	{!! Form::label('additional_information','Additional_Information')!!}
+  	{{--{!! Form::label('additional_information','Additional_Information')!!}--}}
   	{!! Form::textarea('additional_information[]',null,['class'=>'form-control','style'=>'height:33px']) !!}
   	</td>
     </tr>
@@ -138,31 +150,38 @@
 <br>
    {{--<p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">--}}
 
-   <div class="well">
+   <div>
        <div class="row">
                <div class="col-xs-4 col-md-4">
                    <h3>Software</h3>
                </div>
 
            <div class="col-xs-2 col-md-2">
-               <h3><input type="button" value="+"  class="sbtn" style="width: 35px" onClick="add_Row('Table2')" />&nbsp;
-               <input type="button" value="-" class="sbtn" style="width: 35px"  onClick="delete_Row('Table2')" /></h3>
+               <h3><input type="button" value="+"  class="sbtn" style="width: 35px;height: 35px" onClick="add_Row('Table2')" />&nbsp;
+               <input type="button" value="-" class="sbtn" style="width: 35px;height: 35px"  onClick="delete_Row('Table2')" /></h3>
            </div>
        </div>
    </div>
 
    {{--</p>--}}
 
-   <table id="Table2" class="table table-hover" style="font-size: small;font-family: Arial">
+    <table class="table table-hover" width="100%" style="margin-bottom: 1px">
+        <tr id="headRow" style="background-color: #e7e7e7;">
+            <th width="3%"></th>
+            <th width="22%">Device Type</th>
+            <th width="10%">No&nbsp;of&nbsp;License</th>
+            <th width="65%">Additional Information</th>
+        </tr>
+    </table>
+   <table id="Table2" class="table table-hover">
    <tbody>
    <tr>
    <p>
-   <td>
-
+   <td width="3%">
       <input type='checkbox' />
    </td>
-   <td>
-      {!! Form::label('device_type','Device-Type') !!}
+   <td width="22%">
+      {{--{!! Form::label('device_type','Device-Type') !!}--}}
       <select class="form-control" name="device_type[]">
           <option>Select Device</option>
           @foreach($sws as $sw)
@@ -174,12 +193,12 @@
 
       </select>
    </td>
-   <td>
-      {!! Form::label('model','No Of License') !!}
-      <input type="number" name="model[]" min="0" style="height: 33px; width: 100%" />
+   <td width="10%">
+      {{--{!! Form::label('model','No Of License') !!}--}}
+      <input type="number" name="model[]" min="0" style="height: 33px; width: 100%" class="form-control"/>
    </td>
-   <td>
-      {!! Form::label('additional_information_sw','Additional_Information')!!}
+   <td width="65%">
+      {{--{!! Form::label('additional_information_sw','Additional_Information')!!}--}}
       {!! Form::textarea('additional_information_sw[]',null,['class'=>'form-control','style'=>'height:33px']) !!}
    </td>
     </p>
@@ -205,7 +224,7 @@
  @if(Session::has('flash_view'))
     <table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial" >
     <tbody>
-    <tr style="width: 20%">
+    <tr style="width: 20%;background-color: #e7e7e7;">
          <td align="left">{!! Form::label('request_id','Request_ID') !!} </td>
          <td align="left">{!! Form::label('sub_id','Sub_ID') !!} </td>
          <td align="left">{!! Form::label('item','Item') !!} </td>
@@ -244,7 +263,7 @@
 </form>
 
    {!! Form::close() !!}
-
+</div>
 
    <script>
    function add_Row(tableID) {

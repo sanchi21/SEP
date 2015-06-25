@@ -277,6 +277,7 @@
                         </tr>
                     @endif
 
+
                     @foreach($hardware_types as $search)
                         <form action="{{ URL::route('SendResource') }}" method="post">
                         @if($search->type != '')

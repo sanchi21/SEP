@@ -5,6 +5,7 @@ use App\HardDisk;
 use App\Hardware;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Resource;
 use App\Validation;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Schema;
@@ -128,7 +129,7 @@ class TableController extends Controller {
                 $col = array();
                 $attr_name = str_replace(' ','_',strtolower($attribute_name[$x]));
                 $col_name = Column::where('table_column',$attr_name)->get();
-                if(!is_null($col_name))
+                if(is_null($col_name))
                 {
                     $status = false;
                     $err = $attr_name.' Duplicate Column Name. ';
@@ -261,6 +262,17 @@ class TableController extends Controller {
             }
             $cat = Type::find($category);
             $cat->delete();
+
+            $hardware = Hardware::where('type',$category)->get();
+
+            foreach($hardware as $hard)
+            {
+                $inv = $hard->inventory_code;
+                $hard->delete();
+
+                $resource = Resource::find($inv);
+                $resource->delete();
+            }
 
             $status = true;
             \Session::flash('flash_message', 'Category Deleted Successfully!');
