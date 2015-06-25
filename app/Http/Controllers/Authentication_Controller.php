@@ -13,6 +13,7 @@ use App\User;
 use App\system_users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+
 use Auth;
 use URL;
 
@@ -147,7 +148,7 @@ class Authentication_Controller extends Controller {
     {
         // validate the info, create rules for the inputs
         $rules = array(
-            'email' =>'required', // make sure the email is an actual email
+            'email', // make sure the email is an actual email
             'password'  =>'required' // password can only be alphanumeric and has to be greater than 3 characters
         );
 
@@ -164,8 +165,8 @@ class Authentication_Controller extends Controller {
             $remember = (Input::has('remember')) ? true : false;
 
             $auth = Auth::attempt(array(
-//                'username'     => Input::get('email'),
-                'email'     => Input::get('email'),   //local database login
+                'username'     => Input::get('email'),
+//                'email'     => Input::get('email'),   //local database login
                 'password'  => Input::get('password'),
                 //'active'     => 1
             ), $remember);
@@ -175,49 +176,35 @@ class Authentication_Controller extends Controller {
 
 
             // attempt to do the login
-            if ($auth)
-            {
+            if ($auth){
 
-//                $username = 'abhayan';
-//                require_once 'vendor/strebl/adldap/lib/adLDAP/classes/adLDAPUsers.php';
-//                $adldap = new adLDAP\adLDAP();
-//                $adldap->user();
-//
-//
-//                if($adldap->user()->inGroup($username,"ProjectManager"))
-//                {
-//                    $ldap_user_info = $adldap->user()->info($username);
-//                    $ldap_user_name = $ldap_user_info[0]["mail"][0];
-//                    return $ldap_user_name;
-//                }
-//                else
-//                {
-//                    echo 'failed';
-//                }
-
+                $system_users =  DB::table('system_users')->where('username','=',Input::get('email'));
+                $count = ($system_users->count());
 
 //
-//                // validation successful!
-//                //return Redirect::intended('/');
-                if(Auth::user()->permissions=='Administrator Full')
+                if($count == 0)
+                {
+                    //if doesn't exist yet add them
+                    DB::table('system_users')->insert(['id' => Auth::User()->employeeID,'username' => Auth::User()->username, 'email' => Auth::User()->mail,'created_at' => date('Y-m-d G:i:s')]);
+                }
+                else
+                {
+                    //if exist update records
+                    DB::table('system_users')->where('username', Input::get('email'))->update(['id' => Auth::User()->employeeID,'email' => Auth::User()->mail,'updated_at' => date('Y-m-d G:i:s')]);
+
+
+                }
+
+
+                if(Auth::User()->primarygroup=='AdminFull')
                 {
                     return Redirect::route('home-admin-full');
                 }
-                elseif(Auth::user()->permissions=='Administrator Limit')
+                elseif(Auth::User()->primarygroup=='AdminLimited')
                 {
-                    return Redirect::route('home-admin-limited');
-                }
-                elseif(Auth::user()->permissions=='Project Manager')
-                {
-                    return Redirect::route('hardwarereq');
-                }
-//                if(Input::get('email')!="srinithy") {
-//                    return Redirect::route('home-admin-full');
-//                }else
-//                {
-//                    return Redirect::route('home-project-manager');
-//                }
 
+                    return Redirect::route('home-project-manager');
+                }
 
             } else {
 
