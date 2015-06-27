@@ -53,7 +53,7 @@ class DepreciateController extends Controller {
         $resource->inventory_code = $inventory_code;
         $resource->method = $method;
 
-        if($method = "Straight Line")
+        if($method == "Straight Line")
         {
             $resource->residual = $input['residual'];
             $resource->year = $input['year'];
@@ -123,7 +123,7 @@ class DepreciateController extends Controller {
         $current_year = date("Y");
 
         $asset = Depreciation::find($id);
-        $rate = $asset->pecentage;
+        $rate = $asset->percentage;
         $residual = ($rate * $value) / 100.0;
 
         $depreciation = array();

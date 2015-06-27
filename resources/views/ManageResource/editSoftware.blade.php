@@ -7,6 +7,16 @@
 <h2 style="color: #9A0000">Edit Software Resource</h2>
 <br>
 
+@if($errors->any())
+         <div class="alert alert-danger" id="error_msg">
+            <ul style="list-style: none">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+            </ul>
+         </div>
+         @endif
+
 <div class="well">
 {!! Form ::open(['method' => 'POST', 'url' => 'software-edit/search']) !!}
 <table>

@@ -229,12 +229,11 @@ class TableController extends Controller {
                 {
                     $dropDown = DropDown::where('table_column',$column)->get();
 
-                    if(is_null($dropDown))
+                    if(!is_null($dropDown))
                     {
                         foreach ($dropDown as $drop)
                         {
-                            $d = $drop->did;
-                            $d->delete();
+                            $drop->delete();
                         }
                     }
 

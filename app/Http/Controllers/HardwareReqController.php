@@ -123,8 +123,8 @@ class HardwareReqController extends Controller
                        // $req->os_version = $temp1;
                         $req->additional_information = $temp2;
                         $req->status=$All_status;
-                        $req->required_from=$req_start_date;
-                        $req->required_upto=$req_end_date;
+                        $req->required_from=$start_date;
+                        $req->required_upto=$end_date;
                         $req->renewal=$renewal;
 
                         if ($temp != "Select Type") {
@@ -149,8 +149,8 @@ class HardwareReqController extends Controller
                         $req->model = $temp1;
                         $req->additional_information = $temp2;
                         $req->status=$All_status;
-                        $req->required_from=$req_start_date;
-                        $req->required_upto=$req_end_date;
+                        $req->required_from=$start_date;
+                        $req->required_upto=$end_date;
                         $req->renewal=$renewal;
 
                         if ($temp != "Select Device") {

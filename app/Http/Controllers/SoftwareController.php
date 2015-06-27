@@ -69,7 +69,7 @@ class SoftwareController extends Controller {
         return view ('ManageResource.editSoftware',compact('softwares','column'));
     }
 
-    public function update()
+    public function update(Requests\UpdateSoftwareRequest $request)
     {
         $status = true;
         $input = Request::all();

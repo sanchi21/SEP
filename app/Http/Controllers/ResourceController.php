@@ -88,8 +88,11 @@ class ResourceController extends Controller {
                         $t = $columns[$x]->table_column;
                         $hardware->$t = $attribute[$i];
                     }
+
                     $x++;
                 }
+
+                $hardware->status = "Not Allocated";
 
                 if ($resource->save()) {
                     $status = $hardware->save() ? true : false;

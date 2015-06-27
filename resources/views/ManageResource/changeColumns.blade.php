@@ -29,7 +29,7 @@
 <script type="text/javascript">
                 $(document).ready(function() {
                     $('#existing_attribute').multiselect({
-                    enableFiltering: true,
+                    enableCaseInsensitiveFiltering: true,
                     buttonWidth: '250px'
                     });
                 });
@@ -196,15 +196,29 @@
                     <option value="{{$valid->id}}" id="{{$valid->id}}">{{$valid->valid_display}}</option>
                     @endforeach
                 </select>
+
+                <script>
+                    document.getElementById('2').disabled = true;
+                    document.getElementById('3').disabled = true;
+                    document.getElementById('5').disabled = true;
+                    document.getElementById('7').disabled = true;
+                    document.getElementById('8').disabled = true;
+                    document.getElementById('10').disabled = true;
+                    document.getElementById('11').disabled = true;
+                    document.getElementById('12').disabled = true;
+                    document.getElementById('13').disabled = true;
+                    document.getElementById('14').disabled = true;
+                    document.getElementById('15').disabled = true;
+                </script>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <input type="button" name="add" class="btn btn-primary form-control" value="+" style="width: 40px; font-size: 18px" onclick="addButton()">
-    <input type="button" name="remove" class="btn btn-primary form-control" value="-" style="width: 40px; font-size: 18px" onclick="removeButton()">
-    <br>
-    <br>
+    {{--<input type="button" name="add" class="btn btn-primary form-control" value="+" style="width: 40px; font-size: 18px" onclick="addButton()">--}}
+    {{--<input type="button" name="remove" class="btn btn-primary form-control" value="-" style="width: 40px; font-size: 18px" onclick="removeButton()">--}}
+    {{--<br>--}}
+    {{--<br>--}}
 </div>
 <br>
 
