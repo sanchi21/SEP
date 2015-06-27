@@ -4,10 +4,12 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Column;
 use App\DropDown;
+use App\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 use App\Http\Requests\DropDownRequest;
+use App\Http\Requests\ItemRequest;
 
 class DropDownController extends Controller {
 
@@ -22,7 +24,9 @@ class DropDownController extends Controller {
         $dropValues = $this->getDropDownValues($columns);
         $count = count($dropValues);
 
-		return view('ManageResource.dropDown',compact('columns','dropValues','count'));
+        $items = Item::all();
+
+		return view('ManageResource.dropDown',compact('columns','dropValues','count','items'));
 	}
 
     public function getDropDownValues($columns)
@@ -91,6 +95,58 @@ class DropDownController extends Controller {
 
         return Redirect::action('DropDownController@index');
 	}
+
+    public function handle2(ItemRequest $request)
+    {
+        $add_button = Input::get('add_button');
+        $update_button = Input::get('update_button');
+        $status = false;
+
+        if($add_button != "")
+        {
+            $new_item = Input::get('new_value');
+            $dropDown = new Item();
+            $dropDown->category = $new_item;
+
+            $status =  $dropDown->save() ? true : false;
+
+            if($status)
+                \Session::flash('flash_message', 'Value added successfully!');
+            else
+                \Session::flash('flash_message_error', 'Addition failed!');
+
+        }
+        elseif($update_button != "")
+        {
+            $did = Input::get('dropDown');
+            $new_value = Input::get('new_value');
+            $item = Item::find($did);
+            $item->category = $new_value;
+
+            $status = $item->save() ? true : false;
+
+            if($status)
+                \Session::flash('flash_message', 'Value updated successfully!');
+            else
+                \Session::flash('flash_message_error', 'Update failed!');
+
+        }
+        else
+        {
+            $did = Input::get('dropDown');
+            $item = Item::find($did);
+
+            $status = $item->delete() ? true :false;
+
+            if($status)
+                \Session::flash('flash_message', 'Value deleted successfully!');
+            else
+                \Session::flash('flash_message_error', 'Deletion failed!');
+        }
+
+
+        return Redirect::action('DropDownController@index');
+    }
 
 	/**
 	 * Store a newly created resource in storage.

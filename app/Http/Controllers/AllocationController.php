@@ -179,13 +179,22 @@ class AllocationController extends Controller {
 
         if($resource_type=='Hardware'){
             $hardware_types=Hardware::where('status','=',$device_status)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
+            $count_hard=$hardware_types->count();
         }
         else{
             $hardware_types=Software::where('name', 'LIKE', '%' . $type . '%')->paginate(30);
-        }
-        \Session::flash('flash_search','');
-        return view('Requests.Allocate')->with('hardware_types',$hardware_types)->with('results',$results)->with('ids',$ids)->with('ftp_account',$ftp_account)->with('inventory_code',$inventory_code);
+            $count_hard=$hardware_types->count();
 
+        }
+
+        if($count_hard==0){
+            \Session::flash('flash_message_search', 'Search results not found');
+            return redirect('Allocate');
+        }
+        else {
+            \Session::flash('flash_search', '');
+            return view('Requests.Allocate')->with('hardware_types', $hardware_types)->with('results', $results)->with('ids', $ids)->with('ftp_account', $ftp_account)->with('inventory_code', $inventory_code);
+        }
     }
 
     Public function SendResource(){

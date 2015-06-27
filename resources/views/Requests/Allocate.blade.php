@@ -258,6 +258,19 @@
                         </table>
                 </div>
                 </br>
+                <div >
+
+                        @if(Session::has('flash_message_search'))
+                        <div class="alert alert-info">
+                        {{Session::get('flash_message_search')}}
+                        </div>
+
+                        @endif
+                      <script>
+                        $('div.alert').delay(4000).slideUp(300);
+                      </script>
+
+                </div>
 
                 <table class="table table-hover">
 

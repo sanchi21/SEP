@@ -60,6 +60,7 @@ return [
 	*/
     'username_field' => 'username',
 
+
 	'password' => [
 		'email' => 'emails.password',
 		'table' => 'password_resets',

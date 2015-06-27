@@ -126,9 +126,9 @@
                         <tr>
                             <td width="50%">Attributes</td>
                             <td width="50%">
-                                <select id="modal_attribute" name="method" class="form-control" style="width: 250px" onchange="chk(this.value)" onclick="chk(this.value)">
-                                    <option value='Straight Line'>Straight Line Method</option>
-                                    <option value='Declining'>Declining Method</option>
+                                <select id="modal_attribute" name="method" class="form-control" style="width: 250px" onclick="chk(this.value)">
+                                    <option value="Straight Line">Straight Line Method</option>
+                                    <option value="Declining">Declining Method</option>
                                 </select>
                             </td>
                         </tr>

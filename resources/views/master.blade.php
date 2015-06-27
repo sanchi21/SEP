@@ -16,6 +16,7 @@
  {{--styles--}}
 
  {{--scritps--}}
+
  <script src="{{ asset('/includes/js/jquery.min.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrap.min.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrap-multiselect.js') }}"></script>
@@ -103,10 +104,10 @@
 
     <ul class="nav navbar-nav navbar-right">
     <li>
-        @if(\Illuminate\Support\Facades\Request::is('hardware-edit/*'))
-        <a href="#" style="color: #ffffff;font-size: 20px" role="button"  onclick="printContent('content12')"><span class="glyphicon glyphicon-print"></span></a>
+{{--        @if(\Illuminate\Support\Facades\Request::is('hardware-edit/*'))--}}
+        {{--<a href="#" style="color: #ffffff;font-size: 20px" role="button"  onclick="printContent('content12')"><span class="glyphicon glyphicon-print"></span></a>--}}
         {{--<input type="button" onclick="printContent('content12')" class="btn btn-primary" style="height: 32px; width: 20px; margin-top: 8px">--}}
-        @endif
+        {{--@endif--}}
     </li>
     <li>
         <a href="{{ URL::route('sign-out') }}" style="color: #ffffff;font-size: 20px"><span class="glyphicon glyphicon-log-out"></span></a>

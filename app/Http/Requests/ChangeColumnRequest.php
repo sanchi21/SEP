@@ -27,7 +27,7 @@ class ChangeColumnRequest extends Request {
 
 		return [
             'inv' => 'required_if:category,/change-property/New|unique:types,key|regex:/^([A-Za-z]{3})\/([A-Z]{3})$/',
-            'new_category' => 'required_if:category,/change-property/New|unique:types,category',
+            'new_category' => 'required_if:category,/change-property/New|unique:types,category|alpha_dash',
             'existing_attribute' => 'required_if:attribute_name,null',
 		];
 	}

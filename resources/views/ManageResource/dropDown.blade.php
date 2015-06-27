@@ -72,6 +72,31 @@
             </tbody>
 
         </table>
+
+        <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
+            {!! Form ::open(array('url' => 'change-option')) !!}
+            <tr>
+                <td width="20%">
+                    Request Item
+                </td>
+
+                <td width="25%">
+                    <select style="width: 250px" id="" name='dropDown' class="form-control input-sm">
+                        @foreach($items as $item)
+                            <option value='{{$item->key}}'>{{ $item->category }}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td width="25%">
+                    <input type="text" name='new_value' class="form-control input-sm" style="width:250px">
+                </td>
+                <td width="30%">
+                    <input type="submit" name="add_button" value="Add" class="btn btn-primary form-control" style="width:85px">
+                    &nbsp;<input type="submit" name="update_button" value="Update" class="btn btn-success form-control" style="width:85px">
+                    &nbsp;<input type="submit" name="delete_button" value="Delete" class="btn btn-danger form-control" style="width:85px">
+                </td>
+            </tr>
+            {!! Form ::close() !!}
 </div>
 
 <br>
