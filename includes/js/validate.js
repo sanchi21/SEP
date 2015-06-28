@@ -258,7 +258,7 @@ function validation3()
     if(attribute_name[0].value == "")
     {
         msg.innerHTML = "Please Set Attributes. Settings Not Saved!";
-        document.getElementById("error_msg").style.display = "block";
+        document.getElementById("error_msg1").style.display = "block";
         return false;
     }
 

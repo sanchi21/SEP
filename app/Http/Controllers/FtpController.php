@@ -15,7 +15,9 @@ class FtpController extends Controller {
 
     Public function FindU(){
 
-        $sys_users=User::all();
+        //$sys_users=User::all();
+		$sys_users=DB::table('system_users')->get();
+		
         $pros=version::all();
         $ftp=file::all();
         $sf=sfuser::all();
@@ -121,9 +123,11 @@ class FtpController extends Controller {
                     $subId = $max_subID + 1;
                     for($a=0; $a<$size;$a++) {
                         $temp = $users[$a];
-                        $take=User::where('username', '=',$temp)->get();
-                        $take1=$take->first();
-                        $user_id=$take1->id;
+                        //$take=User::where('username', '=',$temp)->get();
+						$take=DB::table('system_users')->where('username', '=',$temp)->pluck('id');
+                        $user_id=$take;
+						//$take1=$take->first();
+                        //$user_id=$take1->id;
 
                         $sf = new sfuser;
                         $sf->request_id = $req_id;

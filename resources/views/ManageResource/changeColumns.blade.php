@@ -61,7 +61,7 @@
          </div>
          @endif
 
-        <div class="alert alert-danger" id="error_msg" style="display: none">
+        <div class="alert alert-danger" id="error_msg1" style="display: none">
             <label id="msg"></label>
         </div>
 
@@ -175,11 +175,11 @@
             </td>
 
             <td>
-                <input type="text" name="attribute_min[]"  class="form-control input-sm" style="width:184px">
+                <input type="text" name="attribute_min[]" id="min_attr"  class="form-control input-sm" style="width:184px">
             </td>
 
             <td>
-                <input type="text" name="attribute_max[]"  class="form-control input-sm" style="width:184px">
+                <input type="text" name="attribute_max[]" id="max_attr" class="form-control input-sm" style="width:184px">
             </td>
 
             <td>
@@ -337,6 +337,12 @@
             document.getElementById('14').disabled = true;
             document.getElementById('15').disabled = true;
         }
+
+        if(type == "bigInteger" || type == "smallInteger" || type == "tinyInteger" || type == "integer" || type == "mediumInteger")
+        {
+            document.getElementById('min_attr').disabled = false;
+            document.getElementById('max_attr').disabled = false;
+        }
     }
 
     function resetList()
@@ -356,5 +362,7 @@
         document.getElementById('13').disabled = false;
         document.getElementById('14').disabled = false;
         document.getElementById('15').disabled = false;
+        document.getElementById('min_attr').disabled = true;
+        document.getElementById('max_attr').disabled = true;
     }
 </script>

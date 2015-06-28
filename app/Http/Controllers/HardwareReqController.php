@@ -80,7 +80,7 @@ class HardwareReqController extends Controller
 
             $project_id = $input['project_id'];
             //$user_id=Auth::user()->userID;
-            $user_id = Auth::User()->id;
+            $user_id = Auth::User()->employeeID;
             $request_status = 1;
             $All_status='Not Allocated';
             $renewal=0;

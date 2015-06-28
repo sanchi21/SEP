@@ -19,6 +19,7 @@
                <th>Project Code</th>
                <th>Current Due Date</th>
                <th>Requested Upto</th>
+               <th></th>
 
     @foreach($requests as $all)
 
@@ -29,9 +30,10 @@
 
                 <td>{{$all->name}}</td>
                 <td>{{$all->project_id}}</td>
-
-                <td><input type="text" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->required_upto}}" style="width: 300px" readonly></td>
-                <td><input type="text" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->req_upto}}" style="width: 300px" readonly></td>
+                <input type="hidden" name="req_upto" class="form-control input-sm" value="{{$all->required_upto}}">
+                <td>{{$all->required_upto}}</td>
+                <input type="hidden" name="req_upto" class="form-control input-sm" value="{{$all->req_upto}}">
+                <td>{{$all->req_upto}}</td>
                 <td> <input class="btn btn-default" type="submit" name="accept" value="Accept">
                 <input class="btn btn-danger" type="submit" name="reject" value="Reject"></td>
                 <input type="hidden" value="{{$all->id}}" name="reqID">
