@@ -129,7 +129,7 @@ class TableController extends Controller {
                 $col = array();
                 $attr_name = str_replace(' ','_',strtolower($attribute_name[$x]));
                 $col_name = Column::where('table_column',$attr_name)->get();
-                if(is_null($col_name))
+                if(!is_null($col_name))
                 {
                     $status = false;
                     $err = $attr_name.' Duplicate Column Name. ';

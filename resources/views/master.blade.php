@@ -156,6 +156,11 @@
       <script>
         $('div.alert').delay(4000).slideUp(300);
       </script>
+
+      <script>
+        $('div.alert-danger').delay(4000).slideUp(300);
+      </script>
+
     </div>
 </div>
 

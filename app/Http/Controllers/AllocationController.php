@@ -88,13 +88,15 @@ class AllocationController extends Controller {
                         ->update(array('inventory_code' => $serial, 'assigned_date' => $date, 'remarks' => $remarks, 'status' => $status));
 
                     $user_id = DB::table('requesths')->where('request_id', $request_id)->pluck('user_id');
-                    $user = User::where('id', '=', $user_id);
-                    $a = $user->count();
-                    $user = $user->first();
+					$user = DB::table('system_users')->where('id', $user_id)->pluck('username');
+					$email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+                    //$user = User::where('id', '=', $user_id);
+                    //$a = $user->count();
+                    //$user = $user->first();
 
-//                    Mail::send('Requests.AllocationSuccess', array('username' => $user->username), function ($message) use ($user) {
-//                        $message->to($user->email, $user->username)->subject('Resource Allocation');
-//                    });
+                    Mail::send('Requests.AllocationSuccess', array('username' => $user), function ($message) use ($user,$email) {
+                        $message->to($email, $user)->subject('Resource Allocation');
+                    });
 
                     \Session::flash('flash_message', 'Hardware Allocated Successfully');
                     return redirect('Allocate');

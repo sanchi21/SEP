@@ -55,7 +55,11 @@
                             </select>
                             <?php $y++; ?>
                         @else
-                            {!! Form :: text($col->table_column,$hardware->$attribute,['style'=>'width:250px','class'=>'form-control input-sm'])!!}
+                            @if($col->column_type == 'date')
+                                <input type="date"  name="{{$col->table_column}}" value="{{$hardware->$attribute}}" class="form-control input-sm" placeholder="mm/dd/yyyy" style="width:250px">
+                            @else
+                                {!! Form :: text($col->table_column,$hardware->$attribute,['style'=>'width:250px','class'=>'form-control input-sm'])!!}
+                            @endif
                         @endif
                     @endif
                 </td>
