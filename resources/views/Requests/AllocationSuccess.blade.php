@@ -8,5 +8,6 @@
  ?>
 
   Hello {{ $username }},<br>
-  Resources Allocated SuccessFully
+  The Requested Resource {{$name}} Is  Allocated To Your Project Successfully.
+  Assigned Date : {{$date}}
  <br>
