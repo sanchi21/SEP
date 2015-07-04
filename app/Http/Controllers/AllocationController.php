@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\System_User;
 use Illuminate\Support\Facades\Redirect;
 use App\requesth;
 use App\req;
@@ -14,6 +15,7 @@ use App\file;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use Request;
+use App\SystemUser;
 use Illuminate\Support\Facades\DB;
 
 
@@ -87,8 +89,14 @@ class AllocationController extends Controller {
                             ->update(array('inventory_code' => $serial, 'assigned_date' => $date, 'remarks' => $remarks, 'status' => $status));
 
                         $user_id = DB::table('requesths')->where('request_id', $request_id)->pluck('user_id');
-                        $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
-                        $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+//                        $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
+//                        $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+
+                        $user_d = SystemUser::where('id',$user_id)->get();
+                        $user_data = $user_d[0];
+                        $user = $user_data->username;
+                        $email = $user_data->email;
+
                         //$user = User::where('id', '=', $user_id);
                         //$a = $user->count();
                         //$user = $user->first();
@@ -128,8 +136,13 @@ class AllocationController extends Controller {
                             //Email function
 
                             $user_id = DB::table('requesths')->where('request_id', $request_id)->pluck('user_id');
-                            $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
-                            $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+
+//                            $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
+//                            $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+                            $user_d = SystemUser::where('id',$user_id)->get();
+                            $user_data = $user_d[0];
+                            $user = $user_data->username;
+                            $email = $user_data->email;
 
                             Mail::send('Requests.AllocationSuccess', array('username' => $user,'date' => $date,'name' => $name), function ($message) use ($user, $email) {
                                 $message->to($email, $user)->subject('Resource Allocation');

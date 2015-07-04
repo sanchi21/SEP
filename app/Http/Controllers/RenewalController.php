@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Request;
 use App\Renewal;
 use App\EmployeeAllocation;
+use App\SystemUser;
 use Illuminate\Support\Facades\Mail;
 
 class RenewalController extends Controller {
@@ -182,14 +183,18 @@ class RenewalController extends Controller {
                 if($status1 && $status2)
                 {
                     $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
-                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
-                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+//                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
+//                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+                    $user_d = SystemUser::where('id',$user_id)->get();
+                    $user_data = $user_d[0];
+                    $user = $user_data->username;
+                    $email = $user_data->email;
 
 
 
 
                     Mail::send('emails.acceptRenewal', array('user'=>$user,
-                        'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage) use ($user,$email)
+                        'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage) use ($user, $email)
                     {
                         $messsage->to($email,$user)->subject('Renewal Accepted');
                     });
@@ -230,11 +235,17 @@ class RenewalController extends Controller {
                 if($status1 && $status2){
 
                     $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
-                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
-                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+//                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
+//                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+
+                    $user_d = SystemUser::where('id',$user_id)->get();
+                    $user_data = $user_d[0];
+                    $user = $user_data->username;
+                    $email = $user_data->email;
+
 
                     Mail::send('emails.rejectRenewal', array('user'=>'srinithy',
-                        'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage)use ($user,$email)
+                        'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage) use ($user,$email)
                     {
                         $messsage->to($email,$user)->subject('Renewal Rejected');
                     });
