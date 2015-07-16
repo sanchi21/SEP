@@ -52,8 +52,9 @@ class ResourceController extends Controller {
         $category = substr($input['category'],10);
 
         $contents = array();
+        $resource_data = array();
+        $hardware_data = array();
         $columns = Column::where('category', $category)->get();
-        $status = true;
 
         try {
             foreach ($columns as $cols) {
@@ -72,40 +73,28 @@ class ResourceController extends Controller {
         {
             $x=0;
 
-            $resource = new Resource();
-            $hardware = new Hardware();
-            $status = true;
+            $resource = array();
+            $hardware = array();
 
             try {
-                DB::beginTransaction();
 
                 foreach ($contents as $attribute) {
                     if ($x == 0) {
-                        $resource->inventory_code = $attribute[$i];
-                        $hardware->inventory_code = $attribute[$i];
-                        $hardware->type = $category;
+                        $resource = array_add($resource,'inventory_code',$attribute[$i]);
+                        $hardware = array_add($hardware,'inventory_code',$attribute[$i]);
+                        $hardware = array_add($hardware,'type',$category);
                     } else {
                         $t = $columns[$x]->table_column;
-                        $hardware->$t = $attribute[$i];
+                        $hardware = array_add($hardware,$t,$attribute[$i]);
                     }
 
                     $x++;
                 }
 
-                $hardware->status = "Not Allocated";
+                $hardware = array_add($hardware,'status',"Not Allocated");
+                array_push($resource_data,$resource);
+                array_push($hardware_data,$hardware);
 
-                if ($resource->save()) {
-                    $status = $hardware->save() ? true : false;
-                } else {
-                    $status = false;
-                }
-
-                if ($status) {
-                    DB::commit();
-                } else {
-                    DB::rollback();
-                    break;
-                }
             }
             catch(\Exception $e)
             {
@@ -113,10 +102,18 @@ class ResourceController extends Controller {
             }
         }
 
-        if($status)
+        try {
+            DB::beginTransaction();
+            Resource::insert($resource_data);
+            Hardware::insert($hardware_data);
+            DB::commit();
             \Session::flash('flash_message','Resource(s) added successfully!');
-        else
+        }
+        catch(\Exception $e)
+        {
+            DB::rollback();
             \Session::flash('flash_message_error','Resource(s) addition failed!');
+        }
 
         return Redirect::action('ResourceController@index');
     }

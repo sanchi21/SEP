@@ -83,23 +83,26 @@ function addButton()
     //get the no of current rows (it includes the header as well)
     var curRows = document.getElementById("hardwareTable").rows.length-1;
 
-    //find the required table id
-    var table = document.getElementById("hardwareTable");
+    if(curRows < 5)
+    {
+        //find the required table id
+        var table = document.getElementById("hardwareTable");
 
-    //find the id of the table body
-    var tab = document.getElementById("tableBody")
+        //find the id of the table body
+        var tab = document.getElementById("tableBody")
 
-    var firstRow = document.getElementById("firstRow");
-    var clone = firstRow.cloneNode(true);
+        var firstRow = document.getElementById("firstRow");
+        var clone = firstRow.cloneNode(true);
 
-    clone.deleteCell(0);
-    var t1=document.createElement("input");
-    t1.setAttribute('class','form-control input-sm');
-    t1.setAttribute('style','width:184px');
-    t1.setAttribute('name','attribute_name[]');
-    clone.insertCell(0).appendChild(t1);
+        clone.deleteCell(0);
+        var t1 = document.createElement("input");
+        t1.setAttribute('class', 'form-control input-sm');
+        t1.setAttribute('style', 'width:184px');
+        t1.setAttribute('name', 'attribute_name[]');
+        clone.insertCell(0).appendChild(t1);
 
-    tab.appendChild(clone);
+        tab.appendChild(clone);
+    }
 }
 
 function removeButton()

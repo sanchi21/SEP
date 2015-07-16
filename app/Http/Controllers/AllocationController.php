@@ -387,6 +387,4 @@ class AllocationController extends Controller {
         }
     }
 
-
-
 }

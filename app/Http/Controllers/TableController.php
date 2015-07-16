@@ -99,69 +99,79 @@ class TableController extends Controller {
 
         if($existing_attributes != '')
         {
+            $existing_column_data = array();
             foreach ($existing_attributes as $existing_attribute)
             {
-                $column = new Column();
+                $column = array();
                 $e_column = Column::where('table_column', $existing_attribute)->get()->first();
-                $column->category = $new_category;
-                $column->table_column = $e_column->table_column;
-                $column->column_type = $e_column->column_type;
-                $column->column_name = $e_column->column_name;
-                $column->min = $e_column->min;
-                $column->max = $e_column->max;
-                $column->validation = $e_column->validation;
-                $column->dropDown = $e_column->dropDown;
+                $column = array_add($column,'category',$new_category);
+                $column = array_add($column,'table_column',$e_column->table_column);
+                $column = array_add($column,'column_type',$e_column->column_type);
+                $column = array_add($column,'column_name',$e_column->column_name);
+                $column = array_add($column,'min',$e_column->min);
+                $column = array_add($column,'max',$e_column->max);
+                $column = array_add($column,'validation',$e_column->validation);
+                                   $column = array_add($column,'dropDown',$e_column->dropDown);
 
-                if ($column->save()) {
-                    $status = true;
-                } else {
-                    $status = false;
-                    break;
-                }
+                array_push($existing_column_data,$column);
+            }
+            try {
+                Column::insert($existing_column_data);
+                $status = true;
+            }
+            catch(\Exception $e)
+            {
+                $status = false;
             }
         }
 
-        if($attribute_name[0]!=null)
+        if($attribute_name!=null)
         {
-            $count = count($attribute_name);
+            $new_column_data = array();
 
-            for ($x = 0; $x < $count; $x++) {
+
                 $col = array();
-                $attr_name = str_replace(' ','_',strtolower($attribute_name[$x]));
-                $col_name = Column::where('table_column',$attr_name)->get();
-                if(!is_null($col_name))
+
+                $attr_name = str_replace(' ','_',strtolower($attribute_name));
+                $col_name = Column::where('table_column',$attr_name)->get()->first();
+                if($col_name)
                 {
                     $status = false;
                     $err = $attr_name.' Duplicate Column Name. ';
-                    break;
+                    DB::rollback();
+                    \Session::flash('flash_message_error', $err.'Settings could not be changed!');
+                    return Redirect::action('TableController@index');
                 }
 
                 $column2 = new Column();
                 $column2->category = $new_category;
                 $column2->table_column = $attr_name;
-                $column2->column_type = $attribute_type[$x];
-                $column2->column_name = $attribute_name[$x];
-                $column2->min = $attribute_min[$x];
-                $column2->max = $attribute_max[$x];
-                $column2->validation = $attribute_validation[$x];
-                $column2->dropDown = $attribute_drop[$x];
+                $column2->column_type = $attribute_type;
+                $column2->column_name = $attribute_name;
+                $column2->min = $attribute_min;
+                $column2->max = $attribute_max;
+                $column2->validation = $attribute_validation;
+                $column2->dropDown = $attribute_drop;
 
 
-
-                if($attribute_drop[$x] == 1)
+                if($attribute_drop == 1)
                     $isDropdown++;
 
                 array_push($col, $attr_name);
-                array_push($col, $attribute_type[$x]);
+                array_push($col, $attribute_type);
 
                 $this->changeSchema($col);
+                array_push($new_column_data,$column2);
 
-                if ($column2->save()) {
+            try {
+                if($column2->save())
                     $status = true;
-                } else {
+                else
                     $status = false;
-                    break;
-                }
+            }
+            catch(\Exception $e)
+            {
+                $status = false;
             }
         }
 
@@ -181,7 +191,7 @@ class TableController extends Controller {
         else
         {
             DB::rollback();
-            \Session::flash('flash_message_error', $err.'Settings could not be changed!');
+            \Session::flash('flash_message_error', 'Settings could not be changed!');
         }
 
         return Redirect::action('TableController@index');
