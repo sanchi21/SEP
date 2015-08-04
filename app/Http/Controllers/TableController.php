@@ -3,7 +3,6 @@
 use App\DropDown;
 use App\HardDisk;
 use App\Hardware;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Resource;
 use App\Validation;

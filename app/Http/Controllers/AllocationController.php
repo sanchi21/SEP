@@ -25,7 +25,10 @@ class AllocationController extends Controller {
     {
         $Allocation_id =1;
         $ids = requesth::where('request_status', '=',$Allocation_id)->get();
-        return view('Requests.Allocate')->with('ids',$ids);
+        $request_id = Input::get('hid1');
+        $device_status='Not Allocated';
+        $results = req::where('request_id', '=',$request_id)->where('status','=',$device_status)->get();
+        return view('Requests.Allocate')->with('ids',$ids)->with('results',$results);
     }
 
     Public function ViewRequests(){
@@ -34,6 +37,7 @@ class AllocationController extends Controller {
         $project_id = Input::get('hid2');
         $Allocation_id =1;
         //$inventory_code = Input::get('hid11');
+        $sub='';
         $inventory_code ='e';
         $device_status='Not Allocated';
         \Session::flash('flash_av','');
@@ -46,7 +50,7 @@ class AllocationController extends Controller {
         $hardware_types=Hardware::where('status','=',$device_status)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
 
 
-        return view('Requests.Allocate')->with('ids',$ids)->with('results',$results)->with('ftp_account',$ftp_account)->with('hardware_types',$hardware_types)->with('inventory_code',$inventory_code);
+        return view('Requests.Allocate')->with('ids',$ids)->with('results',$results)->with('ftp_account',$ftp_account)->with('hardware_types',$hardware_types)->with('inventory_code',$inventory_code)->with('sub',$sub);
         //return Redirect::to('SearchResource',[$request_id]);
 
 
@@ -386,5 +390,7 @@ class AllocationController extends Controller {
             return Redirect::back()->withErrors($e->getMessage());
         }
     }
+
+
 
 }

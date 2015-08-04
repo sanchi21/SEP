@@ -3,7 +3,7 @@
 Hello {{$user}},
 <br>
 <br>
-The below listed resource(s) for Project Code : {{$prCode}} expires on {{$dt}}
+The below listed resource(s) for Project Code : {{$prCode}} wil be released on {{$dt}}
 <br>
 <br>
 @foreach($items as $item)

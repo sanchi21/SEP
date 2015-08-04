@@ -10,19 +10,23 @@
  <link href="{{ asset('/includes/css/resource.css') }}" rel="stylesheet">
 
  <link href="{{ asset('/includes/css/bootstrap-combined.min.css') }}" rel="stylesheet">
-
+{{-- <link href="{{ asset('/includes/js/jquery-alert-dialogs/css/jquery.alerts.css') }}" type="text/css" rel="stylesheet" media="screen">--}}
 
 
  {{--styles--}}
 
  {{--scritps--}}
-
  <script src="{{ asset('/includes/js/jquery.min.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrap.min.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrap-multiselect.js') }}"></script>
  <script src="{{ asset('/includes/js/bootstrapDatetimepicker.min.js') }}"></script>
  <script type="text/javascript" src="{{ asset('/includes/js/FormChange.js') }}"></script>
  <script type="text/javascript" src="{{ asset('/includes/js/validate.js') }}"></script>
+
+ {{--<script type="text/javascript" src="{{ asset('/includes/js/jquery-alert-dialogs/js/jquery.js') }}"></script>--}}
+ {{--<script type="text/javascript" src="{{ asset('/includes/js/jquery-alert-dialogs/js/jquery.ui.draggable.js') }}"></script>--}}
+ {{--<script type="text/javascript" src="{{ asset('/includes/js/jquery-alert-dialogs/js/jquery.alerts.js') }}"></script>--}}
+
  {{--scritps--}}
 
 <style>
