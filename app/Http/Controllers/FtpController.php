@@ -206,11 +206,13 @@ class FtpController extends Controller {
 
                     $max_subID = file::where('request_id', '=', $req_id)->max('sub_id');
                     $subId = $max_subID + 1;
+                    $status='Not Assigned';
                     $ftp = new file;
 
                     $ftp->request_id = $req_id;
                     $ftp->sub_id = $subId;
                     $ftp->type = "Ftp Account";
+                    $ftp->status=$status;
                     if($ftp->save()) {
                         \Session::flash('flash_message', 'FTP Request Sent');
                         return redirect('ftpreq');

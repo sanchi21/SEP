@@ -161,6 +161,14 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::get('ViewAll','AllocationController@getViewAll');
     Route::post('ViewAll', array('as' => 'ViewAll', 'uses' => 'AllocationController@ViewAll'));
 
+    Route::get('AssignFolder','FolderController@ViewFolder');
+    Route::post('AssignFolder', array('as' => 'ViewFolderRequests', 'uses' => 'FolderController@ViewFolderRequests'));
+    Route::post('AssignFolder/AssignData', array('as' => 'AssignData', 'uses' => 'FolderController@AssignData'));
+    Route::post('AssignFolder/AssignDataToDb', array('as' => 'AssignDataToDb', 'uses' => 'FolderController@AssignDataToDb'));
+    Route::post('AssignFolder/CancelAccount', array('as' => 'CancelAccount', 'uses' => 'FolderController@CancelAccount'));
+
+    Route::get('Approval','FolderController@ViewApproval');
+
     Route::post('ftpreq','FtpController@Ftp');
     Route::get('ftpreq', array('as'=>'ftpreq','uses'=>'FtpController@FindU'));
 

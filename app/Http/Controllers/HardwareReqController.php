@@ -105,7 +105,19 @@ class HardwareReqController extends Controller
             if (empty($project_id)) {
                 \Session::flash('flash_message_error', 'Prject_ID Cannot Be Empty');
                 return redirect('hardwarereq');
-            } else {
+            }
+            elseif (empty($start_date) || empty($end_date)) {
+                \Session::flash('flash_message_error', 'Date Fields Cannot Be Empty');
+                return redirect('hardwarereq');
+            } elseif (strtotime($start_date) > strtotime($end_date)) {
+                \Session::flash('flash_message_error', 'Invalid Dates');
+                return redirect('hardwarereq');
+            }
+            elseif (strtotime($start_date) < strtotime($date_today)) {
+                      \Session::flash('flash_message_error', 'Invalid Dates');
+                      return redirect('hardwarereq');
+            }
+            else {
                 if ($b != 0) {
 
                     $req_id = $a->request_id;
@@ -114,18 +126,18 @@ class HardwareReqController extends Controller
                         $subId = $max_subID + 1;
 
                         $temp = $item[$i];
-                       // $temp1 = $os_version[$i];
+                        // $temp1 = $os_version[$i];
                         $temp2 = $additional_information[$i];
                         $req = new req;
                         $req->request_id = $req_id;
                         $req->sub_id = $subId;
                         $req->item = $temp;
-                       // $req->os_version = $temp1;
+                        // $req->os_version = $temp1;
                         $req->additional_information = $temp2;
-                        $req->status=$All_status;
-                        $req->required_from=$start_date;
-                        $req->required_upto=$end_date;
-                        $req->renewal=$renewal;
+                        $req->status = $All_status;
+                        $req->required_from = $start_date;
+                        $req->required_upto = $end_date;
+                        $req->renewal = $renewal;
 
                         if ($temp != "Select Type") {
                             $req->save();
@@ -148,10 +160,10 @@ class HardwareReqController extends Controller
                         $req->device_type = $temp;
                         $req->model = $temp1;
                         $req->additional_information = $temp2;
-                        $req->status=$All_status;
-                        $req->required_from=$start_date;
-                        $req->required_upto=$end_date;
-                        $req->renewal=$renewal;
+                        $req->status = $All_status;
+                        $req->required_from = $start_date;
+                        $req->required_upto = $end_date;
+                        $req->renewal = $renewal;
 
                         if ($temp != "Select Device") {
                             $req->save();
@@ -161,21 +173,22 @@ class HardwareReqController extends Controller
                     }
                     \Session::flash('flash_message', 'Request Sent Successfully');
                     return redirect('hardwarereq');
+                }
 
 
-                } else {
-                    if (empty($start_date) || empty($end_date)) {
-                        \Session::flash('flash_message_error', 'Date Fields Cannot Be Empty');
-                        return redirect('hardwarereq');
-                    } elseif (strtotime($start_date) > strtotime($end_date)) {
-                        \Session::flash('flash_message_error', 'Invalid Dates');
-                        return redirect('hardwarereq');
-                    }
-
-//                  } elseif (strtotime($start_date) < strtotime($date_today)) {
-//                      \Session::flash('flash_message', 'Invalid Required From');
-//                      return redirect('hardwarereq');
-//                  }
+//                } else {
+//                    if (empty($start_date) || empty($end_date)) {
+//                        \Session::flash('flash_message_error', 'Date Fields Cannot Be Empty');
+//                        return redirect('hardwarereq');
+//                    } elseif (strtotime($start_date) > strtotime($end_date)) {
+//                        \Session::flash('flash_message_error', 'Invalid Dates');
+//                        return redirect('hardwarereq');
+//                    }
+//
+////                  } elseif (strtotime($start_date) < strtotime($date_today)) {
+////                      \Session::flash('flash_message', 'Invalid Required From');
+////                      return redirect('hardwarereq');
+////                  }
                     else {
                         $max_requestID = requesth::max('request_id');
                         $new_reqID = $max_requestID + 1;
@@ -243,7 +256,7 @@ class HardwareReqController extends Controller
 
 
             }
-        }
+
         if($view){
 
             $project_id = Input::get('project_id');
