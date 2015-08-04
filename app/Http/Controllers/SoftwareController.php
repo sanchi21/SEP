@@ -26,38 +26,37 @@ class SoftwareController extends Controller {
         $name = $input['name_t'];
         $vendor = $input['vendor_t'];
         $noOfLicense = $input['no_of_license_t'];
-        $status = true;
+        $resource_data = array();
+        $software_data = array();
 
-        DB::beginTransaction();
         for($i=0 ; $i<$count ; $i++)
         {
-            $resource = new Resource();
-            $software = new Software();
-            $status = true;
+            $resource = array();
+            $software = array();
 
-            $resource->inventory_code = $inventoryCode[$i];
-            $software->inventory_code = $inventoryCode[$i];
-            $software->name = $name[$i];
-            $software->vendor = $vendor[$i];
-            $software->no_of_license = $noOfLicense[$i];
+            $resource = array_add($resource,'inventory_code',$inventoryCode[$i]);
+            $software = array_add($software,'inventory_code',$inventoryCode[$i]);
+            $software = array_add($software,'name',$name[$i]);
+            $software = array_add($software,'vendor',$vendor[$i]);
+            $software = array_add($software,'no_of_license',$noOfLicense[$i]);
 
-            $status = $resource->save() ? true : false;
-            if($status)
-                $status = $software->save() ? true : false;
-
-            if($status)
-            {
-                DB::commit();
-            }
-            else {
-                DB::rollback();
-                break;
-            }
+            array_push($resource_data,$resource);
+            array_push($software_data,$software);
         }
-        if($status)
+
+        try{
+            DB::beginTransaction();
+            Resource::insert($resource_data);
+            Software::insert($software_data);
+            DB::commit();
             \Session::flash('flash_message','Software(s) added successfully!');
-        else
+        }
+        catch(Exception $e)
+        {
+            DB::rollback();
             \Session::flash('flash_message_error','Software(s) addition failed!');
+        }
+
 
         return Redirect::action('SoftwareController@index');
     }

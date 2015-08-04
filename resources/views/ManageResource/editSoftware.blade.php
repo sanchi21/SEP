@@ -3,6 +3,12 @@
 @extends('master')
 
 @section('content')
+<style>
+.table
+{
+margin-bottom: 0px;
+}
+</style>
 
 <h2 style="color: #9A0000">Edit Software Resource</h2>
 <br>

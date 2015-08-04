@@ -156,11 +156,11 @@
         <tbody id="tableBody">
         <tr id="firstRow">
             <td>
-                <input type="text" name="attribute_name[]"  class="form-control input-sm" style="width:184px">
+                <input type="text" name="attribute_name"  class="form-control input-sm" style="width:184px">
             </td>
 
             <td>
-                <select id="attribute_type" name="attribute_type[]" class="form-control input-sm" style="width: 184px" onchange="change()">
+                <select id="attribute_type" name="attribute_type" class="form-control input-sm" style="width: 184px" onchange="change()">
                     <option value="bigInteger">BIG INTEGER</option>
                     <option value="date">DATE</option>
                     <option value="dateTime">DATETIME</option>
@@ -175,22 +175,22 @@
             </td>
 
             <td>
-                <input type="text" name="attribute_min[]" id="min_attr"  class="form-control input-sm" style="width:184px">
+                <input type="text" name="attribute_min" id="min_attr"  class="form-control input-sm" style="width:184px">
             </td>
 
             <td>
-                <input type="text" name="attribute_max[]" id="max_attr" class="form-control input-sm" style="width:184px">
+                <input type="text" name="attribute_max" id="max_attr" class="form-control input-sm" style="width:184px">
             </td>
 
             <td>
-                <select id="attribute_drop" name="attribute_drop[]" class="form-control input-sm" style="width: 184px">
+                <select id="attribute_drop" name="attribute_drop" class="form-control input-sm" style="width: 184px">
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
             </td>
 
             <td>
-                <select id="attribute_validation" name="attribute_validation[]" class="form-control input-sm" style="width: 184px">
+                <select id="attribute_validation" name="attribute_validation" class="form-control input-sm" style="width: 184px">
                     {{--<option value="0">None</option>--}}
                     @foreach($validation as $valid)
                     <option value="{{$valid->id}}" id="{{$valid->id}}">{{$valid->valid_display}}</option>

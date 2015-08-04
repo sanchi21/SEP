@@ -92,6 +92,11 @@ Route::group(array('middleware' => ['auth']), function() {
 //    Route::get('hardware-d','DepreciateController@index');
     Route::post('hardware-depreciate','DepreciateController@store');
 
+    Route::post('purchase-request-submit','PurchaseRequestController@store');
+
+    Route::get('purchase-request','PurchaseRequestController@index');
+    Route::post('purchase-request','PurchaseRequestController@create');
+
 //--------------------------------------------------------Parthi
     Route::get('addPortion',array('as'=>'addPortion','uses'=>'AddResourcePortion@index'));
     Route::get('delete/{type}/{id}','AddResourcePortion@delete');

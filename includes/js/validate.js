@@ -239,7 +239,7 @@ function getErrorMsg(num)
 
 function validation3()
 {
-    var attribute_name = document.getElementsByName('attribute_name[]');
+    var attribute_name = document.getElementById('attribute_name').value;
     var existing_attribute = document.getElementsByName('existing_attribute[]');
 
     var msg = document.getElementById("msg");
@@ -255,7 +255,7 @@ function validation3()
         }
     }
 
-    if(attribute_name[0].value == "")
+    if(attribute_name == "")
     {
         msg.innerHTML = "Please Set Attributes. Settings Not Saved!";
         document.getElementById("error_msg1").style.display = "block";
