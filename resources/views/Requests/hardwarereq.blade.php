@@ -222,16 +222,19 @@
     </div>
 
  @if(Session::has('flash_view'))
+  @if($project_id !=null)
+    <p style="color: maroon"><b>Project&nbsp;-&nbsp;{{$project_id}}</b></p>
     <table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial" >
     <tbody>
     <tr style="width: 20%;background-color: #e7e7e7;">
-         <td align="left">{!! Form::label('request_id','Request_ID') !!} </td>
-         <td align="left">{!! Form::label('sub_id','Sub_ID') !!} </td>
+         <td align="left">{!! Form::label('request_id','Request ID') !!} </td>
+         <td align="left">{!! Form::label('sub_id','Sub ID') !!} </td>
          <td align="left">{!! Form::label('item','Item') !!} </td>
          {{--<td align="left">{!! Form::label('os_version','OS') !!} </td>--}}
-         <td align="left">{!! Form::label('device_type','Device_Type')!!} </td>
+         <td align="left">{!! Form::label('device_type','Device Type')!!} </td>
          <td align="left">{!! Form::label('model','Model')!!} </td>
-         <td align="left">{!! Form::label('additional_information','Additional_Information')!!} </td>
+         <td align="left">{!! Form::label('additional_information','Additional Information')!!} </td>
+          <td align="left">{!! Form::label('request_status','Request Status')!!} </td>
          <td></td>
     </tr>
 
@@ -247,17 +250,22 @@
        <td>{{$all->device_type}}</td>
        <td>{{$all->model}}</td>
        <td>{{$all->additional_information}}</td>
+       <td style="color: maroon">{{$all->status}}</td>
        <input type="hidden" value="{{$all->request_id}}" name="hid1">
        <input type="hidden" value="{{$all->sub_id}}" name="hid2">
        {!! Form::token() !!}
+       @if( $all->status=='Not Allocated' )
        <td> {!! Form::submit('Cancel',['class'=>'btn btn-danger form-control','name'=>'cancel']) !!}</td>
-
+       @else
+       <td> {!! Form::submit('Cancel',['class'=>'btn btn-danger form-control','name'=>'cancel', 'disabled' =>'disabled']) !!}</td>
+       @endif
       </tr>
       </form>
     @endforeach
 
     </tbody>
     </table>
+  @endif
   @endif
 
 </form>

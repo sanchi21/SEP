@@ -60,7 +60,7 @@ class AllocationController extends Controller {
 
     Public function ResourceAllocation(){
 
-        try {
+
 
             $request_id = Input::get('hidr');
             $sub_id = Input::get('hid3');
@@ -84,7 +84,9 @@ class AllocationController extends Controller {
                     if ($item != $check_device) {
                         \Session::flash('flash_message_error', 'Requested hardware doest match with the allocation');
                         return redirect('Allocate');
-                    } else {
+                    }
+
+                    else {
                         $count=Hardware::where('inventory_code', '=', $serial)->pluck('count');
                         $new_count=$count+1;
                         $hard = Hardware::find($serial);
@@ -110,14 +112,26 @@ class AllocationController extends Controller {
                         //$a = $user->count();
                         //$user = $user->first();
 
-                        Mail::send('Requests.AllocationSuccess', array('username' => $user,'date' => $date,'name' => $check_device), function ($message) use ($user, $email) {
+                    try {
+
+                        Mail::send('Requests.AllocationSuccess', array('username' => $user, 'date' => $date, 'name' => $check_device), function ($message) use ($user, $email) {
                             $message->to($email, $user)->subject('Resource Allocation');
                         });
 
                         \Session::flash('flash_message', 'Hardware Allocated Successfully');
                         return redirect('Allocate');
                     }
-                } else {
+
+                    catch(\Exception $e)
+                    {
+                        return Redirect::back()->withErrors($e->getMessage());
+                    }
+
+                    }
+                }
+
+
+                else {
                     $no_of_license = Software::where('inventory_code', '=', $serial)->get();
                     $get_first_row = $no_of_license->first();
                     $license_count = $get_first_row->no_of_license;
@@ -178,60 +192,55 @@ class AllocationController extends Controller {
 
 
             }
-        }
-        catch(\Exception $e)
-        {
-            return Redirect::back()->withErrors($e->getMessage());
-        }
+
+
 
     }
 
     Public function SearchResource(){
 
-        try {
 
-            $resource_type = Input::get('resource_type');
-            $type = Input::get('type');
-            $inventory_code = Input::get('hid11');
+            try {
 
-            $request_id = Input::get('r1');
-            //$request_id =1;
-            $Allocation_id = 1;
-            $device_status = 'Not Allocated';
-            $sub='';
-            $device_status_allocated='Allocated';
-            $results = req::where('request_id', '=', $request_id)->where('status', '=', $device_status)->get();
-            $ids = requesth::where('request_status', '=', $Allocation_id)->get();
-            $ftp_account = file::where('request_id', '=', $request_id)->get();
+                $resource_type = Input::get('resource_type');
+                $type = Input::get('type');
+                $inventory_code = Input::get('hid11');
+
+                $request_id = Input::get('r1');
+                //$request_id =1;
+                $Allocation_id = 1;
+                $device_status = 'Not Allocated';
+                $sub = '';
+                $device_status_allocated = 'Allocated';
+                $results = req::where('request_id', '=', $request_id)->where('status', '=', $device_status)->get();
+                $ids = requesth::where('request_status', '=', $Allocation_id)->get();
+                $ftp_account = file::where('request_id', '=', $request_id)->get();
 
 
-            if ($resource_type == 'Hardware') {
-                $hardware_types = Hardware::where('status', '=', $device_status)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
-                $count_hard = $hardware_types->count();
+                if ($resource_type == 'Hardware') {
+                    $hardware_types = Hardware::where('status', '=', $device_status)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
+                    $count_hard = $hardware_types->count();
+                } elseif ($resource_type == 'Allocated Hardware') {
+                    $hardware_types = Hardware::where('status', '=', $device_status_allocated)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
+                    $count_hard = $hardware_types->count();
+                } else {
+                    $hardware_types = Software::where('name', 'LIKE', '%' . $type . '%')->paginate(30);
+                    $count_hard = $hardware_types->count();
+
+                }
+
+                if ($count_hard == 0) {
+                    \Session::flash('flash_message_search', 'Search results not found');
+                    return redirect('Allocate');
+                } else {
+                    \Session::flash('flash_search', '');
+                    return view('Requests.Allocate')->with('hardware_types', $hardware_types)->with('results', $results)->with('ids', $ids)->with('ftp_account', $ftp_account)->with('inventory_code', $inventory_code)->with('sub', $sub);
+                }
+
+            } catch (\Exception $e) {
+                return Redirect::back()->withErrors($e->getMessage());
             }
-            elseif($resource_type=='Allocated Hardware'){
-                $hardware_types = Hardware::where('status', '=', $device_status_allocated)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
-                $count_hard = $hardware_types->count();
-            }
-            else {
-                $hardware_types = Software::where('name', 'LIKE', '%' . $type . '%')->paginate(30);
-                $count_hard = $hardware_types->count();
 
-            }
-
-            if ($count_hard == 0) {
-                \Session::flash('flash_message_search', 'Search results not found');
-                return redirect('Allocate');
-            } else {
-                \Session::flash('flash_search', '');
-                return view('Requests.Allocate')->with('hardware_types', $hardware_types)->with('results', $results)->with('ids', $ids)->with('ftp_account', $ftp_account)->with('inventory_code', $inventory_code)->with('sub', $sub);
-            }
-
-        }
-        catch(\Exception $e)
-        {
-            return Redirect::back()->withErrors($e->getMessage());
-        }
 
     }
 
@@ -273,6 +282,10 @@ class AllocationController extends Controller {
         return view('Requests.ViewAll');
     }
 
+    Public function getViewOfAllocations(){
+        return view('Requests.ViewHardwareResources');
+    }
+
     Public function ViewAll()
     {
         $request_id = Input::get('hid1');
@@ -283,6 +296,27 @@ class AllocationController extends Controller {
         $project_code=$row->project_id;
         $results = req::where('request_id', '=',$request_id)->where('status','=',$device_status)->get();
         return view('Requests.ViewAll')->with('results',$results)->with('project_code',$project_code);
+
+    }
+
+    Public function viewAllocatedHardware(){
+
+        $inventory_code = Input::get('hid11');
+        $results = req::where('inventory_code', '=', $inventory_code)->get();
+        $inventoryType=Input::get('typeView');
+
+        $a=0;
+        foreach ($results as $item){
+            $first[$a]=$item->request_id;
+            $a=$a+1;
+         }
+
+        for ($a = 0;  $a < sizeof($first); $a++) {
+
+            $projectCodes[$a]=requesth::where('request_id', '=',$first[$a])->pluck('project_id');
+
+        }
+        return view('Requests.ViewHardwareResources')->with('inventoryType',$inventoryType)->with('projectCodes',$projectCodes)->with('results',$results)->with('inventory_code',$inventory_code);
 
     }
 

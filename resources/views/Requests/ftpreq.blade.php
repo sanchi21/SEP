@@ -1,160 +1,248 @@
 
 @extends('master')
 
- @section('content')
- <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
-<script type="text/javascript">
+@section('content')
+
+   <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+
+   <script type="text/javascript">
                 $(document).ready(function() {
                     $('#user').multiselect({
                     enableFiltering: true,
                     buttonWidth: '350px'
                     });
                 });
-</script>
+   </script>
 
- {{--<head>--}}
-  {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">--}}
-  {{--<script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>--}}
-  {{--<script src="http://www.bootply.com/plugins/bootstrap-select.min.js"></script>--}}
-  {{--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>--}}
-     {{--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>--}}
-     <script>
-     $(document).ready(function(){
-         $("button").click(function(){
-             $("#Table3").toggle();
-             $("#Table4").toggle();
-         });
-     });
-     </script>
+   <script>
+                $(document).ready(function(){
+                    $("button").click(function(){
+                    $("#Table3").toggle();
+                    $("#Table4").toggle();
+                    });
+                });
+   </script>
 
-{!! Form::open() !!}
+   <style>
+         .dropdown-menu
+         {
+             max-height: 280px;
+             overflow-y: auto;
+             overflow-x: hidden;
+         }
 
- <h3 style="color: maroon">Request For Account And Folder</h3></br>
+         .btn
+         {
+         text-align: left;
+         }
 
- <select class="form-control" name="project_id" style="width: 25%">
-      @foreach($pros as $pro)
-             <option>
-                 {{$pro->os_version}}
-             </option>
+         .multiselect-container>li>a>label {
+             padding: 0px 20px 0px 10px;
+             }
+
+         .btn .caret {
+         margin-left:210px;
+         }
+   </style>
+
+    {!! Form::open() !!}
+
+    <h3 style="color: maroon">Request For Account And Folder</h3></br>
+
+    <select class="form-control" name="project_id" style="width: 25%">
+            @foreach($pros as $pro)
+                <option>
+                    {{$pro->os_version}}
+                </option>
             @endforeach
-     </select>
+    </select>
 
-</br>
+    </br>
 
- <table class="table table-hover" >
- <tbody>
- <td> <h4>Request for FTP Account</h4></td>
- <td style="width: 15%">{!! Form::submit('Send',['class'=>'btn btn-info form-control','name'=>'ftp']) !!}</td>
- </tbody>
- </table>
- </br>
+    <table class="table table-hover" >
+        <tbody>
+            <style>
+                    input[type="checkbox"]{
+                    width: 30px; /*Desired width*/
+                    height: 30px; /*Desired height*/
+                    }
+            </style>
 
-<table class="table table-hover" >
-<tbody>
-<tr>
-<td style="width: 30%"><h4>Request For Shared Folder </h4></td>
-<td><h4>{!! Form::label('Users','Users:') !!}</h4></td>
-<td >
-<select id="user" name="user[]" multiple="multiple" style="height:33px">
-             @foreach($sys_users as $user)
-                     <option>
-                       {{$user->username}}
-                      </option>
-                  @endforeach
-     </select>
+            <td>{!! Form::checkbox('ftp_account', 'no',['class'=>'form-control','style'=>'width:30px','height:30px']) !!}</td>
+            <td> <h5>Request for FTP Account</h5></td>
+        </tbody>
+    </table>
 
-</td>
-<td  style="width: 15%">{!! Form::submit('Send',['class'=>'btn btn-info form-control','name'=>'folder']) !!}</td>
-</tr>
-</tbody>
-</table>
-
-<table class="table table-hover">
-@if(Session::has('flash_permission'))
-  @foreach($set_users as $su)
-  <tr>
-     <td> <label name="sf">{{$su->user_name}}</label></td>
-      <input type="hidden" value="{{$su->user_name}}" name="hid3[]">
-     <td>
-         <select class="form-control" name="permission[]" style="width: 250px">
-             <option>Read</option>
-             <option>Write</option>
-         </select>
-     </td>
-   </tr>
-   <input type="hidden" value="{{$su->request_id}}" name="hid1">
-   <input type="hidden" value="{{$su->sub_id}}" name="hid2">
-  @endforeach
-  <tr>
-      <td  style="width: 15%">{!! Form::submit('Save',['class'=>'btn btn-info form-control','name'=>'set']) !!}</td>
-  </tr>
-@endif
-
-</table>
+    </br>
 
 
+    <div>
+         <div class="row">
+                <div class="col-xs-4 col-md-4">
+                    <h4>&nbsp;&nbsp;Shared Folder Request</h4>
+                </div>
 
-<div class="form-group" style="width: 10%;margin-left: 0.25cm">
- {!! Form::button('View',['class'=>'btn btn-info form-control','name'=>'view']) !!}
- </div>
+                <div class="col-xs-2 col-md-2">
+                    <h3><input type="button" value="+"  class="sbtn" style="width: 35px;height: 35px" onClick="add_Row_folder('Table_folder')" />&nbsp;
+                    <input type="button" value="-" class="sbtn" style="width: 35px;height: 35px" onClick="delete_Row_folder('Table_folder')" /></h3>
+                </div>
 
- <table id="Table3"  class="table table-hover" style="font-size: small;font-family: Arial" >
- <tbody>
- <tr style="width: 20%" class="info">
-      <td align="left">{!! Form::label('request_id','Request_ID') !!} </td>
-      <td align="left">{!! Form::label('sub_id','Sub_ID') !!} </td>
-      <td align="left">{!! Form::label('type','Type') !!} </td>
+         </div>
+    </div>
+
+    <table class="table table-hover"  >
+
+        <tr id="headRow" style="background-color: #e7e7e7;">
+            <th width="4%"></th>
+            <th width="30%">Users</th>
+            <th width="20%">Permision</th>
+        </tr>
+
+    </table>
+
+    <table  id="Table_folder" class="table table-hover" style="font-size: small;font-family: Arial " >
+        <tbody>
+            <tr>
+                <style>
+                        input[type="checkbox"]{
+                        width: 30px; /*Desired width*/
+                        height: 30px; /*Desired height*/
+                         }
+                </style>
+
+                <td width="3%">
+                    <input type='checkbox' class="form-control"/>
+                </td>
+
+                <td width="50%">
+                    <select class="form-control"  name="user[]" style="width: 100%">
+                            <option>Users</option>
+                            @foreach($sys_users as $user)
+                                <option>
+                                    {{$user->username}}|{{$user->id}}
+                                </option>
+                            @endforeach
+                    </select>
+                </td>
+
+                <td width="50%">
+                    <select class="form-control" name="permissions[]" style="width: 100%">
+                            <option>read</option>
+                            <option>write</option>
+                    </select>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    <input type="hidden" id = "count_rows_folder" name="count_rows_folder">
+
+    <div  style="width: 20%">{!! Form::submit('Request',['class'=>'btn btn-info form-control','name'=>'folder','onClick'=>'getRow_folder()']) !!}</div>
+
+    <div align="right">{!! Form::submit('View',['class'=>'btn btn-info form-control','name'=>'view_all']) !!}</div>
+
+    {{--Table view of both ftp accounts and shared folder--}}
+
+    @if(Session::has('flash_view_accounts'))
+
+    @if($project_id !=null)
+
+    <h5 style="color: darkred"><b>Project&nbsp;ID&nbsp;-&nbsp;{{$project_id}}</b> </h5>
+
+    <table id="Table_ftp_folder"   class="table table-hover" style="font-size: small;font-family: Arial "  >
+        <tbody>
+
+                <tr style="width: 20%;"><b>
+                    <th> Request_ID </th>
+                    <th> Sub_ID </th>
+                    <th> Type </th>
+                    <th> User Id</th>
+                    <th> Username</th>
+                    <th> Permission</th>
+                    <th> Request Status</th></b>
+                </tr>
+
+                <!--Get all requests made by pr -->
+
+                @foreach($getAllFtpRequests as $ftp_req)
+                <tr>
+                    <td>{{$ftp_req->request_id}}</td>
+                    <td>{{$ftp_req->sub_id}}</td>
+                    <td>{{$ftp_req->type}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="color: darkred">{{$ftp_req->status}}</td>
+                </tr>
+                @endforeach
+
+                <!--Get all requests made by pr -->
+
+                @foreach($getAllFolderRequests as $folder_req)
+                <tr>
+                    <td>{{$folder_req->request_id}}</td>
+                    <td>{{$folder_req->sub_id}}</td>
+                    <td>{{$folder_req->type}}</td>
+                    <td>{{$folder_req->user_id}}</td>
+                    <td>{{$folder_req->user_name}}</td>
+                    <td>{{$folder_req->permision}}</td>
+                    <td></td>
+
+                </tr>
+                @endforeach
+
+        </tbody>
+    </table>
+
+    @endif
+
+    @endif
+
+    {!! Form::close() !!}
 
 
- </tr>
+ <script>
 
-<!--Get all requests made by pr -->
- @foreach($ftp as $f)
- <tr>
-    <td>{{$f->request_id}}</td>
-    <td>{{$f->sub_id}}</td>
-    <td>{{$f->type}}</td>
-  </tr>
- @endforeach
+     function add_Row_folder(tableID) {
+    	    var table = document.getElementById(tableID);
+    	    var rowCount = table.rows.length;
 
- </tbody>
- </table>
- </br>
- <table id="Table4"  class="table table-hover" style="font-size: small;font-family: Arial" >
-  <tbody>
-  <tr style="width: 20%"  class="danger">
-       <td align="left">{!! Form::label('request_id','Request_ID') !!} </td>
-       <td align="left">{!! Form::label('sub_id','Sub_ID') !!} </td>
-       <td align="left">{!! Form::label('user_id','User ID') !!} </td>
-       <td align="left">{!! Form::label('user_name','User name') !!} </td>
-       <td align="left">{!! Form::label('permission','Permission') !!} </td>
+    		var row = table.insertRow(rowCount);
+    		var colCount = table.rows[0].cells.length;
+    		for(var i=0; i<colCount; i++) {
+    			var newcell = row.insertCell(i);
+    			newcell.innerHTML = table.rows[0].cells[i].innerHTML;
+    		}
+    	}
 
+     function delete_Row_folder(tableID) {
+    	    var table = document.getElementById(tableID);
+      	var rowCount = table.rows.length;
+    	    for(var i=0; i<rowCount; i++) {
+    		   var row = table.rows[i];
+    		   var chkbox =row.querySelector('input[type=checkbox]');
+    		   if(null != chkbox && true == chkbox.checked) {
+    			  if(rowCount <= 1) {               // limit the user from removing all the fields
+    				 alert("Cannot Remove all the requests..");
+    				 break;
+    			  }
+    			  table.deleteRow(i);
+    			  rowCount--;
+    			  i--;
+    		   }
+    	    }
 
-  </tr>
+     }
 
- <!--Get all requests made by pr -->
-  @foreach($sf as $s)
-  <tr>
-     <td>{{$s->request_id}}</td>
-     <td>{{$s->sub_id}}</td>
-     <td>{{$s->user_id}}</td>
-     <td>{{$s->user_name}}</td>
-     <td>{{$s->permision}}</td>
+     function getRow_folder(Table_folder){
+              var x = document.getElementById("Table_folder").rows.length;
+              document.getElementById("count_rows_folder").value=x;
 
-   </tr>
-  @endforeach
+     }
 
-  </tbody>
-  </table>
+ </script>
 
-
- {!! Form::close() !!}
-
-
- {{--<script src="//code.jquery.com/jquery.js"></script>--}}
- {{--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>--}}
-
- {{--</body>--}}
  @endsection
 
 

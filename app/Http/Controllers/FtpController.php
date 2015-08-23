@@ -10,231 +10,298 @@ use App\req;
 use App\requesth;
 use Request;
 use Input;
+use Auth;
 use Illuminate\Support\Facades\DB;
-class FtpController extends Controller {
+class FtpController extends Controller
+{
 
-    Public function FindU(){
+    Public function FindU()
+    {
 
-        //$sys_users=User::all();
-		$sys_users=DB::table('system_users')->get();
-		
-        $pros=version::all();
-        $ftp=file::all();
-        $sf=sfuser::all();
-        $req=req::all();
-        return view('Requests.ftpreq',compact('sys_users','ftp','sf','req','pros') );
+
+        $sys_users = DB::table('system_users')->get();
+        $pros = version::all();
+        $ftp = file::all();
+        $sf = sfuser::all();
+        $req = req::all();
+
+        $project_id = Input::get('project_id');
+        $id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
+        $getAllFtpRequests = file::where('request_id', '=', $id)->get();
+        $getAllFolderRequests=sfuser::where('request_id', '=', $id)->get();
+
+        return view('Requests.ftpreq', compact('sys_users', 'ftp', 'sf', 'req', 'pros','getAllFtpRequests','getAllFolderRequests','project_id'));
 
     }
 
-    Public function ViewConnectivity(){
-        $pros=version::all();
-        $protocols=DB::table('protocol')->get();
-        $connectivity=DB::table('connectivity')->get();
-        return view('Requests.Connectivity')->with('pros',$pros)->with('protocols',$protocols)->with('connectivity',$connectivity);
+    Public function ViewConnectivity()
+    {
+        $pros = version::all();
+        $protocols = DB::table('protocol')->get();
+        $connectivity = DB::table('connectivity')->get();
+        $project_id = Input::get('project_id');
+        $id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
+        $all_table = DB::table('connectivityreq')->where('request_id', '=', $id)->get();
+
+        return view('Requests.Connectivity')->with('pros', $pros)->with('protocols', $protocols)->with('connectivity', $connectivity)->with('project_id', $project_id)->with('all_table', $all_table);
     }
 
     public function SendConnRequest()
     {
-        //$type=Input::get('project_id');
         $send = Input::get('connect');
         $view = Input::get('view');
         $input = Request::all();
         $project_id = $input['project_id'];
-        $connectivity = $input['connectivity'];
-        $protocol = $input['protocol'];
-        $port = $input['port'];
-        $sever = $input['sever'];
-        $ip = $input['ip'];
+
+        $getConnectivity = $input['connectivity'];
+        $getProtocol = $input['protocol'];
+        $getPort = $input['port'];
+        $getSever = $input['sever'];
+        $getIp = $input['ip'];
+
         $id = requesth::where('project_id', '=', $project_id)->get();
         $get_id = $id->first();
-        $req_id = $get_id->request_id;
-        $max_subID = DB::table('connectivityreq')->where('request_id', '=', $req_id)->max('sub_id');
-        $subId = $max_subID + 1;
 
-        if ($send)
-        {
-            if (empty($port) || empty($sever) || empty($ip)) {
-                \Session::flash('flash_message_error', 'Port or Sever or Ip address Fields Cannot Be Empty');
+        if ($send) {
+            $rows1 = $input['count_rows'];
+
+            if ($get_id != null) {
+
+                for ($i = 0; $i < $rows1; $i++) {
+
+                    $req_id = $get_id->request_id;
+                    $connectivity = $getConnectivity[$i];
+                    $protocol = $getProtocol[$i];
+                    $port = $getPort[$i];
+                    $sever = $getSever[$i];
+                    $ip = $getIp[$i];
+
+                    if (!filter_var($ip, FILTER_VALIDATE_IP) === false) {
+
+                        $max_subID = DB::table('connectivityreq')->where('request_id', '=', $req_id)->max('sub_id');
+                        $subId = $max_subID + 1;
+
+                        $insert = DB::table('connectivityreq')->insert(array('request_id' => $req_id,
+                                'sub_id' => $subId,
+                                'type' => $connectivity,
+                                'protocol' => $protocol,
+                                'port' => $port,
+                                'sever_name' => $sever,
+                                'ip_address' => $ip)
+                        );
+                    } else {
+                        \Session::flash('flash_message_error', 'Invalid IP Address');
+                        return redirect('Connectivity');
+                    }
+
+                }
+
+                \Session::flash('flash_message', 'Request Sent Successfully');
                 return redirect('Connectivity');
-            }
-            else{
-                if (!filter_var($ip, FILTER_VALIDATE_IP) === false) {
-                    $insert=DB::table('connectivityreq')->insert(array('request_id' =>$req_id,
-                            'sub_id' => $subId,
-                            'type' => $connectivity,
-                            'protocol' => $protocol,
-                            'port' => $port,
-                            'sever_name' => $sever,
-                            'ip_address' =>$ip)
-                    );
-                    \Session::flash('flash_message', 'Request Sent Successfully');
-                    return redirect('Connectivity');
+            } else {
+
+                $maxRequestId = DB::table('requesths')->max('request_id');
+                $newRequestId = $maxRequestId + 1;
+
+                $user_id = Auth::User()->employeeID;
+                //$user_id = 8;
+                $init = new requesth;
+                $init->request_id = $newRequestId;
+                $init->required_from = date('yyyy-MM-dd');
+                $init->required_upto = date('yyyy-MM-dd');
+                $init->project_id = $project_id;
+                $init->user_id = $user_id;
+                $init->request_status = 1;
+                $init->save();
+
+                $subId = 1;
+                for ($i = 0; $i < $rows1; $i++) {
+
+                    $connectivity = $getConnectivity[$i];
+                    $protocol = $getProtocol[$i];
+                    $port = $getPort[$i];
+                    $sever = $getSever[$i];
+                    $ip = $getIp[$i];
+
+//               if (empty($port) || empty($sever) || empty($ip)) {
+//                    \Session::flash('flash_message_error', 'Port or Sever or Ip address Fields Cannot Be Empty');
+//                    return redirect('Connectivity');
+//                }
+                    if (!filter_var($ip, FILTER_VALIDATE_IP) === false) {
+
+                        $insert = DB::table('connectivityreq')->insert(array('request_id' => $newRequestId,
+                                'sub_id' => $subId,
+                                'type' => $connectivity,
+                                'protocol' => $protocol,
+                                'port' => $port,
+                                'sever_name' => $sever,
+                                'ip_address' => $ip)
+                        );
+                    } else {
+                        \Session::flash('flash_message_error', 'Invalid IP Address');
+                        return redirect('Connectivity');
+                    }
+                    $subId = $subId + 1;
+
                 }
-                else {
-                    \Session::flash('flash_message_error', 'Invalid IP Address');
-                    return redirect('Connectivity');
-                }
+
             }
         }
 
-       if($view)
-        {
-            $pros=version::all();
-            $protocols=DB::table('protocol')->get();
-            $connectivity=DB::table('connectivity')->get();
+        if ($view) {
+            $pros = version::all();
+            $protocols = DB::table('protocol')->get();
+            $connectivity = DB::table('connectivity')->get();
             $project_id = Input::get('project_id');
             $id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
-            $all_table =DB::table('connectivityreq')->where('request_id','=',$id)->get();
+            $all_table = DB::table('connectivityreq')->where('request_id', '=', $id)->get();
 
 
-            \Session::flash('flash_av','');
-            return view('Requests.Connectivity')->with('pros',$pros)->with('protocols',$protocols)->with('connectivity',$connectivity)->with('project_id',$project_id)->with('all_table',$all_table);
-
-
+            \Session::flash('flash_av', '');
+            return view('Requests.Connectivity')->with('pros', $pros)->with('protocols', $protocols)->with('connectivity', $connectivity)->with('project_id', $project_id)->with('all_table', $all_table);
         }
 
     }
 
     public function Ftp()
     {
-        $ftp = Input::get('ftp');
-        $folder=Input::get('folder');
-        $set=Input::get('set');
+
+        $folder = Input::get('folder');
+        $view = Input::get('view_all');
         $input = Request::all();
         $project_id = $input['project_id'];
+        $rows2 = $input['count_rows_folder'];
 
         if ($folder) {
-            if (empty($project_id)) {
-                \Session::flash('flash_message', 'Prject_ID cannot be empty');
+
+            $requestIds = requesth::where('project_id', '=', $project_id)->get();
+            $requestIdCount = $requestIds->count();
+            $users = $input['user'];
+            $folderPermission = $input['permissions'];
+
+            if ($users[0] == "Users" && Input::get('ftp_account') != 'yes') {
+                \Session::flash('flash_message_error', 'No Requests Made');
                 return redirect('ftpreq');
             }
             else {
-                $id = requesth::where('project_id', '=', $project_id)->get();
-                $b = $id->count();
 
+                if ($requestIdCount != 0) {
+                    $firstRow = $requestIds->first();
+                    $reqId = $firstRow->request_id;
 
-                if($b!=0)
-                {
-                    $a = $id->first();
-                    $req_id = $a->request_id;
-                    $users=$input['user'];
-                    $size=sizeof($users);
-                    $max_subID = sfuser::where('request_id', '=', $req_id)->max('sub_id');
+                    $max_subID = sfuser::where('request_id', '=', $reqId)->max('sub_id');
                     $subId = $max_subID + 1;
-                    for($a=0; $a<$size;$a++) {
-                        $temp = $users[$a];
-                        //$take=User::where('username', '=',$temp)->get();
-						$take=DB::table('system_users')->where('username', '=',$temp)->pluck('id');
-                        $user_id=$take;
-						//$take1=$take->first();
-                        //$user_id=$take1->id;
 
-                        $sf = new sfuser;
-                        $sf->request_id = $req_id;
-                        $sf->sub_id = $subId;
-                        $sf->user_id = $user_id;
-                        $sf->user_name =$temp;
-                        $sf->type ='Shared Folder';
-                        $sf->save();
+                    for ($a = 0; $a < $rows2; $a++) {
+                        $username = $users[$a];
+                        $permission = $folderPermission[$a];
+
+                        if ($username != "Users") {
+                            $userSeparate = explode('|', $username);
+                            $uName = $userSeparate[0];
+                            $uId = $userSeparate[1];
+
+                            $sf = new sfuser;
+                            $sf->request_id = $reqId;
+                            $sf->sub_id = $subId;
+                            $sf->user_id = $uId;
+                            $sf->user_name = $uName;
+                            $sf->permision = $permission;
+                            $sf->type = 'Shared Folder';
+
+                            $sf->save();
+                        }
+
                     }
-                    $set_users=sfuser::where('sub_id', '=', $subId)->get();
-                    $sys_users=User::all();
-                    $pros=version::all();
-                    $ftp=file::all();
-                    $sf=sfuser::all();
-                    $req=req::all();
-                    \Session::flash('flash_permission','');
-                    return view('Requests.ftpreq')->with('sys_users',$sys_users)->with('pros',$pros)->with('ftp',$ftp)->with('sf',$sf)->with('req',$req)->with('set_users',$set_users);
+                    if (Input::get('ftp_account') === 'yes') {
+                        $maxSubIdFtp = file::where('request_id', '=', $reqId)->max('sub_id');
+                        $subIdFtp = $maxSubIdFtp + 1;
+                        $status = 'Not Assigned';
 
+                        $ftp = new file;
 
-
-//                      \Session::flash('flash_message', 'Shared Folder Request Sent');
-//                       return redirect('ftpreq');
-
-                }
-
-                else
-                {
-                    \Session::flash('flash_message', 'Request for this project does not exist');
+                        $ftp->request_id = $reqId;
+                        $ftp->sub_id = $subIdFtp;
+                        $ftp->type = "Ftp Account";
+                        $ftp->status = $status;
+                        $ftp->save();
+                    }
+                    \Session::flash('flash_message', 'Request Successfuly Sent !');
                     return redirect('ftpreq');
+
+
                 }
+                else {
+                    $maxRequestId = DB::table('requesths')->max('request_id');
+                    $newRequestId = $maxRequestId + 1;
+                    $user_id = Auth::User()->employeeID;
+                    //$user_id = 8;
+                    $init = new requesth;
+                    $init->request_id = $newRequestId;
+                    $init->required_from = date('yyyy-MM-dd');
+                    $init->required_upto = date('yyyy-MM-dd');
+                    $init->project_id = $project_id;
+                    $init->user_id = $user_id;
+                    $init->request_status = 1;
+                    $init->save();
 
+                    $newSubId = 1;
 
-                 }
+                    for ($a = 0; $a < $rows2; $a++) {
+                        $username = $users[$a];
+                        $permission = $folderPermission[$a];
 
-        }
+                        if ($username != "Users") {
+                            $userSeparate = explode('|', $username);
+                            $uName = $userSeparate[0];
+                            $uId = $userSeparate[1];
 
-        if($set){
-
-            $input = Request::all();
-            $sf_users=$input['hid3'];
-            $permission=$input['permission'];
-            $rid=$input['hid1'];
-            $sid=$input['hid2'];
-
-            $size=sizeof($sf_users);
-
-            for($a=0; $a<$size;$a++) {
-                $temp = $sf_users[$a];
-                $temp2=$permission[$a];
-                $r = DB::table('sfusers')
-                    ->where('request_id', $rid)
-                    ->where('sub_id', $sid)
-                    ->where('user_name',$temp)
-                    ->update(array('permision' => $temp2));
-
-            }
-            \Session::flash('flash_message', 'Permissions successfully set');
-            return redirect('ftpreq');
-
-        }
-
-        else {
-
-            if (empty($project_id)) {
-                \Session::flash('flash_message', 'Prject_ID cannot be empty');
-                return redirect('ftpreq');
-            }
-            else {
-                $id = requesth::where('project_id', '=', $project_id)->get();
-                $b = $id->count();
-
-                if($b!=0)
-                {
-                    $a = $id->first();
-                    $req_id = $a->request_id;
-
-                    $max_subID = file::where('request_id', '=', $req_id)->max('sub_id');
-                    $subId = $max_subID + 1;
-                    $status='Not Assigned';
-                    $ftp = new file;
-
-                    $ftp->request_id = $req_id;
-                    $ftp->sub_id = $subId;
-                    $ftp->type = "Ftp Account";
-                    $ftp->status=$status;
-                    if($ftp->save()) {
-                        \Session::flash('flash_message', 'FTP Request Sent');
-                        return redirect('ftpreq');
+                            $sf = new sfuser;
+                            $sf->request_id = $newRequestId;
+                            $sf->sub_id = $newSubId;
+                            $sf->user_id = $uId;
+                            $sf->user_name = $uName;
+                            $sf->permision = $permission;
+                            $sf->type = 'Shared Folder';
+                            $sf->save();
+                        }
+                        $newSubId = $newSubId + 1;
                     }
-                    else{
-                        \Session::flash('flash_message', 'Request Failure');
-                        return redirect('ftpreq');
-                    }
-                }
+                    if (Input::get('ftp_account') === 'yes') {
+                        $maxSubIdFtp = 1;
+                        $status = 'Not Assigned';
 
-                else
-                {
-                    \Session::flash('flash_message', 'Request for this project does not exist');
+                        $ftp = new file;
+
+                        $ftp->request_id = $newRequestId;
+                        $ftp->sub_id = $maxSubIdFtp;
+                        $ftp->type = "Ftp Account";
+                        $ftp->status = $status;
+                        $ftp->save();
+                    }
+                    \Session::flash('flash_message', 'Request Successfuly Sent !');
                     return redirect('ftpreq');
                 }
 
             }
+
+        }
+        if ($view) {
+
+            $project_id = Input::get('project_id');
+            $id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
+            $getAllFtpRequests = file::where('request_id', '=', $id)->get();
+            $getAllFolderRequests=sfuser::where('request_id', '=', $id)->get();
+            $sys_users = DB::table('system_users')->get();
+            $pros = version::all();
+            $ftp = file::all();
+            $sf = sfuser::all();
+            $req = req::all();
+
+            \Session::flash('flash_view_accounts','');
+            return view('Requests.ftpreq', compact('sys_users', 'ftp', 'pros', 'sf','req','getAllFtpRequests','getAllFolderRequests','project_id'));
 
         }
     }
-
-
-
 
 }

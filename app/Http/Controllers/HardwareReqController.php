@@ -25,17 +25,10 @@ class HardwareReqController extends Controller
         $pros = version::all();
         $types = Item::all();
         $sws = DB::table('software')->get();
-        //$user_id=Auth::user()->userID;
-//        $user_id = 8;
-//        $id = requesth::where('user_id', '=', $user_id)->get();
-//        $ab = $id->count();
-//        $a = $id->first();
-//
-//        $req_id = $a->request_id;
-//
-//        $all_requests = req::where('request_id', '=', $req_id)->get();
-
-        return view('Requests.hardwarereq', compact('versions', 'types','pros', 'sws'));
+        $project_id = Input::get('project_id');
+        $id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
+        $all_requests = req::where('request_id', '=', $id)->get();
+        return view('Requests.hardwarereq', compact('versions', 'types','pros', 'sws','all_requests','project_id'));
 
 
     }
@@ -267,7 +260,7 @@ class HardwareReqController extends Controller
             $types = Type::all();
             $sws = DB::table('software')->get();
             \Session::flash('flash_view','');
-            return view('Requests.hardwarereq', compact('versions', 'types', 'pros', 'sws','all_requests'));
+            return view('Requests.hardwarereq', compact('versions', 'types', 'pros', 'sws','all_requests','project_id'));
         }
 
 
@@ -277,16 +270,7 @@ class HardwareReqController extends Controller
     Public function v(){
 
         return view('Requests.hardwarereq');
-
-
-        }
-
-
-
-
-
-
-
+    }
 
 
 }

@@ -290,26 +290,25 @@
                             <th width="10%">CPU</th>
                             <th width="10%">RAM</th>
                             <th width="10%">Harddisk</th>
-                            <th width="5%">ID</th>
 
                             @if($hardware_types[0]->count!=0)
-                               <th width="5%" style="color: maroon">Current</br>Allocations</th>
+                              <th width="5%" style="color: maroon">Current</br>Allocations</th>
                             @endif
 
-
+                            <th width="5%">ID</th>
                             <th width="5%"></th>
                         </tr>
                     @endif
 
 
                     @foreach($hardware_types as $search)
-                        <form action="{{ URL::route('SendResource') }}" method="post">
+                        {{--<form action="{{ URL::route('SendResource') }}" method="post">--}}
                         @if($search->type != '')
                             <tr>
                                 {{--<td>Serial No</td>--}}
                                 <td> <label name="serialno"> {{$search->inventory_code}} </label></td>
-                                <input type="hidden" value="{{$search->inventory_code}}" name="hid11">
-                                <input type="hidden" name="r2" value="{{$req}}">
+                                {{--<input type="hidden" value="{{$search->inventory_code}}" name="hid11">--}}
+                                {{--<input type="hidden" name="r2" value="{{$req}}">--}}
 
                                    {{--<td>Type</td>--}}
                                 <td><label name="Type"> {{$search->type}} </label></td>
@@ -319,6 +318,21 @@
                                 <td><label name="Type"> {{$search->RAM}} </label></td>
                                 <td><label name="Type"> {{$search->hard_disk}} </label></td>
                                 <?php $rr=0 ?>
+
+
+                                <form action="{{ URL::route('viewAllocatedHardware') }}" method="post">
+                                    @if($search->count!=0)
+
+                                        <td><button type="submit" class="btn btn-primary form-control" style="width:34px" value="SearchCount">{{$search->count}}</button></td>
+
+                                        <input type="hidden" value="{{$search->inventory_code}}" name="hid11">
+                                        <input type="hidden" name="r2" value="{{$req}}">
+                                         <input type="hidden" name="typeView" value="{{$search->type}}">
+                                    @endif
+                                    {!! Form::token() !!}
+                                </form>
+
+                                <form action="{{ URL::route('SendResource') }}" method="post">
                                 <td>
                                     <select class="form-control" style="padding: 0px 0px;height: 32px" name="sub">
                                     @if($results!='')
@@ -331,19 +345,21 @@
                                     @endif
                                     </select>
                                 </td>
-                                @if($search->count!=0)
-                                    <td><label name="Type" style="color: maroon"> {{$search->count}} </label></td>
-                                @endif
 
                                 @if($rr!=0)
                                     <td> {!! Form::submit('+',['class'=>'btn btn-primary form-control','name'=>'ass','style'=>'width:34px']) !!}</td>
                                 @else
                                     <td> {!! Form::submit('+',['class'=>'btn btn-default form-control','name'=>'ass','style'=>'width:34px','disabled'=>'true']) !!}</td>
                                 @endif
+
+                                <input type="hidden" value="{{$search->inventory_code}}" name="hid11">
+                                <input type="hidden" name="r2" value="{{$req}}">
+
+                            {!! Form::token() !!}
+                            </form>
                             </tr>
                         @endif
-                        {!! Form::token() !!}
-                        </form>
+
 
                     @endforeach
                     @endif

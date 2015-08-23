@@ -171,17 +171,28 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('Allocate/ResourceAllocation', array('as' => 'ResourceAllocation', 'uses' => 'AllocationController@ResourceAllocation'));
     Route::post('Allocate/SearchResource', array('as' => 'SearchResource', 'uses' => 'AllocationController@SearchResource'));
     Route::post('Allocate/SendResource', array('as' => 'SendResource', 'uses' => 'AllocationController@SendResource'));
+    Route::post('Allocate/viewAllocatedHardware', array('as' => 'viewAllocatedHardware', 'uses' => 'AllocationController@viewAllocatedHardware'));
+
 
     Route::get('ViewAll','AllocationController@getViewAll');
     Route::post('ViewAll', array('as' => 'ViewAll', 'uses' => 'AllocationController@ViewAll'));
+    Route::get('ViewHardwareResources','AllocationController@getViewOfAllocations');
 
     Route::get('AssignFolder','FolderController@ViewFolder');
     Route::post('AssignFolder', array('as' => 'ViewFolderRequests', 'uses' => 'FolderController@ViewFolderRequests'));
-    Route::post('AssignFolder/AssignData', array('as' => 'AssignData', 'uses' => 'FolderController@AssignData'));
+    //Route::post('AssignFolder/AssignData', array('as' => 'AssignData', 'uses' => 'FolderController@AssignData'));
     Route::post('AssignFolder/AssignDataToDb', array('as' => 'AssignDataToDb', 'uses' => 'FolderController@AssignDataToDb'));
     Route::post('AssignFolder/CancelAccount', array('as' => 'CancelAccount', 'uses' => 'FolderController@CancelAccount'));
 
-    Route::get('Approval','FolderController@ViewApproval');
+    Route::post('AssignFolder/AssignSharedFolder', array('as' => 'AssignSharedFolder', 'uses' => 'FolderController@AssignSharedFolder'));
+    Route::post('AssignFolder/CancelSharedFolder', array('as' => 'CancelSharedFolder', 'uses' => 'FolderController@CancelSharedFolder'));
+
+
+    Route::get('Approval','ApprovalController@ViewApproval');
+    Route::post('Approval', array('as' => 'ViewRequestsApp', 'uses' =>'ApprovalController@ViewRequestsApp'));
+    Route::post('Approval/UpdateChanges', array('as' => 'UpdateChanges', 'uses' =>'ApprovalController@UpdateChanges'));
+    Route::post('Approval/ApproveRequest', array('as' => 'ApproveRequest', 'uses' =>'ApprovalController@ApproveRequest'));
+
 
     Route::post('ftpreq','FtpController@Ftp');
     Route::get('ftpreq', array('as'=>'ftpreq','uses'=>'FtpController@FindU'));
@@ -195,6 +206,8 @@ Route::group(array('middleware' => ['auth']), function() {
 
     Route::get('HardwareMaintenance','AllocationController@getHardwareMaintenance');
     Route::post('HardwareMaintenance', array('as' => 'HardwareMaintenance','uses'=>'AllocationController@SaveHardwareCost'));
+
+    Route::get('/download/{id}', 'ApprovalController@getDownload');
 
 
 

@@ -65,6 +65,9 @@
 
         {{--<li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Allocation</li>--}}
             <li class="nav-item" id="Allocate"><a id="Allocate_a" href=" {{ URL::route('ViewRequests') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Allocate</a></li>
+             <li class="nav-item" id="AssignFolder"><a id="AssignFolder_a" href=" {{ URL::route('ViewFolderRequests') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Assign Folder</a></li>
+            <li class="nav-item" id="Approval"><a id="Approval_a" href=" {{ URL::route('ViewRequestsApp') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Approve</a></li>
+
             <li class="nav-item" id="TrackResource"><a id="TrackResource_a" href=" {{ URL::route('TrackResource') }}"><img src="{{asset('/includes/images/icons/track.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;TrackResource</a></li>
             <li class="nav-item" id="HardwareMaintenance"><a id="HardwareMaintenance_a" href=" {{ URL::route('HardwareMaintenance') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Maintenance</a></li>
 
