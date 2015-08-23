@@ -121,7 +121,7 @@
                                                 <th width="15%">Type</th>
                                                 <th width="15%">Username</th>
                                                 <th width="15%">Password</th>
-                                                <th width="15%">Path</th>
+                                                <th width="15%">URL</th>
                                                 <th width="5%"></th>
 
                                             </tr>

@@ -56,7 +56,7 @@
 
         @if(Session::has('flash_viewApprovalRequests'))
 
-        @if( (  ($requestedItems != null) &&  ( $id != null) )      )
+        @if( (  ($requestedItems != null) &&  ( $id != null) )   )
         @if($id != "-- Select Procurement Request --")
 
              <div >

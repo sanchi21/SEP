@@ -305,7 +305,7 @@
                         {{--<form action="{{ URL::route('SendResource') }}" method="post">--}}
                         @if($search->type != '')
                             <tr>
-                                {{--<td>Serial No</td>--}}
+
                                 <td> <label name="serialno"> {{$search->inventory_code}} </label></td>
                                 {{--<input type="hidden" value="{{$search->inventory_code}}" name="hid11">--}}
                                 {{--<input type="hidden" name="r2" value="{{$req}}">--}}

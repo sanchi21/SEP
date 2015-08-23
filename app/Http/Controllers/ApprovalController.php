@@ -221,7 +221,7 @@ class ApprovalController extends Controller {
         $requestStatus = "";
         $requestPath = "";
 
-// -------------Save to Note
+// --------------Save to Note
 
         $createNote = new Note;
         $createNote->pRequest_no = $pRequestNo;
@@ -229,7 +229,7 @@ class ApprovalController extends Controller {
         $createNote->note = $note;
         $createNote->save();
 
-// -----------check for conditions
+// ------------check for conditions
 
         if ($status == "Approve" && $selectVendorId !='-- Select Vendor--') {
 
