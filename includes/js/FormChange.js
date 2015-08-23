@@ -357,6 +357,7 @@ function verify()
     }
 
     document.getElementById("error_msg").style.display = "none";
+    document.getElementById("success_msg").style.display = "none";
     return findSum();
 }
 

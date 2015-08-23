@@ -143,8 +143,6 @@ class PaymentController extends Controller {
         $orders = DB::table('orders')
             ->where('status',"Ordered")->groupBy('request_id')->get();
 
-
-
         return view('payment.viewOrders')
                  ->with('orders', $orders);
 
@@ -153,8 +151,21 @@ class PaymentController extends Controller {
 
     public function searchOrders()
     {
+        $input = Request::all();
 
-            return 'hello';
+        $searchKey = $input['searchKey'];
+
+        $orders = DB::table('orders')
+            ->where('invoice_id','LIKE', '%'.$searchKey.'%')
+            ->orWhere('request_id','LIKE', '%'.$searchKey.'%')
+            ->orWhere('payment_method', 'LIKE', '%'.$searchKey.'%')
+            ->orWhere('order_date', 'LIKE', '%'.$searchKey.'%')
+            ->orWhere('total', 'LIKE', '%'.$searchKey.'%')
+            ->groupBy('request_id')
+            ->get();
+
+        return view('payment.viewOrders')
+            ->with('orders', $orders);
 
     }
 
@@ -200,6 +211,25 @@ class PaymentController extends Controller {
             return Redirect::action('PaymentController@getOrders');
 
         }
+
+
+    }
+
+    public function sendEmail()
+    {
+        $input = Request::all();
+
+        $emailBody = $input['emailBody'];
+        $reqID = $input['reqID'];
+
+        Mail::send('emails.purchaseDelay', array('reqID'=>$reqID, 'emailBody'=>$emailBody),function($messsage)
+        {
+            $messsage->to('paarthipank@gmail.com','Parthipan')->subject('Purchase Delayed');
+        });
+
+        \Session::flash('flash_message','Email Successfully sent!');
+
+        return Redirect::action('PaymentController@getOrders');
 
 
     }

@@ -92,9 +92,9 @@ Route::group(array('middleware' => ['auth']), function() {
 //    Route::get('hardware-d','DepreciateController@index');
     Route::post('hardware-depreciate','DepreciateController@store');
 
-    Route::post('purchase-request-submit','PurchaseRequestController@store');
+    Route::post('purchase-request/','PurchaseRequestController@store');
 
-    Route::get('purchase-request','PurchaseRequestController@index');
+    Route::get('purchase-request',array('as'=>'purchase-request','uses'=>'PurchaseRequestController@index'));
     Route::get('purchase-request/{no}','PurchaseRequestController@create');
 //    Route::post('purchase-request','PurchaseRequestController@create');
 
@@ -103,10 +103,10 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('request-type/New','RequestTableController@store');
     Route::post('delete-request','RequestTableController@destroy');
 
-    Route::get('other-request','OtherRequestController@index');
+    Route::get('other-request',array('as'=>'other-request','uses'=>'OtherRequestController@index'));
     Route::get('other-request/{id}','OtherRequestController@create');
     Route::post('other-request','OtherRequestController@store');
-    Route::get('other-request-update','OtherRequestController@showRequests');
+    Route::get('other-request-update',array('as'=>'other-request-update','uses'=>'OtherRequestController@showRequests'));
     Route::get('other-request-update/{id}','OtherRequestController@editAll');
     Route::get('other-request-update/{id}/{pr}','OtherRequestController@edit');
     Route::post('other-request-update','OtherRequestController@update');
@@ -153,6 +153,19 @@ Route::group(array('middleware' => ['auth']), function() {
 
     Route::get('viewAllocations', 'RenewalController@viewAllocation');
 
+    Route::get('placeOrder', array('as'=>'placeOrder','uses'=>'PaymentController@index'));
+    Route::post('placeOrder', 'PaymentController@viewByRequest');
+    Route::post('placeOrder2', 'PaymentController@placeOrder');
+
+    Route::get('viewInvoice', array('as'=>'ViewInvoice','uses'=>'PaymentController@getOrders'));
+    Route::post('viewInvoice', 'PaymentController@searchOrders');
+
+    Route::get('viewInvoice/{request_id}',array('as'=>'viewInvoice','uses'=>'PaymentController@getInvoice'));
+    Route::post('viewInvoice/{request_id}',array('as'=>'viewInvoice','uses'=>'PaymentController@getInvoice'));
+
+//    Route::get('purchaseUp',array('as'=>'purchaseUp','uses'=>'PaymentController@updatePurchase'));
+    Route::post('purchaseUp',array('as'=>'purchaseUp','uses'=>'PaymentController@updatePurchase'));
+    Route::post('email',array('as'=>'email','uses'=>'PaymentController@sendEmail'));
 
 
 

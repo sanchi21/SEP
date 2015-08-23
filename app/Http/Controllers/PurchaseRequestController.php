@@ -56,7 +56,7 @@ class PurchaseRequestController extends Controller {
 	{
         try
         {
-            $input = Request::all();
+            $input = Input::all();
             $requestNo = $input['request_no'];
             $reason = $input['reason'];
             $approval = $input['approval'];
@@ -76,8 +76,6 @@ class PurchaseRequestController extends Controller {
                 $descriptions = $input['description_v' . $vendorCount];
                 $quantities = $input['quantity_v' . $vendorCount];
                 $prices = $input['price_v' . $vendorCount];
-//            $totalPrices = $input['total_price_v'.$vendorCount];
-//            $taxPrices = $input['tax_price_v'.$vendorCount];
                 $warranties = $input['warranty_v' . $vendorCount];
 
                 for ($i = 0; $i < count($itemNos); $i++) {
@@ -108,7 +106,7 @@ class PurchaseRequestController extends Controller {
             $procurementRequest->request_date = date('Y-m-d');
             $procurementRequest->reason = $reason;
             $procurementRequest->for_appeal = $approval;
-            $procurementRequest->status = 'OnProcess';
+            $procurementRequest->status = 'On Process';
             $procurementRequest->email = $email;
 
             if(!is_null(Input::file('attachment')))
@@ -131,7 +129,7 @@ class PurchaseRequestController extends Controller {
 
             DB::beginTransaction();
 
-            if(!is_null($input['mail_cc']))
+            if(isset($input['mail_cc']))
             {
                 $mailCC = $input['mail_cc'];
                 foreach ($mailCC as $mail)
@@ -159,7 +157,7 @@ class PurchaseRequestController extends Controller {
             return Redirect::back()->withErrors($e->getMessage());
         }
 
-        return Redirect::to('home');
+        return Redirect::to('/home');
 	}
 
 	private function sendEmail($approval,$ccList,$requestNo)

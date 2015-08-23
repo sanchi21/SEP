@@ -14,28 +14,64 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use App\DropDown;
+use League\Flysystem\Exception;
 
 class RequestTableController extends Controller {
 
+    /**
+     * show the other request create page
+     *
+     *
+     * @return Other request type create form
+     */
+
     public function index()
     {
+        //set the request type id to New
         $id='New';
+
+        //retrieve all the available request types
         $requestTypes = RequestType::all();
+
+        //retrieve the user groups available
         $groups = Group::all();
+
+        //retrieve all the validation rules available
         $validation = Validation::all();
+
+        //get all the columns available for the given request type
         $delete_column = Column::where('category',"New")->get();
+
+        //set the default approving group to 2
         $rGroup = 2;
+
+        //set the default requesting group to 1
         $aGroup = 1;
+
+
         return view('NewRequest.createNewRequest',compact('id','validation','requestTypes','groups','delete_column','rGroup','aGroup'));
     }
 
+
+    /**
+     * store the request type data to database
+     *
+     * @param RequestTypeRequest
+     *
+     * @return Response
+     */
 
     public function store(RequestTypeRequest $request)
     {
         try
         {
+            //get all the inputs
             $input = Input::all();
+
+            //get the request type
             $requestType = substr($input['request_type'], 14);
+
+            //define variables to get new attribute details
             $attributeNames = '';
             $attributeTypes = '';
             $attributeMins = '';
@@ -43,31 +79,40 @@ class RequestTableController extends Controller {
             $attributeDrops = '';
             $attributeValidates = '';
             $isDropdown = 0;
+
+            //array to hold new request type details
             $tableData = array();
 
+            //get the new request type name and replace - with _
             $newTitle = str_replace('-','_',strtolower($requestType));
-//            $multipleRequest = 'No';
 
-//            if(isset($input['multiple_request']))
-//                $multipleRequest = 'Yes';
-
+            //array to hold new request type data
             $newRequestType = new RequestType();
+
+            //array to hold new request type's request id column
             $requestIdColumn = new Column();
+
+            //array to new request type request status columns
             $requestStatusColumn = new Column();
 
 
+            //if it is a new request type
+
             if($requestType == 'New')
             {
+                //get the title
                 $title = $input['new_title'];
+
+                //replace the new title - with _
                 $newTitle = str_replace('-','_',strtolower($title));
 
+                //get the new request type data
                 $requestCode = $input['request_code'];
                 $requestGroup = $input['request_group'];
                 $approvingGroup = $input['approve_group'];
 
                 $newRequestType->request_type = $newTitle;
                 $newRequestType->key = $requestCode;
-//                $newRequestType->multiple_request = $multipleRequest;
                 $newRequestType->requester_group = $requestGroup;
                 $newRequestType->approving_group = $approvingGroup;
 
@@ -91,6 +136,7 @@ class RequestTableController extends Controller {
             }
 
 
+            //if new columns are created for request type get new column data
             if (isset($input['attribute_name']))
             {
                 $attributeNames = $input['attribute_name'];
@@ -100,6 +146,7 @@ class RequestTableController extends Controller {
                 $attributeDrops = $input['attribute_drop'];
                 $attributeValidates = $input['attribute_validation'];
 
+                //get the new columns details and store it to an array
                 for($i=0 ; $i<count($attributeNames); $i++)
                 {
                     $newColumns = array();
@@ -116,28 +163,47 @@ class RequestTableController extends Controller {
                 }
             }
 
+            //begin database transaction
             DB::beginTransaction();
+
+            //to check for error status
             $status = true;
+
+            //store new request type data
             if($requestType == 'New')
             {
                 $status = $newRequestType->save() ? true : false;
                 $status = $requestIdColumn->save() ? true : false;
                 $status = $requestStatusColumn->save() ? true :false;
+
+                //create new request type table in the database
                 $this->createTable($newTitle);
             }
 
             if($status)
             {
+                //insert request type column data to database
                 Column::insert($tableData);
+
+                //create new columns for the request type
                 $this->addColumns($newTitle,$tableData);
 
+                //commit database
                 DB::commit();
-                \Session::flash('flash_message', 'Settings Saved Successfully!');
+
+                if($requestType == 'New')
+                    \Session::flash('flash_message', 'Request Type Created Successfully!');
+                else
+                    \Session::flash('flash_message', 'Settings Saved Successfully!');
             }
             else
             {
                 DB::rollback();
-                \Session::flash('flash_message_error', 'Settings could not be changed!');
+                if($requestType == 'New')
+                    \Session::flash('flash_message_error', 'Request Type Creation Failed!');
+                else
+                    \Session::flash('flash_message_error', 'Settings could not be changed!');
+
             }
         }
         catch(\Exception $e)
@@ -162,101 +228,106 @@ class RequestTableController extends Controller {
         return view('NewRequest.createNewRequest',compact('id','validation','requestTypes','groups','delete_column','rGroup','aGroup'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update($id)
-    {
-        //
-    }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the request type columns from database
      *
-     * @param  int  $id
      * @return Response
      */
+
     public function destroy()
     {
-        $input = Input::all();
-        $deleteAttribute = Input::get('delete_attribute');
-        $attributes = '';
-
-        $title = $input['modal_category'];
-        $requestType = str_replace('-','_',strtolower($title));
-
-        if($deleteAttribute != "")
+        try
         {
-            if (isset($input['modal_attribute']))
+            //get all the inputs
+            $input = Input::all();
+
+            //get the request type to check for delete operation
+            $deleteAttribute = Input::get('delete_attribute');
+            $attributes = '';
+
+            //get the request type
+            $title = $input['modal_category'];
+
+            //replace the request type - with _
+            $requestType = str_replace('-', '_', strtolower($title));
+
+
+            //if the request is for delete attributes
+
+            if ($deleteAttribute != "")
             {
-                $attributes = $input['modal_attribute'];
+                //check for attributes set
+                if (isset($input['modal_attribute']))
+                {
+                    $attributes = $input['modal_attribute'];
+                }
+                else
+                {
+                    \Session::flash('flash_message_error', 'No Attributes Set for Deletion!');
+                    return Redirect::action('RequestTableController@index');
+                }
+
+                //find the attributes set for deletion and remove them from the database and table
+                foreach ($attributes as $attribute) {
+                    $col = Column::find($attribute);
+                    $column = $col->table_column;
+                    $col->delete();
+
+                    $new_col = Column::where('table_column', $column)->first();
+
+                    //if there are dropdowns defined delete them
+
+                    if (is_null($new_col)) {
+                        $dropDown = DropDown::where('table_column', $column)->get();
+
+                        if (!is_null($dropDown)) {
+                            foreach ($dropDown as $drop) {
+                                $drop->delete();
+                            }
+                        }
+
+
+                        $this->removeColumn($requestType, $column);
+                    }
+                }
+                \Session::flash('flash_message', 'Attribute Deleted Successfully!');
             }
+
+            //delete category
+
             else
             {
-                \Session::flash('flash_message_error', 'No Attributes Set for Deletion!');
-                return Redirect::action('RequestTableController@index');
-            }
+                $cols = Column::where('category', $requestType)->get();
 
-            foreach($attributes as $attribute)
-            {
-                $col = Column::find($attribute);
-                $column = $col->table_column;
-                $col->delete();
+                foreach ($cols as $col) {
+                    $column = $col->table_column;
+                    $col->delete();
 
-                $new_col = Column::where('table_column',$column)->first();
-                if(is_null($new_col))
-                {
-                    $dropDown = DropDown::where('table_column',$column)->get();
-
-                    if(!is_null($dropDown))
-                    {
-                        foreach ($dropDown as $drop)
-                        {
-                            $drop->delete();
-                        }
+                    $new_col = Column::where('table_column', $column)->first();
+                    if (is_null($new_col)) {
+                        $this->removeColumn($requestType, $column);
                     }
-
-
-                    $this->removeColumn($requestType,$column);
                 }
+                $cat = RequestType::find($requestType);
+                $cat->delete();
+
+                $gRequest = GRequest::where('type', $requestType)->get();
+
+                if (!is_null($gRequest)) {
+                    foreach ($gRequest as $gR) {
+                        $gR->delete();
+
+                    }
+                }
+                $this->deleteTable($requestType);
+                \Session::flash('flash_message', 'Request Type Deleted Successfully!');
             }
-            \Session::flash('flash_message', 'Attribute Deleted Successfully!');
         }
-        else
+        catch(\Exception $e)
         {
-            $cols = Column::where('category',$requestType)->get();
-
-            foreach ($cols as $col)
-            {
-                $column = $col->table_column;
-                $col->delete();
-
-                $new_col = Column::where('table_column',$column)->first();
-                if(is_null($new_col))
-                {
-                    $this->removeColumn($requestType,$column);
-                }
-            }
-            $cat = RequestType::find($requestType);
-            $cat->delete();
-
-            $gRequest = GRequest::where('type',$requestType)->get();
-
-            if(!is_null($gRequest))
-            {
-                foreach ($gRequest as $gR)
-                {
-                    $gR->delete();
-
-                }
-            }
-            $this->deleteTable($requestType);
-            \Session::flash('flash_message', 'Request Type Deleted Successfully!');
+            return Redirect::back()->withErrors($e->getMessage());
         }
-
         return Redirect::action('RequestTableController@index');
 
     }

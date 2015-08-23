@@ -3,7 +3,11 @@
 @section('content')
 
 <br>
+<div class="container">
+
 <h2 style=" color: #9A0000">Update Purchase</h2>
+</div>
+
 
 <br>
 <br>
@@ -63,7 +67,11 @@
 
 
               </div>
+              <button style="float: right" type="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal1">Send Email</button>
               <button style="float: right" type="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal2">Mark Purchased</button>
+
+
+
 
               <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                              <div class="modal-dialog" role="document">
@@ -83,7 +91,33 @@
                                              </div>
                                              {!! Form::close() !!}
                                            </div>
+
+
           </div>
+
+           <div class="container">
+
+                          {!! Form::open(array('class'=>'form-horizontal','action' => ['PaymentController@sendEmail'],'method'=>'POST')) !!}
+                            <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                             <div class="modal-dialog" role="document">
+                               <div class="modal-content">
+                                 <div class="modal-header">
+                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                   <h4 class="modal-title" id="myModalLabel">Message</h4>
+                                 </div>
+                                 <div class="modal-body">
+                                   <textarea class="form-control" id="emailBody" name="emailBody"></textarea>
+                                   <input type="hidden" value="{{$item->pRequest_no}}" name="reqID">
+                                 </div>
+                                 <div class="modal-footer">
+                                  <button type="submit" class="btn btn-primary">Send</button>
+                                 </div>
+                               </div>
+                             </div>
+                           </div>
+                           {!! Form::close() !!}
+
+                          </div>
 
           <br>
 

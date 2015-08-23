@@ -3,14 +3,13 @@
 @section('content')
 
 <br>
+<div class="container">
+
 <h2 style=" color: #9A0000">Order Details</h2>
-
 <br>
 <br>
 
-
- <!-- Select Basic -->
-        {!! Form::open(array('class'=>'form-horizontal','action' => ['PaymentController@viewByRequest'],'method'=>'POST')) !!}
+{!! Form::open(array('class'=>'form-horizontal','action' => ['PaymentController@viewByRequest'],'method'=>'POST')) !!}
 
           <div class="form-group">
                       <label class="col-md-2 control-label" for="cakeCategory">Approved Requests</label>
@@ -28,8 +27,17 @@
 
           {!! Form::close() !!}
 
-          <br>
-          <br>
+</div>
+
+
+<br>
+<br>
+
+
+ <!-- Select Basic -->
+
+
+
 
           <div class="container">
               <div class="row">

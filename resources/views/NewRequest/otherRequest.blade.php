@@ -144,6 +144,7 @@
                 <th>{{$c->column_name}}</th>
                 @endif
             @endforeach
+            <th></th>
         </tr>
 
         <?php $x=0;
@@ -184,10 +185,11 @@
                 if($c->dropDown != '1')
                     $columns_to_validate = $columns_to_validate.($c->table_column).'-'.($c->validation).'/'; ?>
             @endforeach
-
+            <td>
             <input type="hidden" name="request_id[]" value="{{$key}}">
             <input type="hidden" name="status[]" value="Pending">
             <input type="hidden" name="count[]" value="1">
+            </td>
         </tr>
 
         </tbody>

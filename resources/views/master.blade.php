@@ -56,6 +56,8 @@
                 <li class="nav-item" id="hardware"><a id="hardware_a" href=" {{ URL::route('hardware') }}"><img src="{{asset('/includes/images/icons/add.png')}}" alt="New Hardware" style="width:18px;height:18px">&nbsp;&nbsp;New Hardware</a></li>
                 <li class="nav-item" id="hardware-edit/All"><a id="hardware-edit/All_a" href=" {{ URL::route('hardware-edit-get') }}"><img src="{{asset('/includes/images/icons/edit.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Edit Hardware</a></li>
                 <li class="nav-item" id="change-property/New"><a id="change-property/New_a" href=" {{ URL::route('change-property/New') }}"><img src="{{asset('/includes/images/icons/add_attr.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Attributes</a></li>
+                <li class="nav-item" id="request-type/New"><a id="request-type/New_a" href=" {{ URL::route('request-type/New') }}"><img src="{{asset('/includes/images/icons/add_attr.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Create Request</a></li>
+                <li class="nav-item" id="purchase-request"><a id="purchase-request_a" href=" {{ URL::route('purchase-request') }}"><img src="{{asset('/includes/images/icons/connect.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Purchase Request</a></li>
                 <li class="nav-item" id="change-options"><a id="change-options_a" href=" {{ URL::route('change-options') }}"><img src="{{asset('/includes/images/icons/drop_down.png')}}" alt="Edit Hardware" style="width:18px;height:18px">&nbsp;&nbsp;Drop Downs</a></li>
 
         {{--<li class="nav-item"><img src="{{asset('/includes/images/icons/software.png')}}" alt="Software" style="width:20px;height:20px">&nbsp;&nbsp;Software</li>--}}
@@ -67,6 +69,11 @@
             <li class="nav-item" id="Allocate"><a id="Allocate_a" href=" {{ URL::route('ViewRequests') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Allocate</a></li>
              <li class="nav-item" id="AssignFolder"><a id="AssignFolder_a" href=" {{ URL::route('ViewFolderRequests') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Assign Folder</a></li>
             <li class="nav-item" id="Approval"><a id="Approval_a" href=" {{ URL::route('ViewRequestsApp') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Approve</a></li>
+
+            <li class="nav-item" id="View Invoice"><a id="View Invoice_a" href=" {{ URL::route('ViewInvoice') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;View Invoice</a></li>
+            <li class="nav-item" id="Place Order"><a id="Place Order_a" href=" {{ URL::route('placeOrder') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Place Order</a></li>
+
+            <li class="nav-item" id="Other Requests"><a id="Other Requests_a" href=" {{ URL::route('other-request-update') }}"><img src="{{asset('/includes/images/icons/allocate.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Other Requests</a></li>
 
             <li class="nav-item" id="TrackResource"><a id="TrackResource_a" href=" {{ URL::route('TrackResource') }}"><img src="{{asset('/includes/images/icons/track.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;TrackResource</a></li>
             <li class="nav-item" id="HardwareMaintenance"><a id="HardwareMaintenance_a" href=" {{ URL::route('HardwareMaintenance') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Maintenance</a></li>
@@ -93,6 +100,7 @@
                 <li class="nav-item" id="hardwarereq"><a id="hardwarereq_a" href=" {{ URL::route('hardwarereq') }}"><img src="{{asset('/includes/images/icons/resource.png')}}" alt="New Software" style="width:18px;height:18px">&nbsp;&nbsp;Resources</a></li>
                 <li class="nav-item" id="ftpreq"><a id="ftpreq_a" href=" {{ URL::route('ftpreq') }}"><img src="{{asset('/includes/images/icons/ftp.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;FTP Account</a></li>
                 <li class="nav-item" id="Connectivity"><a id="Connectivity_a" href=" {{ URL::route('Connectivity') }}"><img src="{{asset('/includes/images/icons/connect.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Connectivity</a></li>
+                <li class="nav-item" id="Other Requests"><a id="Other Requests_a" href=" {{ URL::route('other-request') }}"><img src="{{asset('/includes/images/icons/connect.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Other Request</a></li>
 
                 <li class="nav-item" id="renewal"><a id="renewal_a" href=" {{ URL::route('renewal') }}"><img src="{{asset('/includes/images/icons/renew.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Renew&nbsp;Project</a></li>
    @endif

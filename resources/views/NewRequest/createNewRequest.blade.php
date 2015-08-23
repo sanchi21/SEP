@@ -235,7 +235,9 @@
                 <select id="attribute_validation" name="attribute_validation[]" class="form-control input-sm" style="width: 200px">
                     {{--<option value="0">None</option>--}}
                     @foreach($validation as $valid)
-                    <option value="{{$valid->id}}" id="{{$valid->id}}">{{$valid->valid_display}}</option>
+                    @if($valid->id != 8 && $valid->id != 9 && $valid->id != 11 && $valid->id != 12 && $valid->id != 13 && $valid->id != 14 &&$valid->id != 15)
+                        <option value="{{$valid->id}}" id="{{$valid->id}}">{{$valid->valid_display}}</option>
+                    @endif
                     @endforeach
                 </select>
 
@@ -244,13 +246,7 @@
                     document.getElementById('3').disabled = true;
                     document.getElementById('5').disabled = true;
                     document.getElementById('7').disabled = true;
-                    document.getElementById('8').disabled = true;
                     document.getElementById('10').disabled = true;
-                    document.getElementById('11').disabled = true;
-                    document.getElementById('12').disabled = true;
-                    document.getElementById('13').disabled = true;
-                    document.getElementById('14').disabled = true;
-                    document.getElementById('15').disabled = true;
                 </script>
             </td>
 
@@ -307,7 +303,9 @@
                         <td width="50%">
                             <select id="modal_attribute" name="modal_attribute[]" class="form-control" style="width: 250px" multiple="multiple">
                             @foreach($delete_column as $col)
-                   	                <option value='{{$col->cid}}'>{{ $col->column_name }}</option>
+                   	                @if($col->column_name != 'Status')
+                   	                    <option value='{{$col->cid}}'>{{ $col->column_name }}</option>
+                   	                @endif
                             @endforeach
                             </select>
                         </td>
@@ -326,6 +324,15 @@
   </div>
 </div>
 {!! Form ::close() !!}
+
+
+<script type="text/javascript">
+    function confirmDelete()
+    {
+        var check = confirm("Do you want to permanently delete this?");
+        return check;
+    }
+</script>
 
 <script>
     function allowAdd()

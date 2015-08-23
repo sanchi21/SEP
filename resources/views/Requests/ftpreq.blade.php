@@ -3,7 +3,7 @@
 
 @section('content')
 
-   <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+   {{--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">--}}
 
    <script type="text/javascript">
                 $(document).ready(function() {
@@ -68,7 +68,7 @@
                     }
             </style>
 
-            <td>{!! Form::checkbox('ftp_account', 'no',['class'=>'form-control','style'=>'width:30px','height:30px']) !!}</td>
+            <td>{!! Form::checkbox('ftp_account', 'yes',['class'=>'form-control','style'=>'width:30px','height:30px']) !!}</td>
             <td> <h5>Request for FTP Account</h5></td>
         </tbody>
     </table>
@@ -138,9 +138,9 @@
 
     <input type="hidden" id = "count_rows_folder" name="count_rows_folder">
 
-    <div  style="width: 20%">{!! Form::submit('Request',['class'=>'btn btn-info form-control','name'=>'folder','onClick'=>'getRow_folder()']) !!}</div>
+    <div  style="width: 20%">{!! Form::submit('Request',['class'=>'btn btn-info','name'=>'folder','onClick'=>'getRow_folder()']) !!}</div>
 
-    <div align="right">{!! Form::submit('View',['class'=>'btn btn-info form-control','name'=>'view_all']) !!}</div>
+    <div align="right">{!! Form::submit('View',['class'=>'btn btn-info','name'=>'view_all']) !!}</div>
 
     {{--Table view of both ftp accounts and shared folder--}}
 

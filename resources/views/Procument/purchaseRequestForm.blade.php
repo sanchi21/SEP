@@ -201,10 +201,10 @@
         </td>
         <td width="30%">
             <select id="mail_cc" name="mail_cc[]" class="form-control" style="width: 250px" multiple="multiple">
-                <option value="1">Abhayan</option>
-                <option value="2">Srinithy</option>
-                <option value="3">Parthipan</option>
-                <option value="4">Sanchayan</option>
+                <option value="sabhayans@gmail.com">Abhayan</option>
+                <option value="pathnithyasri@gmail.com">Srinithy</option>
+                <option value="paarthipank@gmail.com">Parthipan</option>
+                <option value="sanchayan@live.com">Sanchayan</option>
             </select>
         </td>
     </tr>

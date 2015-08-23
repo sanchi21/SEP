@@ -103,8 +103,8 @@ class FtpController extends Controller
                 $maxRequestId = DB::table('requesths')->max('request_id');
                 $newRequestId = $maxRequestId + 1;
 
-                $user_id = Auth::User()->employeeID;
-                //$user_id = 8;
+                //$user_id = Auth::User()->employeeID;
+                $user_id = Auth::User()->id;
                 $init = new requesth;
                 $init->request_id = $newRequestId;
                 $init->required_from = date('yyyy-MM-dd');
@@ -214,6 +214,7 @@ class FtpController extends Controller
 
                     }
                     if (Input::get('ftp_account') === 'yes') {
+
                         $maxSubIdFtp = file::where('request_id', '=', $reqId)->max('sub_id');
                         $subIdFtp = $maxSubIdFtp + 1;
                         $status = 'Not Assigned';
@@ -234,7 +235,7 @@ class FtpController extends Controller
                 else {
                     $maxRequestId = DB::table('requesths')->max('request_id');
                     $newRequestId = $maxRequestId + 1;
-                    $user_id = Auth::User()->employeeID;
+                    $user_id = Auth::User()->id;
                     //$user_id = 8;
                     $init = new requesth;
                     $init->request_id = $newRequestId;

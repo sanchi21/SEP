@@ -3,29 +3,45 @@
 @section('content')
 
 <br>
+<div class="container">
 <h2 style=" color: #9A0000">Update Orders</h2>
 
+</div>
+
+
 <br>
 <br>
 
-{!! Form::open(array('class'=>'form-horizontal','action' => ['PaymentController@index'],'method'=>'POST')) !!}
+
 
           <div class="form-group">
-                      <label class="col-md-2 control-label" for="cakeCategory">Orders</label>
-                      <div class="col-md-4">
-                        <select id="reqID" name="reqID" class="form-control">
-                        <option value="">Select a Request Number</option>
+          <div class="container">
+          {!! Form::open(array('class'=>'form-horizontal','action' => ['PaymentController@searchOrders'],'method'=>'POST')) !!}
 
-                        @foreach($orders as $request)
-                          <option value='{{$request->request_id}}'>{{$request->request_id}}</option>
-                          @endforeach
-                        </select>
-                      </div>
+            <table  id="search" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff">
+            <tbody>
 
-                      <button type="submit" class="btn btn-primary">View</button>
+                    <td width="10%">Search</td>
+
+                            <td width="25%">
+
+                            <input type="text" class="form-control input-sm" name="searchKey" style="width: 300px">
+                            <td>
+                            <button type="submit" name ="search" class="btn btn-primary" style="height: 30px;width: 30px"><span class="glyphicon glyphicon-search"></span> </button>
+                            </td>
+
+                            </td>
+                    </td>
+
+            </tbody>
+            </table>
+        {!! Form ::close() !!}
+
           </div>
 
-          {!! Form::close() !!}
+          </div>
+
+
 
           <br>
           <br>
