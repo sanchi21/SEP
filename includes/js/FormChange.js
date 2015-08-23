@@ -355,6 +355,43 @@ function verify()
             }
         }
     }
+
     document.getElementById("error_msg").style.display = "none";
     return findSum();
+}
+
+
+function validateColumnsTable()
+{
+    var multiple = document.getElementById('multiple_request').checked;
+
+    if(multiple)
+    {
+        var table = document.getElementById('columns_table');
+        var rowCount = table.rows.length - 1;
+
+        var attribute_name = document.getElementsByName('attribute_name[]');
+        var attribute_type = document.getElementsByName('attribute_type[]');
+
+        var msg = document.getElementById("msg");
+
+
+        for (var j = 0; j < rowCount; j++)
+        {
+            var name = attribute_name[j].value;
+
+            if (name == '')
+            {
+                msg.innerHTML = "Please Provide a Valid Attribute Name";
+                document.getElementById("error_msg1").style.display = "block";
+
+                $(table.rows.item(j + 1).cells[1]).find('input').focus();
+                return false;
+            }
+        }
+
+        document.getElementById("error_msg1").style.display = "none";
+    }
+
+    return true;
 }

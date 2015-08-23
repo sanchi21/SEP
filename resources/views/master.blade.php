@@ -158,11 +158,11 @@
        @yield('content')
       </div>
       <script>
-        $('div.alert').delay(4000).slideUp(300);
+        $('div.alert').delay(10000).slideUp(300);
       </script>
 
       <script>
-        $('div.alert-danger').delay(4000).slideUp(300);
+        $('div.alert-danger').delay(10000).slideUp(300);
       </script>
 
     </div>

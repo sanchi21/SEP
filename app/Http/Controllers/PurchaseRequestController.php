@@ -3,6 +3,9 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Note;
+use App\PItem;
+use App\ProcMailCC;
 use App\ProcurementItem;
 use App\ProcurementRequest;
 use App\req;
@@ -12,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use League\Flysystem\Exception;
 
 class PurchaseRequestController extends Controller {
@@ -31,13 +36,15 @@ class PurchaseRequestController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function create($no)
 	{
         $vendors = Vendor::all();
+        $pItems = PItem::all();
         $requestNo = 'PR_'.date('Ymd_His');
-        $noOfVendors = Input::get('no_of_vendors');
+//        $noOfVendors = Input::get('no_of_vendors');
+        $noOfVendors = $no;
         $tax = 0.02;
-        return view('Procument.purchaseRequestForm',compact('noOfVendors','vendors','requestNo','tax'));
+        return view('Procument.purchaseRequestForm',compact('noOfVendors','pItems','vendors','requestNo','tax'));
 	}
 
 	/**
@@ -47,20 +54,24 @@ class PurchaseRequestController extends Controller {
 	 */
 	public function store()
 	{
-        try {
+        try
+        {
             $input = Request::all();
             $requestNo = $input['request_no'];
             $reason = $input['reason'];
             $approval = $input['approval'];
-            $mailCC = $input['mail_cc'];
+            $attachment = '';
+            $mailCC = '';
             $note = $input['note'];
             $vendors = $input['vendor_name'];
             $vendorCount = 1;
             $tax = 0.02;
 
             $itemData = array();
+            $mailData = array();
 
-            foreach ($vendors as $vendor) {
+            foreach ($vendors as $vendor)
+            {
                 $itemNos = $input['item_v' . $vendorCount];
                 $descriptions = $input['description_v' . $vendorCount];
                 $quantities = $input['quantity_v' . $vendorCount];
@@ -82,6 +93,7 @@ class PurchaseRequestController extends Controller {
                     $tempData = array_add($tempData, 'total_price', $total);
                     $tempData = array_add($tempData, 'price_tax', $tax_total);
                     $tempData = array_add($tempData, 'warranty', $warranties[$i]);
+                    $tempData = array_add($tempData, 'status', 'On Process');
 
                     array_push($itemData, $tempData);
                 }
@@ -89,16 +101,56 @@ class PurchaseRequestController extends Controller {
                 $vendorCount++;
             }
 
+
+            $email = $this->getEmail($approval);
             $procurementRequest = new ProcurementRequest();
             $procurementRequest->pRequest_no = $requestNo;
             $procurementRequest->request_date = date('Y-m-d');
             $procurementRequest->reason = $reason;
             $procurementRequest->for_appeal = $approval;
+            $procurementRequest->status = 'OnProcess';
+            $procurementRequest->email = $email;
+
+            if(!is_null(Input::file('attachment')))
+            {
+                $attachment = Input::file('attachment');
+                $destination = 'uploads/';
+                $extension = $attachment->getClientOriginalExtension();
+                $filename = $requestNo . '_' . rand(1111, 9999) . '.' . $extension;
+                $attachment->move($destination, $filename);
+
+                $procurementRequest->path = $destination.$filename;
+                $procurementRequest->filename = $attachment->getClientOriginalName();
+            }
+
+            $notes = new Note();
+            $notes->pRequest_no = $requestNo;
+            $notes->type_of_note = 0;
+            $notes->note = $note;
+
 
             DB::beginTransaction();
+
+            if(!is_null($input['mail_cc']))
+            {
+                $mailCC = $input['mail_cc'];
+                foreach ($mailCC as $mail)
+                {
+                    $mailCCs = array();
+                    $mailCCs = array_add($mailCCs, 'pRequest_no', $requestNo);
+                    $mailCCs = array_add($mailCCs, 'user_name', $mail);
+                    array_push($mailData, $mailCCs);
+                }
+                ProcMailCC::insert($mailData);
+            }
+
             $procurementRequest->save();
+            $notes->save();
             ProcurementItem::insert($itemData);
             DB::commit();
+
+            $this->sendEmail($email,$mailCC,$requestNo);
+
             \Session::flash('flash_message','Purchase Request Sent Successfully!');
         }
         catch(\Exception $e)
@@ -110,12 +162,38 @@ class PurchaseRequestController extends Controller {
         return Redirect::to('home');
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	private function sendEmail($approval,$ccList,$requestNo)
+    {
+
+        try
+        {
+            Mail::send('emails.procurementRequest', array('requestNo' => $requestNo),
+                function ($messsage) use ($approval,$ccList)
+                {
+                    $messsage->to($approval, 'Admin')->cc($ccList)->subject('Procurement Request');
+                });
+        }
+        catch(Exception $e)
+        {
+
+        }
+    }
+
+    private function getEmail($uid)
+    {
+        $email = '';
+        if($uid == '1')
+            $email = 'sabhayans@gmail.com';
+        elseif($uid == '2')
+            $email = 'pathnithyasri@gmail.com';
+        elseif($uid == '3')
+            $email = 'paarthipank@gmail.com';
+        else
+            $email = 'sanchayan@live.com';
+
+        return $email;
+    }
+
 	public function show($id)
 	{
 		//

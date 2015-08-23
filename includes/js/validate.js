@@ -43,6 +43,52 @@ function validation()
     }
 }
 
+
+function validationRequest()
+{
+    var column_to_validate = document.getElementById('columns_valid').value;
+    var msg = document.getElementById("msg");
+    var columns_with_rules = column_to_validate.split('/');
+    var columns = [];
+    var quantity = document.getElementById('hardwareTable').rows.length - 1;
+    msg.innerHTML = "";
+    var validation_rule = [];
+
+    for(var i=0 ; i < columns_with_rules.length ; i++)
+    {
+        var column_name = columns_with_rules[i];
+        var key = column_name.substr(0, column_name.lastIndexOf('-'));
+        var value = column_name.substr(column_name.lastIndexOf('-')+1);
+        var name = key.concat('[]');
+        columns[i] = name;
+        validation_rule[i] = parseInt(value);
+    }
+
+
+    for(var j=0 ; j<quantity ; j++)
+    {
+        for(var k=0 ; k<columns.length ; k++)
+        {
+            if(validation_rule[k] >0 )
+            {
+                var temp = document.getElementsByName(columns[k]);
+                var val = temp[j].value;
+                var status  = validate(val,validation_rule[k]);
+
+                if(!status)
+                {
+                    msg.innerHTML = getErrorMsg(validation_rule[k]);
+                    document.getElementById("error_msg").style.display = "block";
+                    temp[j].focus();
+
+                    return false;
+                }
+            }
+        }
+    }
+}
+
+
 function validate(value,validation)
 {
     var dateFormat = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;

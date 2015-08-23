@@ -26,7 +26,7 @@ top: 25%;
 
 <div style="min-height:550px">
 
-{!! Form ::open(['method' => 'POST', 'action' => ['PurchaseRequestController@create']]) !!}
+<form method="get">
     <div class="modal-backdrop in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -40,7 +40,7 @@ top: 25%;
                         <tr>
                             <td>No of Vendors</td>
                             <td>
-                                <input type="number" name="no_of_vendors" class="form-control" value="1" min="1">
+                                <input type="number" name="no_of_vendors" id="no_of_vendors" class="form-control" value="1" min="1">
                             </td>
                         </tr>
 
@@ -53,12 +53,12 @@ top: 25%;
 
                 <br>
                 <div class="modal-footer">
-                    <input type="submit" class="btn btn-info" value="Next" name="Next">
+                    <input type="button" class="btn btn-info" value="Next" name="Next" onclick="javascript:location.href = '/purchase-request/'.concat(document.getElementById('no_of_vendors').value);">
                 </div>
             </div>
         </div>
     </div>
-{!! Form ::close() !!}
+</form>
 
 </div>
 

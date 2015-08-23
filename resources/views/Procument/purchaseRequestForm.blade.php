@@ -7,7 +7,25 @@
     padding: 2px;
     border-spacing: 0px;
 }
+
+.multiselect-container>li>a>label {
+        padding: 0px 20px 0px 10px;
+        }
+
+    .btn .caret {
+    margin-left:120px;
+    }
 </style>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#mail_cc').multiselect({
+        enableCaseInsensitiveFiltering: true,
+        buttonWidth: '250px'
+        });
+    });
+</script>
+
 
 <h2 style="color: #9A0000">Purchase Request</h2>
 {{--<br>--}}
@@ -48,7 +66,7 @@
     {{--<li id="plus"><a onclick="newVendor()">+</a></li>--}}
 </ul>
 </div>
-{!! Form ::open(['method' => 'POST', 'action' => ['PurchaseRequestController@store']]) !!}
+{!! Form ::open(['method' => 'POST', 'action' => ['PurchaseRequestController@store'], 'files' => 'true']) !!}
 
     <input type="hidden" name="request_no" value="{{$requestNo}}">
     <input type="hidden" id="tax" name="tax" value="{{$tax}}">
@@ -101,22 +119,15 @@
 
                 <tbody id="tableBody">
                 <tr id="firstRow">
-                    <style>
-                    input[type="checkbox"]{
-                      width: 25px; /*Desired width*/
-                      height: 25px; /*Desired height*/
-                    }
-                    </style>
-
                     <td>
-                        <input type='checkbox' class="form-control"/>
+                        <input type='checkbox' class="form-control" style="height: 25px; width: 25px;"/>
                     </td>
                     <td>
                         <select class="form-control input-sm" name="item_{{$name}}[]" width="200px" >
                             <option value="Not Selected">Not Selected</option>
-                            <option value="1">Item 1</option>
-                            <option value="2">Item 2</option>
-                            <option value="3">Item 3</option>
+                            @foreach($pItems as $pItem)
+                                <option value="{{$pItem->id}}">{{$pItem->item}}</option>
+                            @endforeach
                         </select>
                     </td>
 
@@ -178,7 +189,10 @@
         </td>
         <td width="30%">
             <select class="form-control" style="width: 300px" name="approval">
-                <option value="12">value</option>
+                <option value="1">Abhayan</option>
+                <option value="2">Srinithy</option>
+                <option value="3">Parthipan</option>
+                <option value="4">Sanchayan</option>
             </select>
         </td>
 
@@ -186,8 +200,11 @@
             <label>Mail&nbsp;CC</label>
         </td>
         <td width="30%">
-            <select class="form-control" name="mail_cc">
-                <option value="12">value</option>
+            <select id="mail_cc" name="mail_cc[]" class="form-control" style="width: 250px" multiple="multiple">
+                <option value="1">Abhayan</option>
+                <option value="2">Srinithy</option>
+                <option value="3">Parthipan</option>
+                <option value="4">Sanchayan</option>
             </select>
         </td>
     </tr>
@@ -199,6 +216,17 @@
     <tr>
         <td width="20%"><label>Note</label></td>
         <td><textarea class="form-control" name="note"></textarea></td>
+    </tr>
+
+    <tr>
+        <td><br></td><td></td>
+    </tr>
+
+    <tr>
+        <td width="20%"><label>Attachment (Quotations)</label></td>
+        <td>
+        {!! Form::file('attachment','',array('id'=>'attachment','class'=>'form-control')) !!}
+        </td>
     </tr>
 </table>
 

@@ -24,10 +24,6 @@ class CreateColumnsTable extends Migration {
             $table->string('validation');
             $table->tinyInteger('dropDown');
 
-            $table->foreign('category')
-            ->references('category')
-            ->on('Types')
-            ->onDelete('cascade');
 		});
 	}
 

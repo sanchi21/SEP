@@ -95,7 +95,21 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('purchase-request-submit','PurchaseRequestController@store');
 
     Route::get('purchase-request','PurchaseRequestController@index');
-    Route::post('purchase-request','PurchaseRequestController@create');
+    Route::get('purchase-request/{no}','PurchaseRequestController@create');
+//    Route::post('purchase-request','PurchaseRequestController@create');
+
+    Route::get('request-type/New',array('as'=>'request-type/New','uses'=>'RequestTableController@index'));
+    Route::get('request-type/{id}','RequestTableController@edit');
+    Route::post('request-type/New','RequestTableController@store');
+    Route::post('delete-request','RequestTableController@destroy');
+
+    Route::get('other-request','OtherRequestController@index');
+    Route::get('other-request/{id}','OtherRequestController@create');
+    Route::post('other-request','OtherRequestController@store');
+    Route::get('other-request-update','OtherRequestController@showRequests');
+    Route::get('other-request-update/{id}','OtherRequestController@editAll');
+    Route::get('other-request-update/{id}/{pr}','OtherRequestController@edit');
+    Route::post('other-request-update','OtherRequestController@update');
 
 //--------------------------------------------------------Parthi
     Route::get('addPortion',array('as'=>'addPortion','uses'=>'AddResourcePortion@index'));

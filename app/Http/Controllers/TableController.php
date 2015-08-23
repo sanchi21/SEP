@@ -9,6 +9,7 @@ use App\Validation;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
+use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 use App\Column;
 use App\Type;
@@ -50,7 +51,7 @@ class TableController extends Controller {
     {
         $input = Input::all();
 
-        $category = substr($input['category'],17);;
+        $category = substr($input['category'],17);
         $new_category = '';
         $existing_attributes = '';
         $attribute_name = null;
@@ -110,7 +111,7 @@ class TableController extends Controller {
                 $column = array_add($column,'min',$e_column->min);
                 $column = array_add($column,'max',$e_column->max);
                 $column = array_add($column,'validation',$e_column->validation);
-                                   $column = array_add($column,'dropDown',$e_column->dropDown);
+                $column = array_add($column,'dropDown',$e_column->dropDown);
 
                 array_push($existing_column_data,$column);
             }

@@ -8,7 +8,7 @@
 <br>
 
 
-<ul class="nav nav-tabs" role="tablist">
+<ul class="nav nav-tabs" role="tablist" id="myTab">
     <li role="presentation" class="active"><a href="#home2" aria-controls="home" role="tab" data-toggle="tab">Project Resource</a></li>
     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Individual Resource</a></li>
 
@@ -79,7 +79,7 @@
 
       </div>
 
-      <div role="tabpanel" class="tab-pane active" id="profile">
+      <div role="tabpanel" class="tab-pane" id="profile">
 
       {{--<h2 style="color: #9A0000">Individual Resource</h2>--}}
 
@@ -145,6 +145,10 @@
 
     <br>
 
-
+<script>
+  $(function () {
+    $('#myTab a:first').tab('show')
+  })
+</script>
 
 @stop
