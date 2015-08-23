@@ -55,7 +55,7 @@
 
         @if(Session::has('flash_av') || Session::has('flash_get') ||Session::has('flash_search') )
         {{--<input type="hidden" value="{{$request_id}}" name="hidr">--}}
-
+        @if($results!='')
                  <div class="panel panel-default" style="width: 100%">
                     <div class="panel-heading" style="color: #9A0000"><h4>Requests</h4>
                     </div>
@@ -63,6 +63,7 @@
                  <div class="panel-body">
 
                     <table id="Table3"  class="table table-hover" style="width:100%;font-size: 14px">
+
                         <tr style="background-color: #f5f5f5;">
                             <th width="2%">Sub&nbsp;ID</th>
                             <th>Item</th>
@@ -195,6 +196,7 @@
                  @endforeach
                     {{--</div>--}}
                 </tbody>
+
                 </table>
                 </div>
 
@@ -221,6 +223,7 @@
         {{--</table>--}}
 
         @endif
+        @endif
         </div>
 
 
@@ -242,6 +245,8 @@
                                         <select class="form-control" name="resource_type" style="width: 160px">
                                             <option>Hardware</option>
                                             <option>Software</option>
+                                            <option>Allocated Hardware</option>
+
                                         </select>
                                     </td>
 
@@ -275,7 +280,7 @@
                 <table class="table table-hover">
 
                 @if(Session::has('flash_search') || Session::has('flash_get'))
-
+                   @if($hardware_types!='Allocated')
                     @if($hardware_types[0]->name =='')
                         <tr style="background-color: #f5f5f5;">
                             <th width="15%">Serial&nbsp;No</th>
@@ -286,6 +291,12 @@
                             <th width="10%">RAM</th>
                             <th width="10%">Harddisk</th>
                             <th width="5%">ID</th>
+
+                            @if($hardware_types[0]->count!=0)
+                               <th width="5%" style="color: maroon">Current</br>Allocations</th>
+                            @endif
+
+
                             <th width="5%"></th>
                         </tr>
                     @endif
@@ -310,14 +321,20 @@
                                 <?php $rr=0 ?>
                                 <td>
                                     <select class="form-control" style="padding: 0px 0px;height: 32px" name="sub">
+                                    @if($results!='')
                                     @foreach($results as $r)
                                         @if($r->item !='')
                                             <option value="{{$r->sub_id}}">{{$r->sub_id}}</option>
                                             <?php $rr++ ?>
                                         @endif
                                     @endforeach
+                                    @endif
                                     </select>
                                 </td>
+                                @if($search->count!=0)
+                                    <td><label name="Type" style="color: maroon"> {{$search->count}} </label></td>
+                                @endif
+
                                 @if($rr!=0)
                                     <td> {!! Form::submit('+',['class'=>'btn btn-primary form-control','name'=>'ass','style'=>'width:34px']) !!}</td>
                                 @else
@@ -329,7 +346,9 @@
                         </form>
 
                     @endforeach
+                    @endif
 
+                    @if($hardware_types!='Allocated')
                     @if($hardware_types[0]->name !='')
                         <tr style="background-color: #f5f5f5;">
                             <th width="15%">Serial&nbsp;No</th>
@@ -358,12 +377,14 @@
                                 <?php $rr=0 ?>
                                 <td>
                                     <select class="form-control" style="padding: 0px 0px;height: 32px" name="sub">
+                                        @if($results!='')
                                         @foreach($results as $r)
                                             @if($r->item =='')
                                                 <option value="{{$r->sub_id}}">{{$r->sub_id}}</option>
                                                 <?php $rr++ ?>
                                             @endif
                                         @endforeach
+                                        @endif
                                     </select>
                                 </td>
                                 @if($rr!=0)
@@ -376,7 +397,7 @@
                         {!! Form::token() !!}
                         </form>
                     @endforeach
-
+                    @endif
                 @endif
                 </table>
             </div>

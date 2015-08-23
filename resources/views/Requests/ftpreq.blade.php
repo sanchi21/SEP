@@ -2,32 +2,15 @@
 @extends('master')
 
  @section('content')
- {{--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">--}}
+ <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <script type="text/javascript">
                 $(document).ready(function() {
                     $('#user').multiselect({
                     enableFiltering: true,
-                    buttonWidth: '250px'
+                    buttonWidth: '350px'
                     });
                 });
 </script>
-
-<style>
-.dropdown-menu {
-max-height: 370px;
-overflow-y: auto;
-overflow-x: hidden;
-}
-.hideextra { white-space: nowrap; overflow: hidden; text-overflow:ellipsis; }
-.multiselect-container>li>a>label {
-    padding: 0px 20px 0px 10px;
-    }
-
-.btn .caret {
-margin-left:70px;
-}
-
-</style>
 
  {{--<head>--}}
   {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">--}}
@@ -46,9 +29,7 @@ margin-left:70px;
 
 {!! Form::open() !!}
 
- <h2 style="color: maroon">Request For Account And Folder</h2></br>
-
-<div class="panel-body" style="min-height: 500px">
+ <h3 style="color: maroon">Request For Account And Folder</h3></br>
 
  <select class="form-control" name="project_id" style="width: 25%">
       @foreach($pros as $pro)
@@ -60,25 +41,21 @@ margin-left:70px;
 
 </br>
 
-<div class="well">
- <table width="100%">
+ <table class="table table-hover" >
  <tbody>
- <td width="30%"> <h4>Request for FTP Account</h4></td>
- <td width="5%"></td>
- <td width="25%"></td>
- <td>{!! Form::submit('Send',['class'=>'btn btn-primary form-control','name'=>'ftp']) !!}</td>
+ <td> <h4>Request for FTP Account</h4></td>
+ <td style="width: 15%">{!! Form::submit('Send',['class'=>'btn btn-info form-control','name'=>'ftp']) !!}</td>
  </tbody>
  </table>
-</div>
+ </br>
 
-<div class="well">
-<table width="100%">
+<table class="table table-hover" >
 <tbody>
 <tr>
-<td width="30%"><h4>Request For Shared Folder </h4></td>
-<td width="5%"><h4>{!! Form::label('Users','Users:') !!}</h4></td>
-<td width="25%">
-<select id="user" name="user[]" multiple="multiple" style="width: 180px; min-height: 30px">
+<td style="width: 30%"><h4>Request For Shared Folder </h4></td>
+<td><h4>{!! Form::label('Users','Users:') !!}</h4></td>
+<td >
+<select id="user" name="user[]" multiple="multiple" style="height:33px">
              @foreach($sys_users as $user)
                      <option>
                        {{$user->username}}
@@ -87,11 +64,10 @@ margin-left:70px;
      </select>
 
 </td>
-<td>{!! Form::submit('Send',['class'=>'btn btn-primary form-control','name'=>'folder']) !!}</td>
+<td  style="width: 15%">{!! Form::submit('Send',['class'=>'btn btn-info form-control','name'=>'folder']) !!}</td>
 </tr>
 </tbody>
 </table>
-</div>
 
 <table class="table table-hover">
 @if(Session::has('flash_permission'))
@@ -110,7 +86,7 @@ margin-left:70px;
    <input type="hidden" value="{{$su->sub_id}}" name="hid2">
   @endforeach
   <tr>
-      <td  style="width: 25%">{!! Form::submit('Save',['class'=>'btn btn-info form-control','name'=>'set']) !!}</td>
+      <td  style="width: 15%">{!! Form::submit('Save',['class'=>'btn btn-info form-control','name'=>'set']) !!}</td>
   </tr>
 @endif
 
@@ -173,7 +149,7 @@ margin-left:70px;
 
 
  {!! Form::close() !!}
-</div>
+
 
  {{--<script src="//code.jquery.com/jquery.js"></script>--}}
  {{--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>--}}

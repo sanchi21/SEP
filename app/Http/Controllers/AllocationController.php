@@ -27,8 +27,10 @@ class AllocationController extends Controller {
         $ids = requesth::where('request_status', '=',$Allocation_id)->get();
         $request_id = Input::get('hid1');
         $device_status='Not Allocated';
-        $results = req::where('request_id', '=',$request_id)->where('status','=',$device_status)->get();
-        return view('Requests.Allocate')->with('ids',$ids)->with('results',$results);
+        $hardware_types='Allocated';
+        $results='';
+       // $results = req::where('request_id', '=',$request_id)->where('status','=',$device_status)->get();
+        return view('Requests.Allocate')->with('ids',$ids)->with('results',$results)->with('hardware_types',$hardware_types);
     }
 
     Public function ViewRequests(){
@@ -83,8 +85,11 @@ class AllocationController extends Controller {
                         \Session::flash('flash_message_error', 'Requested hardware doest match with the allocation');
                         return redirect('Allocate');
                     } else {
+                        $count=Hardware::where('inventory_code', '=', $serial)->pluck('count');
+                        $new_count=$count+1;
                         $hard = Hardware::find($serial);
                         $hard->status = $status;
+                        $hard->count=$new_count;
                         $hard->save();
 
                         $r = DB::table('reqs')
@@ -194,7 +199,7 @@ class AllocationController extends Controller {
             $Allocation_id = 1;
             $device_status = 'Not Allocated';
             $sub='';
-
+            $device_status_allocated='Allocated';
             $results = req::where('request_id', '=', $request_id)->where('status', '=', $device_status)->get();
             $ids = requesth::where('request_status', '=', $Allocation_id)->get();
             $ftp_account = file::where('request_id', '=', $request_id)->get();
@@ -203,7 +208,12 @@ class AllocationController extends Controller {
             if ($resource_type == 'Hardware') {
                 $hardware_types = Hardware::where('status', '=', $device_status)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
                 $count_hard = $hardware_types->count();
-            } else {
+            }
+            elseif($resource_type=='Allocated Hardware'){
+                $hardware_types = Hardware::where('status', '=', $device_status_allocated)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
+                $count_hard = $hardware_types->count();
+            }
+            else {
                 $hardware_types = Software::where('name', 'LIKE', '%' . $type . '%')->paginate(30);
                 $count_hard = $hardware_types->count();
 
@@ -275,6 +285,8 @@ class AllocationController extends Controller {
         return view('Requests.ViewAll')->with('results',$results)->with('project_code',$project_code);
 
     }
+
+
 
 //---------------------------------------------------Hardware Resource History-------------------------------------------------------------------------------------------------------------------------------------
 
