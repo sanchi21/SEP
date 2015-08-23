@@ -12,6 +12,7 @@ use App\file;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 
 class ApprovalController extends Controller {
@@ -105,6 +106,7 @@ class ApprovalController extends Controller {
             $itemNo = Input::get('itemNo1');
             $description = Input::get('description');
             $quantity = Input::get('quantity');
+
             $price = Input::get('price');
             $priceTax = Input::get('priceTax');
             $warranty = Input::get('warranty');
@@ -215,7 +217,7 @@ class ApprovalController extends Controller {
         $viewRequests = ProcurementRequest::where('status', '=', 'On Process')->get();
 
 
-        $id ="-- Select Procurement Request --";
+        $id ="";
         $requestStatus = "";
         $requestPath = "";
 
@@ -286,6 +288,7 @@ class ApprovalController extends Controller {
                 });
 
             }
+            $viewRequests = ProcurementRequest::where('status', '=', 'On Process')->get();
             $users = DB::table('system_users')->get();
             \Session::flash('flash_message', 'Procurement Request has been approved');
 

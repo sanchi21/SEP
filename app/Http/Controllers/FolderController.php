@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\SystemUser;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 
 
 use Illuminate\Http\Request;
@@ -130,7 +131,7 @@ class FolderController extends Controller {
         }
 
 
-        if (preg_match("#^[a-zA-Z0-9]*[:.][/]+[a-zA-Z0-9]+#",$link)) {
+        if (!filter_var($link, FILTER_VALIDATE_URL) === false) {
 
             $r = DB::table('files')
                 ->where('request_id', $req_id)
@@ -295,7 +296,7 @@ class FolderController extends Controller {
         }
 
 
-        if(!filter_var($path, FILTER_VALIDATE_URL) === false)
+        if(preg_match("#^[a-zA-Z0-9_\\\\:.-]+#",$path))
         {
 
             $AssignFolder = DB::table('sfusers')

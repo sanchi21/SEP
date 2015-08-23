@@ -6,6 +6,8 @@
  * Time: 5:35 PM
  */
  ?>
+
+<?php $count_message=0  ?>
 @extends('master')
 @section('content')
 
@@ -54,32 +56,35 @@
 
         @if(Session::has('flash_viewApprovalRequests'))
 
-        @if(($requestedItems != null) && ( $id !=null))
+        @if( (  ($requestedItems != null) &&  ( $id != null) )      )
+        @if($id != "-- Select Procurement Request --")
 
              <div >
-                                        @if(Session::has('flash_message_savedChanges'))
+                   @if(Session::has('flash_message_savedChanges'))
 
-                                           <div class="alert alert-success">
-                                                {{Session::get('flash_message_savedChanges')}}
-                                           </div>
-                                        @endif
+                   <div class="alert alert-success">
+                          {{Session::get('flash_message_savedChanges')}}
+                   </div>
+                   @endif
 
-                                        <script>
-                                               $('div.alert').delay(4000).slideUp(300);
-                                        </script>
-                                  </div>
-                                  <div >
-                                         @if(Session::has('flash_message_CancelModification'))
-                                         @if(  !(Session::has('flash_message_savedChanges')) )
-                                             <div class="alert alert-danger">
-                                                  {{Session::get('flash_message_CancelModification')}}
-                                             </div>
-                                         @endif
-                                         @endif
-                                         <script>
-                                              $('div.alert').delay(4000).slideUp(300);
-                                         </script>
-                                  </div>
+                   <script>
+                            $('div.alert').delay(4000).slideUp(300);
+                   </script>
+             </div>
+
+             <div >
+                   @if(Session::has('flash_message_CancelModification'))
+                   @if(  !(Session::has('flash_message_savedChanges')) )
+
+                      <div class="alert alert-danger">
+                           {{Session::get('flash_message_CancelModification')}}
+                      </div>
+                   @endif
+                   @endif
+                   <script>
+                            $('div.alert').delay(4000).slideUp(300);
+                   </script>
+             </div>
 
 
             <div class="panel panel-default"  style="width: 100%">
@@ -192,6 +197,7 @@
                 </div>
                 </div>
             </div><br>
+        @endif
         @endif
         @endif
 

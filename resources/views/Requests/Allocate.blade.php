@@ -323,7 +323,7 @@
                                 <form action="{{ URL::route('viewAllocatedHardware') }}" method="post">
                                     @if($search->count!=0)
 
-                                        <td><button type="submit" class="btn btn-primary form-control" style="width:34px" value="SearchCount">{{$search->count}}</button></td>
+                                        <td><button type="submit" class="btn btn-success form-control" style="width:34px" value="SearchCount">{{$search->count}}</button></td>
 
                                         <input type="hidden" value="{{$search->inventory_code}}" name="hid11">
                                         <input type="hidden" name="r2" value="{{$req}}">
