@@ -1,5 +1,5 @@
 
-@extends('master')
+@extends('...master')
 
 @section('content')
 <br>
@@ -152,6 +152,7 @@
                    <th>Name</th>
                    <th>Project Code</th>
                    <th>Requested Upto</th>
+                   <th></th>
 
         @foreach($requests as $all)
 
@@ -166,12 +167,36 @@
                     <td>{{$all->name}}</td>
                     <td>{{$all->project_id}}</td>
 
-
-
-                      <td ><input type="date" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->req_upto}}" style="width: 300px" readonly></td>
-                    <td> <input class="btn btn-danger" type="submit" name="cancelRequest" value="Cancel"></td>
+                    <td ><input type="date" name="req_upto" data-format="MM-dd-yyyy" placeholder="mm-dd-yyyy" class="form-control input-sm" value="{{$all->req_upto}}" style="width: 300px" readonly></td>
+                    <td>
+                    <!-- Button trigger modal -->
+                                         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                                           Cancel
+                                         </button>
+                    </td>
                       <input type="hidden" value="{{$all->id}}" name="reqID">
                       <input type="hidden" value="{{$all->sid}}" name="SubID">
+
+
+
+                     <!-- Modal -->
+                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                       <div class="modal-dialog" role="document">
+                         <div class="modal-content">
+                           <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                             <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+                           </div>
+                           <div class="modal-body">
+                             <p>Are you sure you want to cancel this request?</p>
+                           </div>
+                           <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Yes</button>
+                             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
 
                {!! Form::close() !!}
 
@@ -192,10 +217,13 @@
 
 </div>
 
+            <script>
 
+            $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').focus()
+            })
 
-
-
+            </script>
 
 
     @stop
