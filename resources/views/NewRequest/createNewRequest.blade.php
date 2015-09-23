@@ -44,7 +44,7 @@
 
 
 
-<h2 style="color: #9A0000">Create New Request Type</h2>
+<h2 style="color: #9A0000">Add, Edit Request Types</h2>
 <br>
 
 {!! Form ::open(['method' => 'POST', 'action' => ['RequestTableController@store']]) !!}

@@ -91,7 +91,7 @@
         @endif
 
         <input type="button" onclick="printContent('content12')" class="btn btn-primary" value="Print">&nbsp;&nbsp;
-        <input type="submit" name="delete" class="btn btn-danger" style="width: 85px" value="Delete">&nbsp;&nbsp;
+        <input type="submit" name="delete" class="btn btn-danger" style="width: 85px" value="Dispose">&nbsp;&nbsp;
         {{--<input type="submit" name="update" class="btn btn-primary" value="Update" onclick="javascript:return validation2()">--}}
         <input type="submit" name="update" class="btn btn-primary" value="Update">
 

@@ -219,7 +219,7 @@ class OtherRequestController extends Controller {
         //get only the pending requests
         $temp = GRequest::select('type')->where('g_status',1)->get();
 
-        //ifthere are no pending requests to process redirect to home page with message
+        //if there are no pending requests to process redirect to home page with message
         if(count($temp) == 0)
         {
             \Session::flash('flash_message', 'There are no requests to process!');
@@ -230,7 +230,7 @@ class OtherRequestController extends Controller {
         $id = $temp[0]->type;
 
         //get the PR Codes for the request type
-        $prCodes = GRequest::select('pr_code')->where('type',$id)->groupBy('pr_code')->get();
+        $prCodes = GRequest::select('pr_code')->where('type',$id)->where('g_status',1)->groupBy('pr_code')->get();
 
         //get the first PR Code to load
         $pr = $prCodes[0]->pr_code;
@@ -242,7 +242,7 @@ class OtherRequestController extends Controller {
         $requestTypes = RequestType::all();
 
         //retrieve the request data for approval
-        $requests = DB::table($id)->join('g_requests',$id.'.request_id','=','g_requests.request_id')->where('g_requests.g_status','=',1)->get();
+        $requests = DB::table($id)->join('g_requests',$id.'.request_id','=','g_requests.request_id')->where('g_requests.g_status','=',1)->where('g_requests.pr_code',$pr)->get();
 
         //retrieve the columns of the request type
         $columns = Column::select('table_column', 'column_name', 'cid')->where('category',$id)->orderBy('cid')->get();
@@ -265,11 +265,11 @@ class OtherRequestController extends Controller {
             $temp = GRequest::select('type')->where('g_status',1)->get();
             $id = $temp[0]->type;
         }
-        $prCodes = GRequest::select('pr_code')->where('type',$id)->groupBy('pr_code')->get();
+        $prCodes = GRequest::select('pr_code')->where('type',$id)->where('g_status',1)->groupBy('pr_code')->get();
         $pr = $prCodes[0]->pr_code;
         $gRequests = GRequest::where('pr_code',$pr)->where('g_status',1)->get();
         $requestTypes = RequestType::all();
-        $requests = DB::table($id)->join('g_requests',$id.'.request_id','=','g_requests.request_id')->where('g_requests.g_status','=',1)->get();
+        $requests = DB::table($id)->join('g_requests',$id.'.request_id','=','g_requests.request_id')->where('g_requests.g_status','=',1)->where('g_requests.pr_code',$pr)->get();
         $columns = Column::select('table_column', 'column_name', 'cid')->where('category',$id)->orderBy('cid')->get();
 
         return view('NewRequest.otherRequestAccept',compact('gRequests','requestTypes','requests','columns','id','prCodes','pr'));
@@ -284,10 +284,10 @@ class OtherRequestController extends Controller {
      */
 	public function edit($id,$pr)
 	{
-        $prCodes = GRequest::select('pr_code')->where('type',$id)->groupBy('pr_code')->get();
+        $prCodes = GRequest::select('pr_code')->where('type',$id)->where('g_status',1)->groupBy('pr_code')->get();
         $gRequests = GRequest::where('pr_code',$pr)->where('g_status',1)->get();
         $requestTypes = RequestType::all();
-        $requests = DB::table($id)->join('g_requests',$id.'.request_id','=','g_requests.request_id')->where('g_requests.g_status','=',1)->get();
+        $requests = DB::table($id)->join('g_requests',$id.'.request_id','=','g_requests.request_id')->where('g_requests.g_status','=',1)->where('g_requests.pr_code',$pr)->get();
         $columns = Column::select('table_column', 'column_name', 'cid')->where('category',$id)->orderBy('cid')->get();
 
         return view('NewRequest.otherRequestAccept',compact('gRequests','requestTypes','requests','columns','id','prCodes','pr'));

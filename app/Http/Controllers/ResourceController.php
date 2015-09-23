@@ -288,7 +288,7 @@ class ResourceController extends Controller {
 
             $hardware = Hardware::find($inventory_code);
 
-            if ($delete != "Delete") {
+            if ($delete != "Dispose") {
                 foreach ($columns as $col) {
                     $attribute = $col->table_column;
                     $temp = $input[$attribute];
@@ -298,15 +298,20 @@ class ResourceController extends Controller {
 
                 $status = $hardware->save() ? true : false;
 
+            }
+            else
+            {
+                $hardware->status = 'Disposed';
+                $status = $hardware->save() ? true : false;
+                //$this->remove($inventory_code);
+            }
 
-                if ($status) {
-                    \Session::flash('flash_message', 'Hardware ' . $inventory_code . ' updated successfully!');
-                } else {
-                    \Session::flash('flash_message_error', 'Hardware update failed!');
-                }
-
-            } else {
-                $this->remove($inventory_code);
+            if ($status) {
+                \Session::flash('flash_message', 'Hardware ' . $inventory_code . ' updated successfully!');
+            }
+            else
+            {
+                \Session::flash('flash_message_error', 'Hardware update failed!');
             }
         }
         catch(\Exception $e)

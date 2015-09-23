@@ -300,7 +300,7 @@ function findSum()
         }
     }
     document.getElementById("error_msg").style.display = "none";
-    smsg.innerHTML = "Request Form Verified! Click Submit to Submit the Request!";
+    smsg.innerHTML = "Request Form Verified!";
     document.getElementById("success_msg").style.display = "block";
 
     return true;

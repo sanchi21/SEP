@@ -22,7 +22,7 @@ overflow-x: hidden;
     }
 
 .btn .caret {
-margin-left:70px;
+margin-left:50px;
 }
 .btn
     {
@@ -31,7 +31,7 @@ margin-left:70px;
 </style>
 
 
-<h2 style="color: #9A0000">Hardware Resource</h2>
+<h2 style="color: #9A0000">View Hardware Resources</h2>
 
 <br>
 
@@ -84,7 +84,7 @@ margin-left:70px;
             <select id="existing_attribute" name="existing_attribute[]" class="form-control input-sm" style="width: 180px; min-height: 30px" multiple="multiple">
                 @foreach($columns as $col)
                     @if($col->table_column != 'inventory_code')
-                   	    <option value='{{$col->table_column}}'>{{ $col->column_name }}</option>
+                   	    <option value='{{$col->table_column}}' @if($col->column_name == 'Description' || $col->column_name == 'Make') selected @endif>{{ $col->column_name }}</option>
                    	@endif
                 @endforeach
             </select>
@@ -118,7 +118,14 @@ margin-left:70px;
             <div class="hideextra">
             <?php $attribute = $col->table_column; ?>
 
-            {{$hardware->$attribute}}
+            @if($attribute == 'inventory_code')
+                <?php $temp1 = urlencode(base64_encode(str_replace('/','-',$hardware->inventory_code)))?>
+                        <a href="/hardware-change/{{$temp1}}">{{$hardware->$attribute}}</a>
+            @else
+                {{$hardware->$attribute}}
+            @endif
+
+
 
             @if($attribute == 'inventory_code')
                     <input type="hidden" name="inventory_code" value="{{$hardware->inventory_code}}">

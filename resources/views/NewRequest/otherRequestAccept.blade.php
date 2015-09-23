@@ -9,7 +9,7 @@
 }
 </style>
 
-<h2 style="color: #9A0000">Other Requests Accept/Reject</h2>
+<h2 style="color: #9A0000">Manage Other Requests</h2>
 <br>
 
 
@@ -50,8 +50,8 @@
 
             <div class="col-xs-4 col-md-4">
                 <select name="PR_Code" class="form-control" style="width: 250px" onchange="javascript:location.href = this.value;">
-                @foreach($prCodes as $pr)
-                    <option value="/other-request-update/{{$id}}/{{$pr->pr_code}}" @if($pr->pr_code == $pr) selected @endif>{{$pr->pr_code}}</option>
+                @foreach($prCodes as $prc)
+                    <option value="/other-request-update/{{$id}}/{{$prc->pr_code}}" @if($prc->pr_code == $pr) selected @endif>{{$prc->pr_code}}</option>
                 @endforeach
                 </select>
             </div>

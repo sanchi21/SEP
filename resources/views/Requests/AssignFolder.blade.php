@@ -13,7 +13,7 @@
 
   <div class="panel-body">
         <table class="table table-hover" width="100%">
-            <tr style="background-color: #f5f5f5;">
+            <tr style="background-color: #e7e7e7;">
                 <th width="80%">Project&nbsp;Code</th>
                 <th width="10%">Requests</th>
              </tr>
@@ -122,6 +122,7 @@
                                                 <th width="15%">Username</th>
                                                 <th width="15%">Password</th>
                                                 <th width="15%">URL</th>
+                                                <th width="5%"></th>
                                                 <th width="5%"></th>
 
                                             </tr>

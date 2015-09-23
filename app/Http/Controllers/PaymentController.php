@@ -78,6 +78,8 @@ class PaymentController extends Controller {
         $payMethod = $input['payMethod'];
         $total = $input['total'];
         $orderDate = $input['orderDate'];
+        $chequeNumber = $input['chequeNumber'];
+        $payDescription = $input['payDescription'];
 
         $items = DB::table('procurement_items')
             ->where('status',"Approved")
@@ -85,35 +87,14 @@ class PaymentController extends Controller {
 
         $itemsCount = count($items);
 
-//        $vendorID = DB::table('procurement_items')
-//            ->select('vendor_id')
-//            ->where('status',"Approved")
-//            ->where('pRequest_no',$reqID)->get();
-
-//        $status1 = DB::table('users')->whereIn('pRequest_no', $reqID)
-//                        ->whereIn('status', "Approved")->update(array('status' => "Ordered"));
-
-//        if($status1)
-//            \Session::flash('flash_message','Your Order was successfull');
-
-//        foreach($items as $item)
-//        {
-//
-////            DB::table('procument_items')
-////                ->where('request_id', $reqID)
-////                ->where('status',"Approved")
-////                ->update(array('staus'=>"Ordered"));
-//            $item->status = 'Ordered';
-//
-//        }
-
-
         $order = new Order();
 
         $order->request_id = $reqID;
         $order->payment_method = $payMethod;
         $order->total = $total;
         $order->order_date = $orderDate;
+        $order->cheque_number = $chequeNumber;
+        $order->pay_description - $payDescription;
         $order->status = "Ordered";
 
         $status = $order->save() ? true : false;
@@ -125,15 +106,13 @@ class PaymentController extends Controller {
             Mail::send('emails.orderDetails', array('reqID'=>$reqID, 'payMethod'=>$payMethod,
                 'orderDate'=>$orderDate,'total'=>$total,'items'=>$items,'link' => URL::route('viewInvoice', $reqID)),function($messsage)
             {
-                $messsage->to('paarthipank@gmail.com','Parthipan')->subject('New Order');
+                $messsage->to('sanchayan@live.com','Parthipan')->subject('New Order');
             });
 
             \Session::flash('flash_message','Your Order has been placed!');
 
             return Redirect::action('PaymentController@index');
-
         }
-
 
     }
 
@@ -145,7 +124,6 @@ class PaymentController extends Controller {
 
         return view('payment.viewOrders')
                  ->with('orders', $orders);
-
 
     }
 
@@ -206,12 +184,11 @@ class PaymentController extends Controller {
 
         {
 
-            \Session::flash('flash_message','Purchase Update was successfull');
+            \Session::flash('flash_message','Purchase Update was successful');
 
             return Redirect::action('PaymentController@getOrders');
 
         }
-
 
     }
 
@@ -224,7 +201,7 @@ class PaymentController extends Controller {
 
         Mail::send('emails.purchaseDelay', array('reqID'=>$reqID, 'emailBody'=>$emailBody),function($messsage)
         {
-            $messsage->to('paarthipank@gmail.com','Parthipan')->subject('Purchase Delayed');
+            $messsage->to('sanchayan@live.com','Sanchayan')->subject('Purchase Delayed');
         });
 
         \Session::flash('flash_message','Email Successfully sent!');

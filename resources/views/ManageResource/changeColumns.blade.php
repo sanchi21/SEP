@@ -46,7 +46,7 @@
 
 
 
-<h2 style="color: #9A0000">Category/Attributes</h2>
+<h2 style="color: #9A0000">Add, Edit Category & Attributes</h2>
 <br>
 
 {!! Form ::open(array('url' => 'change-property')) !!}

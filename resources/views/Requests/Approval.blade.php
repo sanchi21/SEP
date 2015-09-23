@@ -22,11 +22,15 @@
    </script>
 
 
+<h2 style="color: #9A0000">Manage Procurement Requests</h2>
+
+<br>
+
 <div class="panel panel-default" name="sss" style="width: 100%">
 
-     
+
      <div class="panel-heading" style="color: #9A0000">
-                <h4>Approval</h4>
+                <h4>Approve / Reject</h4>
      </div>
 
 

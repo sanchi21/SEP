@@ -3,13 +3,10 @@
 @section('content')
 
 <br>
-<div class="container">
+
 
 <h2 style=" color: #9A0000">Update Purchase</h2>
-</div>
 
-
-<br>
 <br>
 
 
@@ -57,6 +54,10 @@
                                   <td>   </td>
                                   <td>   </td>
                                   <td>   </td>
+                                  <td>   </td>
+                                  <td>   </td>
+                                  <td>   </td>
+                                  <td>   </td>
 
                               </tr>
                           </tbody>
@@ -67,9 +68,11 @@
 
 
               </div>
-              <button style="float: right" type="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal1">Send Email</button>
-              <button style="float: right" type="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal2">Mark Purchased</button>
 
+              <div align="right">
+                <button style="height: 36px" type="button" class="btn btn-success"  data-toggle="modal" data-target="#myModal2">Mark Purchased</button>
+                <button style="max-width: 100px" type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal1">Send Email</button>
+              </div>
 
 
 

@@ -8,10 +8,25 @@ Request details with reference to the Request ID : <b>{{$requestNo}}</b>
 Request Type : {{$type}}
 <br><br>
 <br>
-@foreach($requestData as $request)
-Status : {{$request->status}}  <pre>   </pre> Remarks : {{$request->remarks}}
-<br>
-@endforeach
+    <table class="table table-hover" cellpadding="0" cellspacing="0" width="60%" style="font-size: 15px;">
+        <tr id="headRow" style="background-color: #e7e7e7;">
+            <th width="40%">Remarks</th>
+            <th>Status</th>
+        </tr>
+
+        @foreach($requestData as $request)
+            <tr>
+                <td>
+                    {{$request->remarks}}
+                </td>
+                <td>
+                    {{$request->status}}
+                </td>
+            </tr>
+        @endforeach
+    </table>
+
+
 <br>
 <br>
 -----------------------------------------------------------------------------------------------------<br>
