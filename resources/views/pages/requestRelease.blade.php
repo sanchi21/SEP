@@ -43,10 +43,9 @@
                                 <th></th>
 
                      @foreach($allocated as $all)
+                            {!! Form::open(array('class'=>'form-horizontal','action' => ['RenewalController@requestReleasePost'],'method'=>'POST')) !!}
+                            <tr>
 
-                      {!! Form::open(array('class'=>'form-horizontal','action' => ['RenewalController@requestReleasePost'],'method'=>'POST')) !!}
-
-                        <tr>
 
                                  <td> {{$all->item}}</td>
                                  <input type="hidden" value="{{$all->item}}" name="item">
@@ -60,41 +59,17 @@
                                  <input type="hidden" value="{{$all->required_upto}}" name="reqUpto">
 
 
-                            <td>
                                    <input type="hidden" value="{{$all->request_id}}" name="rid">
                                    <input type="hidden" value="{{$all->sub_id}}" name="sid">
 
-                          </td>
-                          <td>
-                          <div align="right">
-                         <button style="height: 36px" type="button" class="btn btn-success"  data-toggle="modal" data-target="#myModal2">Send Request</button>
-                         </div>
+                                   <td>
+                                       <input class="btn btn-default" type="submit" name="accept" value="Request">
+                                   </td>
 
+                            </tr>
 
-                          </td>
+                            {!! Form::close() !!}
 
-
-                          </tr>
-                          <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                              <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
-                                  </div>
-                                  <div class="modal-body">
-                                    <p>Are you sure you want send the request</p>
-                                  </div>
-                                  <div class="modal-footer">
-                                   <button type="submit" class="btn btn-primary">Yes</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                  </div>
-                                </div>
-                              </div>
-
-                            </div>
-
-                        {!! Form::close() !!}
                         @endforeach
 
                         </tbody>

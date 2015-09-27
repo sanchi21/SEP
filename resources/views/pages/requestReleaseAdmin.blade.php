@@ -17,7 +17,7 @@
 
                                 <td width="25%">
 
-                                <input type="text" class="form-control input-sm" name="name" style="width: 300px">
+                                <input type="text" class="form-control input-sm" name="searchKey" style="width: 300px">
                                 <td>
                                 <button type="submit" name ="search" class="btn btn-primary" style="height: 30px;width: 30px"><span class="glyphicon glyphicon-search"></span> </button>
                                 </td>
@@ -59,18 +59,18 @@
                 <td>{{$all->assigned_date}}</td>
                 <td>{{$all->required_upto}}</td>
 
-                <td>
-                <input class="btn btn-default" type="submit" name="accept" value="Accept">
-                <input class="btn btn-danger" type="submit" name="reject" value="Reject"></td>
-                </td>
-
                 <input type="hidden" value="{{$all->req_id}}" name="reqID">
                 <input type="hidden" value="{{$all->sub_id}}" name="SubID">
 
+                <td>
+                <input class="btn btn-default" type="submit" name="accept" value="Accept">
+                <input class="btn btn-danger" type="submit" name="reject" value="Reject">
+                </td>
 
-         </td>
-         </tr>
 
+       </tr>
+
+        {!! Form::close() !!}
       @endforeach
 
 
@@ -78,7 +78,7 @@
        </table>
 
 
-        {!! Form::close() !!}
+
 
       </div>
 

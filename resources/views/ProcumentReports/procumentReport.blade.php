@@ -66,59 +66,76 @@
             @endif
 
 
-
-
-
    </tr>
 
    </tbody>
 
    </table>
 
-        <div name = "report-header">
-           <table width="100%">
-               <tr>
-                   <td width="50%"><img src="/includes/images/zone_logo.png" height="70px" width="200px"></td>
-                   <td width="50%"></td>
-               </tr>
-               <tr>
-                   <td width="50%"><h4>Zone24x7 (Private) Limited</h4></td>
-                   <td width="50%" align="right"><h4>Date : {{date("d-m-Y")}}</h4></td>
-               </tr>
+   <div class="panel-body" name="printContent" id="printContent">
 
-               <tr>
-                   <td width="50%"><h4>Nawala Road,</h4></td>
-                   <td></td>
-               </tr>
+   <div class="panel-body" name="content12" id="content12" style="display: none">
 
-               <tr>
-                   <td width="50%"><h4>Koswatte,</h4></td>
-                   <td></td>
-               </tr>
+   <div name = "report-header">
+              <table width="100%">
+                  <tr>
+                      <td width="50%"><img src="/includes/images/zone_logo.png" height="70px" width="200px"></td>
+                      <td width="50%"></td>
+                  </tr>
+                  <tr>
+                      <td width="50%"><h4>Zone24x7 (Private) Limited</h4></td>
+                      <td width="50%" align="right"><h4>Date : {{date("d-m-Y")}}</h4></td>
+                  </tr>
 
-               <tr>
-                   <td width="50%"><h4>Sri Lanka 10107</h4></td>
-                   <td></td>
-               </tr>
+                  <tr>
+                      <td width="50%"><h4>Nawala Road,</h4></td>
+                      <td></td>
+                  </tr>
 
-           </table>
+                  <tr>
+                      <td width="50%"><h4>Koswatte,</h4></td>
+                      <td></td>
+                  </tr>
 
-            @if(isset($vendors))
-           <h2 align="center">Vendor Details For Requests</h2>
-           <br>
-           @endif
+                  <tr>
+                      <td width="50%"><h4>Sri Lanka 10107</h4></td>
+                      <td></td>
+                  </tr>
 
-           @if(isset($pRequests))
-           <h2 align="center">Accepted Procurement Requests</h2>
-           <br>
-           @endif
+              </table>
 
-           @if(isset($orders))
-           <h2 align="center">Procurement Orders</h2>
-           <br>
-           @endif
 
-       </div>
+
+          </div>
+
+   </div>
+
+
+         <div align="right">
+        <input type="button"  class="btn btn-success form-control" style="width: 10%" onclick="tableToExcel('vendorProcument','Procurement')" value="Save To File">
+        </div>
+        <div align="right">
+          <input type="button" onclick="printContent('printContent')" class="btn btn-primary" value="Print">&nbsp;&nbsp;
+          </div>
+
+
+
+         @if(isset($vendors))
+                  <h2 align="center">Vendor Details For Requests</h2>
+                  <br>
+                  @endif
+
+                  @if(isset($pRequests))
+                  <h2 align="center">Accepted Procurement Requests</h2>
+                  <br>
+                  @endif
+
+                  @if(isset($orders))
+                  <h2 align="center">Procurement Orders</h2>
+                  <br>
+                  @endif
+
+
 
         @if(isset($vendors))
 
@@ -178,7 +195,6 @@
                                     <th>Warranty</th>
                                     <th></th>
 
-
                                     {!! Form::open(array('class'=>'form-horizontal','action' => ['RenewalController@adminAccept'],'method'=>'POST')) !!}
 
                          @foreach($pRequests as $pRequest)
@@ -192,7 +208,6 @@
                                      <td>{{$pRequest->quantity}}</td>
                                      <td>{{$pRequest->price_tax}}</td>
                                      <td>{{$pRequest->warranty}}</td>
-
 
                               </td>
                               </tr>
@@ -240,21 +255,44 @@
                                 <td>{{$order->pay_description}}</td>
                                 <td>{{$order->status}}</td>
 
-
                          </td>
                          </tr>
 
                       @endforeach
-
 
                        </tbody>
                        </table>
 
          @endif
 
-
-
 </div>
+</div>
+
+<script>
+    function printContent(print_content){
+        var restorepage = document.body.innerHTML;
+        var printcontent = document.getElementById(print_content).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+    }
+</script>
+
+<script>
+
+         var tableToExcel = (function() {
+           var uri = 'data:application/vnd.ms-excel;base64,'
+             , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+             , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+             , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+           return function(table, name) {
+             if (!table.nodeType) table = document.getElementById(table)
+             var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+             window.location.href = uri + base64(format(template, ctx))
+           }
+         })()
+
+</script>
 
 
 @stop

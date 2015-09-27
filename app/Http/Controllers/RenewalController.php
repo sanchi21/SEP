@@ -22,27 +22,16 @@ class RenewalController extends Controller {
 
 
 
-    public function great()
-
-    {
-        echo 'hello';
-
-    }
-
-
 	public function index()
 	{
-		//$hold = DB::table('reqs')->where('status',0)->where('renewal', 0)->get();
 
-        //$requests = DB::table('renewal')->where('status',0)->get();
-
-        $hold = DB::table('reqs')
+        $hold = DB::table('reqs')   //Retrieve Allocated resources which are not requested for renewal
             ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
             ->select( 'requesths.project_id','reqs.item','reqs.device_type','reqs.request_id'
                     ,'reqs.sub_id', 'reqs.assigned_date', 'reqs.required_upto','reqs.status','reqs.renewal')
             ->where('reqs.status',"Allocated")->where('reqs.renewal',0)->get();
 
-        $requests = DB::table('renewal')
+        $requests = DB::table('renewal') //Retrieve all pending renewal request along with their project code
         ->join('reqs', 'renewal.id', '=', 'reqs.request_id')
         ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
         ->select('renewal.id', 'renewal.sid', 'renewal.name','renewal.req_upto','requesths.project_id')
@@ -52,7 +41,7 @@ class RenewalController extends Controller {
         $prCode = DB::table('versions')->get();
 
 
-        return view('pages.renew')->with('allocated',$hold )
+        return view('pages.renew')->with('allocated',$hold ) //Pass all the data to the view
                                 ->with('requests', $requests)
                                 ->with('prCode', $prCode);
 
@@ -60,18 +49,15 @@ class RenewalController extends Controller {
 
     public function searchResource()
     {
-        $input = Request::all();
 
-       // $name = $input['resourceName'];
-        //$prCode2 = $input['prCode'];
 
-        $prCode = DB::table('reqs')
+        $prCode = DB::table('reqs') //Retrieve the PR Code
             ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
             ->select('requesths.project_id')->groupBy('requesths.project_id')->get();
 
         $prCode = DB::table('versions')->get();
 
-        $hold = DB::table('reqs')
+        $hold = DB::table('reqs') //Search the Joined table with the search key
             ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
             ->select( 'requesths.project_id','reqs.item','reqs.device_type','reqs.request_id'
                 ,'reqs.sub_id', 'reqs.assigned_date', 'reqs.required_upto','reqs.status','reqs.renewal')
@@ -79,11 +65,11 @@ class RenewalController extends Controller {
             ->where('reqs.renewal',0)
             ->where(function($query)
             {
-                $input = Request::all();
+                $input = Request::all(); // Get all the POST data from the view
 
-                $name = $input['resourceName'];
+                $name = $input['resourceName']; //Grab the search keyword from the POST data
 
-                $query->where('reqs.item','LIKE', '%'.$name.'%')
+                $query->where('reqs.item','LIKE', '%'.$name.'%') //search the table
                     ->orWhere('requesths.project_id','LIKE', '%'.$name.'%')
                     ->orWhere('reqs.device_type', 'LIKE', '%'.$name.'%');
             })
@@ -101,24 +87,23 @@ class RenewalController extends Controller {
             ->with('requests', $requests)
             ->with('prCode', $prCode);
 
-
     }
 
     public function cancelRequest()
     {
 
-        $input = Request::all();
-        $id = $input['reqID'];
-        $sid = $input['SubID'];
+        $input = Request::all(); // Get all the POST data from the view
+        $id = $input['reqID']; // Grab the request id from POST
+        $sid = $input['SubID']; //Grab the sub id from POST
 
-        $status1 = DB::table('reqs')->where('request_id', $id)
+        $status1 = DB::table('reqs')->where('request_id', $id) // update the renewal status
             ->where('sub_id',$sid)
             ->update(array('renewal'=>0));
 
-        $status2 = DB::table('renewal')->where('id', $id)->where('sid',$sid)->delete();
+        $status2 = DB::table('renewal')->where('id', $id)->where('sid',$sid)->delete(); //delete the request
 
         if($status1 && $status2)
-            \Session::flash('flash_message','Renewal request cancelled');
+            \Session::flash('flash_message','Renewal request cancelled'); //Flash message with
         else
             \Session::flash('flash_message_error','Renewal request failed to cancel');
 
@@ -126,34 +111,22 @@ class RenewalController extends Controller {
 
     }
 
-    public function adminView()
+    public function adminView() //Administrators view for renewal requests
     {
 
-//        $requests = DB::table('renewal')
-//            ->join('reqs', 'renewal.id', '=', 'reqs.request_id')
-//            ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
-//            ->select('renewal.id', 'renewal.sid', 'renewal.name','renewal.req_upto','requesths.project_id')
-//            ->where('renewal.status', 0)->groupBy('renewal.name')
-//            ->get();
 
-        $requests = DB::table('renewal')
+        $requests = DB::table('renewal') //Get all the renewal requests
             ->join('reqs', 'renewal.id', '=', 'reqs.request_id')
             ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
             ->select('renewal.id', 'renewal.sid', 'renewal.name','renewal.req_upto','requesths.project_id','reqs.required_upto')
             ->where('renewal.status', 0)->groupBy('renewal.name')
             ->get();
 
-//        $requests = DB::table('renewal')
-//            ->join('requesths', 'renewal.id', '=', 'requesths.request_id')->where('renewal.sid')
-//            ->select('renewal.id', 'renewal.sid', 'renewal.name','renewal.req_upto','requesths.project_id','requesths.required_upto' )
-//            ->where('renewal.status',0)->groupBy('renewal.name')->get();
-
-
         return view('pages.acceptRequest')->with('requests',$requests);
 
     }
 
-    public function adminSearchView()
+    public function adminSearchView() //Search renewal requests
     {
 
         $requests = DB::table('renewal')
@@ -163,11 +136,11 @@ class RenewalController extends Controller {
             ->where('renewal.status', 0)->groupBy('renewal.name')
             ->where(function($query)
             {
-                $input = Request::all();
+                $input = Request::all(); //Get all the POST data
 
-                $name = $input['name'];
+                $name = $input['name']; //Grab the search keyword
 
-                $query->where('renewal.name','LIKE', '%'.$name.'%')
+                $query->where('renewal.name','LIKE', '%'.$name.'%') //search the table with the keyword
                     ->orWhere('renewal.req_upto','LIKE', '%'.$name.'%')
                     ->orWhere('requesths.project_id', 'LIKE', '%'.$name.'%')
                     ->orWhere('reqs.required_upto', 'LIKE', '%'.$name.'%');
@@ -178,7 +151,7 @@ class RenewalController extends Controller {
 
     }
 
-    public function adminAccept()
+    public function adminAccept() //Admin's Renewal request Accept or Delete
     {
         $input = Request::all();
 //        $reject = Input::get('reject');
@@ -202,21 +175,21 @@ class RenewalController extends Controller {
         //$temp = count($id);
 //        var_dump($action);
 
-        if(count($sid)==0)
+        if(count($sid)==0) //if there is no data Flash a message
         {
             \Session::flash('flash_message_error','Nothing to Update');
         }
 
         try {
 
-            for ($i = 0; $i < count($sid); $i++)
+            for ($i = 0; $i < count($sid); $i++) //Iterate through each and every requests
             {
 
-                if($action[$i]=="accept") {
+                if($action[$i]=="accept") { //if the action is accept for this particular request
 
                     DB::table('reqs')->where('request_id', $id[$i])
                         ->where('sub_id',$sid[$i])
-                        ->update(array('renewal'=>0, 'required_upto'=>$date));
+                        ->update(array('renewal'=>0, 'required_upto'=>$date)); //update the action in renewal table
 
                     DB::table('renewal')->where('id', $id[$i])
                         ->where('sid',$sid[$i])
@@ -224,7 +197,7 @@ class RenewalController extends Controller {
 
                 }
 
-                if($action[$i]=="reject") {
+                if($action[$i]=="reject") { //if the action is reject for this particular request
 
                     DB::table('reqs')->where('request_id', $id)
                         ->where('sub_id',$sid)
@@ -232,7 +205,7 @@ class RenewalController extends Controller {
 
                     DB::table('renewal')->where('id', $id[$i])
                         ->where('sid',$sid[$i])
-                        ->update(array('status'=>2));
+                        ->update(array('status'=>2)); //update the action in renewal table
                 }
 
             }
@@ -243,7 +216,7 @@ class RenewalController extends Controller {
             $status = false;
         }
 
-        if($status)
+        if($status) //if actions are updated
         {
             $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
 //                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
@@ -253,7 +226,7 @@ class RenewalController extends Controller {
             $user = 'Parthi'; //$user_data->username;
             $email = 'paarthipank@gmail.com'; //$user_data->email;
 
-            Mail::send('emails.acceptRenewal', array('user'=>'Parthi',
+            Mail::send('emails.acceptRenewal', array('user'=>'Parthi', //mail the user
                 'prCode'=>'001','item'=>'New', 'inventory'=>'Hello'),function($messsage) use ($user, $email)
             {
                 $messsage->to('paarthipank@gmail.com',$user)->subject('Renewal Accepted');
@@ -289,22 +262,21 @@ class RenewalController extends Controller {
 
         //var_dump(count($sid));
 
-        for ($i = 0; $i < count($sid); $i++)
+        for ($i = 0; $i < count($sid); $i++) //Iterate through each and every requests
         {
             try {
-                $renew = new Renewal();
+                $renew = new Renewal(); //create an instance of Renewal model
 
                 $renew->id = $id[$i];
                 $renew->sid = $sid[$i];
                 $renew->req_upto = $renewal_date[$i];
                 $renew->name = $name[$i];
 
-                $renew->status = 0;
+                $renew->status = 0; //add the request data to the instance
 
                DB::table('reqs')->where('request_id', $id[$i])
                     ->where('sub_id',$sid[$i])
-                    ->update(array('renewal'=>1));
-
+                    ->update(array('renewal'=>1)); //update renewal table
 
 
                 $renew->save() ? true : false;
@@ -313,11 +285,11 @@ class RenewalController extends Controller {
             catch(\Exception $e)
             {
                 $status = false;
-                return Redirect::back()->withErrors($e->getMessage());
+                return Redirect::back()->withErrors($e->getMessage()); //display the errors if exception occurs
             }
         }
 
-        if($status)
+        if($status) //if request is successful mail the user
         {
             //$user_id = DB::table('requesths')->where('request_id',$id[0])->pluck('user_id');
             //$user = DB::table('system_users')->where('id', $user_id[0])->pluck('username');
@@ -351,7 +323,7 @@ class RenewalController extends Controller {
 
     public function adminReleaseView()
     {
-        $hold = DB::table('reqs')
+        $hold = DB::table('reqs') //Get all the allocated resource details
             ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
             ->select( 'requesths.project_id','reqs.item','reqs.device_type','reqs.request_id'
                 ,'reqs.sub_id', 'reqs.required_upto','reqs.status','reqs.renewal', 'reqs.inventory_code')
@@ -359,22 +331,22 @@ class RenewalController extends Controller {
 
         $hardware = DB::table('employeeAllocation')->where('status', 1)->get();
 
-        return view('pages.releaseResource')->with('allocated',$hold )
+        return view('pages.releaseResource')->with('allocated',$hold ) //send it to the view
                                             ->with('hardwares', $hardware);
 
     }
 
     public function resourceReleaseProject()
     {
-        $input = Request::all();
+        $input = Request::all(); // Get all the post data
 
-        $id = $input['rid'];
-        $sid = $input['sid'];
-        $inventory = $input['inventory'];
+        $id = $input['rid']; //Grab the request id
+        $sid = $input['sid']; // Grab the sub id
+        $inventory = $input['inventory']; //Grab the inventory
 
-        $hard = Hardware::find($inventory);
+        $hard = Hardware::find($inventory); //search hardware table for the particular inventory
 
-        $hard->status = "Not Allocated";
+        $hard->status = "Not Allocated"; //Release the resource and update as not allocated
         $status1 = $hard->save() ? true : false;
 
 
@@ -393,21 +365,22 @@ class RenewalController extends Controller {
 
     public function resourceReleaseEmployee()
     {
-        $input = Request::all();
+        $input = Request::all(); //Ge all the POST data
 
         $inventory = $input['inventory'];
 
-        $hard = Hardware::find($inventory);
+        $hard = Hardware::find($inventory);//search hardware table for the particular inventory
 
-        $hard->status = "Not Allocated";
+        $hard->status = "Not Allocated"; //Release the resource and update as not allocated
         $status1 = $hard->save() ? true : false;
 
 //        $username = EmployeeAllocation::find($inventory);
 //        $username->status =0;
 
+        //Update the employee allocation table as released
         $status2 = DB::table('employeeAllocation')->where('inventory_code', $inventory)->update(array('status'=>0));
 
-        //$status2 = $username->save() ? true : false;
+
 
         if($status1 && $status2)
             \Session::flash('flash_message','Resource was successfully released');
@@ -422,8 +395,7 @@ class RenewalController extends Controller {
 
     public function employeeAllocationView()
     {
-        $hardware = DB::table('hardware')->where('status',"Not Allocated")->get();
-        //$types = DB::table('hardware')->select('type','inventory_code')->groupBy('type')->get();
+        $hardware = DB::table('hardware')->where('status',"Not Allocated")->get(); //get all the resources which are free
         $users = DB::table('system_users')->get();
 
         return view('pages.individualAllocation')->with('hardwares',$hardware )
@@ -434,7 +406,7 @@ class RenewalController extends Controller {
     public function searchHardware()
     {
 
-        $hardware = DB::table('hardware')->where('status', "Not Allocated")
+        $hardware = DB::table('hardware')->where('status', "Not Allocated") //search all the table which are not allocated
                                                     ->where(function($query)
                                             {
                                                 $input = Request::all();
@@ -446,12 +418,6 @@ class RenewalController extends Controller {
                                             })
                                             ->get();
 
-//            ->where('status', "Not Allocated")
-//                                        ->where('type','LIKE', '%'.$make.'%')
-//                                        ->orWhere('make','LIKE', '%'.$make.'%')
-//                                        ->orWhere('model','LIKE', '%'.$make.'%')->get();
-
-//        $types = DB::table('hardware')->select('type','inventory_code')->groupBy('type')->get();
 
         $users = DB::table('system_users')->get();
 
@@ -462,10 +428,10 @@ class RenewalController extends Controller {
 
     public function employeeAllocation()
     {
-        $input = Request::all();
+        $input = Request::all(); //Get all the POST data
 
-        $inventory_code = $input['inventory_code'];
-        $username = $input['username'];
+        $inventory_code = $input['inventory_code']; //Grab the inventory code
+        $username = $input['username']; //Grab the user name
 
         $resource = Hardware::find($inventory_code);
         $username2 = User::find($username);
@@ -474,14 +440,14 @@ class RenewalController extends Controller {
         $status1 = DB::table('hardware')->where('inventory_code', $inventory_code)
             ->update(array('status'=>"Employee Allocated"));
 
-        $empAllocation = new EmployeeAllocation();
+        $empAllocation = new EmployeeAllocation(); //Create an instance of Employee Allocation model
 
         $empAllocation->inventory_code = $inventory_code;
         $empAllocation->user_name = $username2->username;
         $empAllocation->resource_type = $resource->type;
         $empAllocation->make = $resource->make;
         $empAllocation->model = $resource->model;
-        $empAllocation->status = 1;
+        $empAllocation->status = 1; //save all the data to the instance
 
         $status2 = $empAllocation->save() ? true : false;
 
@@ -498,15 +464,15 @@ class RenewalController extends Controller {
     public function viewAllocation()
 
     {
-        $allocations = DB::table('employeeAllocation')->where('status', 1)->get();
+        $allocations = DB::table('employeeAllocation')->where('status', 1)->get(); //view all the individual allocation
 
         return view('pages.viewAllocations')->with('allocations',$allocations );
     }
 
-    public function requestReleaseView()
+    public function requestReleaseView() //request for release
     {
 
-        $hold = DB::table('reqs')
+        $hold = DB::table('reqs') //get all the resources which are currently allocated
             ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
             ->select( 'requesths.project_id','reqs.item','reqs.device_type','reqs.request_id'
                 ,'reqs.sub_id', 'reqs.assigned_date', 'reqs.required_upto','reqs.status','reqs.renewal')
@@ -520,16 +486,16 @@ class RenewalController extends Controller {
     public function requestReleaseSearch()
     {
 
-        $hold = DB::table('reqs')
+        $hold = DB::table('reqs') //Search the allocated resources with the key word
             ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
             ->select( 'requesths.project_id','reqs.item','reqs.device_type','reqs.request_id'
                 ,'reqs.sub_id', 'reqs.assigned_date', 'reqs.required_upto','reqs.status','reqs.renewal')
             ->where('reqs.release_request',0)
             ->where(function($query)
             {
-                $input = Request::all();
+                $input = Request::all(); //Get all the POST data
 
-                $searchKey = $input['searchKey'];
+                $searchKey = $input['searchKey']; //Grab the search keyword
 
                 $query->where('reqs.item','LIKE', '%'.$searchKey.'%')
                     ->orWhere('requesths.project_id','LIKE', '%'.$searchKey.'%')
@@ -544,15 +510,17 @@ class RenewalController extends Controller {
     public function requestReleasePost()
     {
 
-        $input = Request::all();
+        $input = Request::all(); //Get all the POST data
 
-        $id = $input['rid'];
-        $sid = $input['sid'];
-        $item = $input['item'];
-        $type = $input['type'];
-        $pID = $input['pID'];
-        $assigned_date = $input['assigned_date'];
-        $reqUpto = $input['reqUpto'];
+        $id = $input['rid']; //Grab the request ID
+        $sid = $input['sid']; //Grab the sub id
+
+        //return $sid;
+        $item = $input['item']; //Grab the item name
+        $type = $input['type']; //Grab the device type
+        $pID = $input['pID']; //Grab the project code
+        $assigned_date = $input['assigned_date']; //Grab the assigned date
+        $reqUpto = $input['reqUpto']; //Grab the required upto date
 
         $releaseRequest = new ReleaseRequest();
 
@@ -562,14 +530,14 @@ class RenewalController extends Controller {
         $releaseRequest->type = $type;
         $releaseRequest->project_code = $pID;
         $releaseRequest->assigned_date = $assigned_date;
-        $releaseRequest->required_upto = $reqUpto;
+        $releaseRequest->required_upto = $reqUpto; //save all the data to the Release Resource table
 
 
         $status1 = $releaseRequest->save() ? true : false;
 
         $status2 = DB::table('reqs')->where('request_id', $id)
             ->where('sub_id',$sid)
-            ->update(array('release_request'=>1));
+            ->update(array('release_request'=>1)); //update the table
 
         if ($status1 && $status2)
             \Session::flash('flash_message', 'Request Sent Successfully');
@@ -585,7 +553,7 @@ class RenewalController extends Controller {
     public function requestReleaseAdminView()
     {
 
-        $requests = DB::table('release_requests')->where('status',0)->get();
+        $requests = DB::table('release_requests')->where('status',0)->get(); //get all the release resource requests
 
         return view('pages.requestReleaseAdmin')->with('requests',$requests);
 
@@ -593,22 +561,22 @@ class RenewalController extends Controller {
 
     public function requestReleaseAdminPost()
     {
-        $input = Request::all();
-        $reject = Input::get('reject');
+        $input = Request::all(); //Get all the POST data
+        $reject = Input::get('reject'); //Grab the action made
 
-        $id = $input['reqID'];
-        $sid = $input['SubID'];
+        $id = $input['reqID']; //Grab the request id
+        $sid = $input['SubID']; //Grab the sub id
 
         try {
-            if ($reject!="Reject") //Accept button has been clicked
+            if ($reject!="Reject") //If the Accept button is clicked
             {
                 $status1 = DB::table('reqs')->where('request_id', $id)
                     ->where('sub_id',$sid)
-                    ->update(array('release_request'=>0));
+                    ->update(array('release_request'=>0)); //update the reqs table
 
-                $status2 = DB::table('release_requests')->where('id', $id)
-                    ->where('sid',$sid)
-                    ->update(array('status'=>1));
+                $status2 = DB::table('release_requests')->where('req_id', $id)
+                    ->where('sub_id',$sid)
+                    ->update(array('status'=>1)); //update the release request table
 
                 $prCode = DB::table('requesths')->where('request_id', $id)->first();
 
@@ -618,8 +586,9 @@ class RenewalController extends Controller {
                 $code = DB::table('reqs')->where('request_id', $id)
                     ->where('sub_id',$sid)->first();
 
-                if($status1 && $status2)
+                if($status1 && $status2) //mail the user if the action is successful
                 {
+
                     $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
 //                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
 //                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
@@ -647,12 +616,12 @@ class RenewalController extends Controller {
                 return Redirect::action('RenewalController@requestReleaseAdminView');
 
             }
-            else
+            else // if the reject button is clicked
             {
 
                 $status1 = DB::table('reqs')->where('request_id', $id)
                     ->where('sub_id',$sid)
-                    ->update(array('release_request'=>0));
+                    ->update(array('release_request'=>0)); //update the reqs table
 
                 $prCode = DB::table('requesths')->where('request_id', $id)->first();
 
@@ -662,9 +631,11 @@ class RenewalController extends Controller {
                 $code = DB::table('reqs')->where('request_id', $id)
                     ->where('sub_id',$sid)->first();
 
-                $status2 = DB::table('release_requests')->where('id', $id)->where('sid',$sid)->delete();
+                $status2 = DB::table('release_requests')->where('req_id', $id)
+                    ->where('sub_id',$sid)
+                    ->update(array('status'=>1));
 
-                if($status1 && $status2){
+                if($status1 && $status2){ //mail the user if the action is successful
 
                     $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
 //                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
@@ -685,7 +656,7 @@ class RenewalController extends Controller {
                 }
 
                 else
-                    \Session::flash('flash_message_error','Failed to reject renewal');
+                    \Session::flash('flash_message_error','Failed to reject request');
 
                 return Redirect::action('RenewalController@requestReleaseAdminView');
 
@@ -697,12 +668,21 @@ class RenewalController extends Controller {
             return Redirect::back()->withErrors($e->getMessage());
         }
 
-
     }
 
     public function requestReleaseAdminSearch()
     {
+        $input = Request::all(); //Get all the POST data
 
+        $searchKey = $input['searchKey']; //grab the search keyword
+
+        $requests = DB::table('release_requests')->where('status',0) //search the table
+                                                 ->where('item_name','LIKE', '%'.$searchKey.'%')
+                                                 ->orWhere('type','LIKE', '%'.$searchKey.'%')
+                                                 ->orWhere('project_code','LIKE', '%'.$searchKey.'%')
+                                                 ->orWhere('status', 'LIKE', '%'.$searchKey.'%')->get();
+
+        return view('pages.requestReleaseAdmin')->with('requests',$requests);
 
     }
 
