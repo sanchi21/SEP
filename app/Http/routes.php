@@ -217,11 +217,12 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('Allocate/SearchResource', array('as' => 'SearchResource', 'uses' => 'AllocationController@SearchResource'));
     Route::post('Allocate/SendResource', array('as' => 'SendResource', 'uses' => 'AllocationController@SendResource'));
     Route::post('Allocate/viewAllocatedHardware', array('as' => 'viewAllocatedHardware', 'uses' => 'AllocationController@viewAllocatedHardware'));
+    Route::post('Allocate/CheckAvailability', array('as' => 'CheckAvailability', 'uses' => 'AllocationController@CheckAvailability'));
 
 
     Route::get('ViewAll','AllocationController@getViewAll');
     Route::post('ViewAll', array('as' => 'ViewAll', 'uses' => 'AllocationController@ViewAll'));
-    Route::get('ViewHardwareResources','AllocationController@getViewOfAllocations');
+    //Route::get('ViewHardwareResources','AllocationController@getViewOfAllocations');
 
     Route::get('ViewGraphs','AllocationController@getAllocationReports');
     Route::post('ViewGraphs', array('as' => 'ViewAllocationGraph', 'uses' => 'AllocationController@ViewAllocationGraph'));

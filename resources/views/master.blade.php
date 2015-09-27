@@ -77,6 +77,8 @@
 
             <li class="nav-item" id="TrackResource"><a id="TrackResource_a" href=" {{ URL::route('TrackResource') }}"><img src="{{asset('/includes/images/icons/track.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;TrackResource</a></li>
             <li class="nav-item" id="HardwareMaintenance"><a id="HardwareMaintenance_a" href=" {{ URL::route('HardwareMaintenance') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Maintenance</a></li>
+            <li class="nav-item" id="MonthlyExpenses"><a id="MonthlyExpenses_a" href=" {{ URL::route('ViewMonthlyExpenses') }}"><img src="{{asset('/includes/images/icons/options.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Expenditure</a></li>
+
 
         <li class="nav-item" id="renewalAccept" ><a id="renewalAccept_a" href=" {{ URL::route('renewalAccept') }}"><img src="{{asset('/includes/images/icons/renew.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Renewal&nbsp;Requests</a></li>
         <li class="nav-item" id="releaseResource"><a id="releaseResource_a" href=" {{ URL::route('releaseResource') }}"><img src="{{asset('/includes/images/icons/release.png')}}" alt="Options" style="width:20px;height:20px">&nbsp;&nbsp;Release&nbsp;Resources</a></li>

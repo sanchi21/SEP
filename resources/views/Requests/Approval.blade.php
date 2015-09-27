@@ -21,6 +21,32 @@
                 });
    </script>
 
+   <div >
+                              @if(Session::has('flash_message_savedChanges'))
+
+                              <div class="alert alert-success">
+                                     {{Session::get('flash_message_savedChanges')}}
+                              </div>
+                              @endif
+
+                              <script>
+                                       $('div.alert').delay(4000).slideUp(300);
+                              </script>
+   </div>
+
+   <div >
+                              @if(Session::has('flash_message_CancelModification'))
+
+                                 <div class="alert alert-danger">
+                                      {{Session::get('flash_message_CancelModification')}}
+                                 </div>
+                              @endif
+
+                              <script>
+                                       $('div.alert').delay(4000).slideUp(300);
+                              </script>
+   </div>
+
 
 <h2 style="color: #9A0000">Manage Procurement Requests</h2>
 
@@ -63,34 +89,6 @@
         @if( (  ($requestedItems != null) &&  ( $id != null) )   )
         @if($id != "-- Select Procurement Request --")
 
-             <div >
-                   @if(Session::has('flash_message_savedChanges'))
-
-                   <div class="alert alert-success">
-                          {{Session::get('flash_message_savedChanges')}}
-                   </div>
-                   @endif
-
-                   <script>
-                            $('div.alert').delay(4000).slideUp(300);
-                   </script>
-             </div>
-
-             <div >
-                   @if(Session::has('flash_message_CancelModification'))
-                   @if(  !(Session::has('flash_message_savedChanges')) )
-
-                      <div class="alert alert-danger">
-                           {{Session::get('flash_message_CancelModification')}}
-                      </div>
-                   @endif
-                   @endif
-                   <script>
-                            $('div.alert').delay(4000).slideUp(300);
-                   </script>
-             </div>
-
-
             <div class="panel panel-default"  style="width: 100%">
                 <div class="panel-body">
 
@@ -100,7 +98,7 @@
 
                 </br><td width="20%"><label style="font-size: 16px;color: #9A0000 ">Edit</label></td>
                 <td width="28%"> <input type="checkbox" name="test" value="a" /></td>
-                <td><a href="/download/{{$id}}" class="btn btn-large pull-right"><i class="icon-download-alt"> </i> Download Attachment</a></td>
+                <td><a href="/download/{{$id}}" class="btn btn-large pull-right"><i class="icon-download-alt"> </i><span class="glyphicon glyphicon-download"></span> Download Attachment</a></td>
 
                 <div id="tab-count">
 
@@ -209,7 +207,7 @@
         <form action="{{ URL::route('ApproveRequest') }}" method="post">
               <tr>
                     <th width="25%">Note</th>
-                    @if(Session::has('flash_viewApprovalRequests') ||Session::has('flash_message_CancelModification')||Session::has('flash_message_savedChanges'))
+                    @if(Session::has('flash_viewApprovalRequests') )
                      <th width="25%">vendor</th>
                     @endif
                     <th width="25%">Status</th>
@@ -222,7 +220,7 @@
 
 
 
-                   @if(Session::has('flash_viewApprovalRequests') ||Session::has('flash_message_CancelModification')||Session::has('flash_message_savedChanges'))
+                   @if(Session::has('flash_viewApprovalRequests'))
                    <td>
                        <select class="form-control" style="padding: 0px 0px;height: 32px; width:80%" name="selectVendorId" id="selectVendorId">
 
@@ -270,7 +268,7 @@
               <tr>
                   <td></td>
                   <td></td>
-                  @if(Session::has('flash_viewApprovalRequests') ||Session::has('flash_message_CancelModification')||Session::has('flash_message_savedChanges'))
+                  @if(Session::has('flash_viewApprovalRequests'))
                     <td></td>
                   @endif
                    <td>
@@ -287,7 +285,7 @@
               <tr>
                   <td></td>
                   <td></td>
-                  @if(Session::has('flash_viewApprovalRequests') ||Session::has('flash_message_CancelModification')||Session::has('flash_message_savedChanges'))
+                  @if(Session::has('flash_viewApprovalRequests') )
                     <td></td>
                   @endif
                   <td>
@@ -334,7 +332,7 @@
       }
 
   function popupCancel(){
-       var r = confirm("Are sure that you want to cancel this ftp account request?");
+       var r = confirm("Are sure that you want to cancel this modification?");
               if (r == true) {
                   document.getElementById("valueApprovalCancel").value=true;
               } else {

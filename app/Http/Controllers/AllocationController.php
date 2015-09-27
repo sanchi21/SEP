@@ -769,7 +769,7 @@ class AllocationController extends Controller {
      *
      */
 
-    Public function getAllocationReports()
+    Public function CheckAvailability()
     {
         try
         {
@@ -846,6 +846,12 @@ class AllocationController extends Controller {
     }
 
 
+//
+//    Public function CheckAvailability()
+//    {
+//
+//
+//    }
 
 
 }

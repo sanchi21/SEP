@@ -20,7 +20,7 @@
 
         <input type="button" class="btn btn-primary form-control" style="float: right;width:50px"  value="Print" onclick="printAllocation('order','maintenance','total','header','chartContainer')"></button></br>
 
-        </br>
+        </br></br>
 
         <table class="table table-hover-l" style="width: 100%">
 
@@ -283,7 +283,7 @@
 
  <script >
 
- {{--@if( $totalCost != "" || $totalCostMain != "" )--}}
+ @if( $totalCost != "" || $totalCostMain != "" )
 
   Morris.Donut({
             element: 'chartContainer',
@@ -299,7 +299,7 @@
 
               ]
           });
- {{--@endif--}}
+ @endif
 
  </script>
 
