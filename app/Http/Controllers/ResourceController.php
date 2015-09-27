@@ -5,7 +5,10 @@ use App\Depreciation;
 use App\DropDown;
 use App\Hardware;
 use App\Http\Requests;
+use App\ProcurementItem;
 use App\Resource;
+use App\SelectedColumn;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use App\Type;
@@ -124,27 +127,42 @@ class ResourceController extends Controller {
         $types = Type::all();
         $id = "All";
         $column = 'inventory_code';
+        $userId = Auth::User()->id;
+
+        $selected = SelectedColumn::where('user_id',$userId)->where('table_name','hardware')->where('type','All')->first();
+
+        $selectedColumns = array('0');
+        if(!is_null($selected))
+            $selectedColumns = explode('-',$selected->columns);
 
         try
         {
-            $columns = Column::select('table_column', 'column_name', 'cid')->groupBy('table_column')->orderBy('cid')->get();
+            $columns = Column::select('table_column', 'column_name', 'cid')->join('types','types.category','=','columns.category')->groupBy('table_column')->orderBy('cid')->get();
+            $columns2 = Column::select('table_column', 'column_name', 'cid')->whereIn('cid',$selectedColumns)->join('types','types.category','=','columns.category')->groupBy('table_column')->orderBy('cid')->get();
         }
         catch(\Exception $e)
         {
             return Redirect::back()->withErrors($e->getMessage());
         }
 
-        return view('ManageResource.editHardware',compact('hardwares','types','id','column','columns'));
+        return view('ManageResource.editHardware',compact('hardwares','types','id','column','columns','selectedColumns','columns2'));
     }
 
     public function edit($id)
     {
         $types = Type::all();
         $column = "inventory_code";
+        $userId = Auth::User()->id;
+        $selected = SelectedColumn::where('user_id',$userId)->where('table_name','hardware')->where('type',$id)->first();
+
+        $selectedColumns = array('0');
+        if(!is_null($selected))
+            $selectedColumns = explode('-',$selected->columns);
 
         try
         {
-            $columns = Column::where('category', $id)->get();
+            $columns = Column::join('types','types.category','=','columns.category')->where('types.category', $id)->get();
+            $columns2 = Column::whereIn('cid',$selectedColumns)->join('types','types.category','=','columns.category')->get();
             if ($id == 'All') {
                 $hardwares = Hardware::paginate(30);
                 $columns = Column::all();
@@ -157,23 +175,29 @@ class ResourceController extends Controller {
             return Redirect::back()->withErrors($e->getMessage());
         }
 
-        return view('ManageResource.editHardware',compact('hardwares','types','id','column','columns'));
+        return view('ManageResource.editHardware',compact('hardwares','types','id','column','columns','selectedColumns','columns2'));
     }
 
 
     public function search()
     {
-        try {
+        try
+        {
             $key = Input::get('search_t');
             $type = Input::get('category');
             $id = substr($type, 15);
             $ascend = Input::get('ascend');
             $descend = Input::get('descend');
             $column = Input::get('sort');
-            $columns = Column::select('table_column', 'column_name', 'cid')->groupBy('table_column')->orderBy('cid')->get();
+            $search = Input::get('search');
+            $selectedColumns = Input::get('existing_attribute');
+            $user_id = Auth::User()->id;
+
+            $columns = Column::select('table_column', 'column_name', 'cid')->join('types','types.category','=','columns.category')->groupBy('columns.table_column')->orderBy('columns.cid')->get();
+            $columns2 = Column::whereIn('cid',$selectedColumns)->join('types','types.category','=','columns.category')->get();
 
             if($id!='All')
-                $columns = Column::select('table_column', 'column_name', 'cid')->where('category',$id)->groupBy('table_column')->orderBy('cid')->get();
+                $columns = Column::join('types','types.category','=','columns.category')->where('types.category', $id)->get();
 
             $types = Type::all();
 
@@ -187,7 +211,7 @@ class ResourceController extends Controller {
                     $hardwares = DB::table('Hardware')->orderBy($column, 'desc')->paginate(30);
                 else
                     $hardwares = DB::table('Hardware')->where('type', $id)->orderBy($column, 'desc')->paginate(30);
-            } else {
+            } elseif($search == 'search'){
 
                 $hardwares = Hardware::where('inventory_code', 'LIKE', '%' . $key . '%')->
                 orWhere(function ($query) use ($key) {
@@ -219,13 +243,51 @@ class ResourceController extends Controller {
                 })->
                 paginate(30);
             }
+            else
+            {
+                $this->storeColumns($selectedColumns,$id,$user_id);
+                if($id=='All')
+                    $hardwares = DB::table('Hardware')->orderBy($column, 'asc')->paginate(30);
+                else
+                    $hardwares = DB::table('Hardware')->where('type', $id)->paginate(30);
+            }
         }
         catch(\Exception $e)
         {
             return Redirect::back()->withErrors($e->getMessage());
         }
 
-        return view('ManageResource.editHardware',compact('hardwares','types','id','column','columns'));
+        return view('ManageResource.editHardware',compact('hardwares','types','id','column','columns','selectedColumns','columns2'));
+    }
+
+    public function storeColumns($columns,$category,$userId)
+    {
+        if(!is_null($columns))
+        {
+            $columnIds = '';
+
+            foreach ($columns as $column)
+            {
+                $columnIds = $columnIds.$column.'-';
+            }
+
+            $colData = DB::table('selected_columns')->where('user_id',$userId)->where('table_name','hardware')->where('type',$category)->first();
+            if(!is_null($colData))
+            {
+                $colData = DB::table('selected_columns')->where('user_id',$userId)->where('table_name','hardware')->where('type',$category)
+                    ->update(['columns' => $columnIds]);
+            }
+            else
+            {
+                $columnData = new SelectedColumn();
+                $columnData->user_id = $userId;
+                $columnData->table_name = 'hardware';
+                $columnData->type = $category;
+                $columnData->columns = $columnIds;
+
+                $columnData->save();
+            }
+        }
     }
 
     public function editSpecific($d)
@@ -352,5 +414,20 @@ class ResourceController extends Controller {
             DB::rollback();
             \Session::flash('flash_message_error', 'Hardware deletion failed!');
         }
+    }
+
+    public function inventory($category,$request_id,$item)
+    {
+        $columns = Column::where('category', $category)->get();
+        $id = $category;
+        $key = Hardware::getInventoryCode($id);
+
+        $item = ProcurementItem::where('pRequest_no',urldecode(base64_decode($request_id)))->where('item_no',urldecode(base64_decode($item)))->first();
+
+        $dropValues = $this->getDropDownValues($columns);
+        $count = count($dropValues);
+
+
+        return view('Procument.inventory',compact('dropValues','types','columns','count','id','key','item','category'));
     }
 }

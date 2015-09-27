@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Mail;
 
 class OtherRequestController extends Controller {
 
-	/**
-	 * Display initial request form for other requests.
-	 *
-	 * @return Other Request form
-	 */
-	public function index()
-	{
+    /**
+     * Display initial request form for other requests.
+     *
+     * @return Other Request form
+     */
+    public function index()
+    {
         //Get all the other request types available
         $requestTypes = RequestType::all();
 
@@ -45,18 +45,18 @@ class OtherRequestController extends Controller {
         $count = count($dropValues);
 
         return view('NewRequest.otherRequest',compact('dropValues','requestTypes','columns','count','id','key'));
-	}
+    }
 
 
-	/**
-	 * show the request form for the given request type
-	 *
+    /**
+     * show the request form for the given request type
+     *
      * @param Request Type
      *
-	 * @return Request Type form
-	 */
-	public function create($id)
-	{
+     * @return Request Type form
+     */
+    public function create($id)
+    {
         //Get all the other request types available
         $requestTypes = RequestType::all();
 
@@ -80,7 +80,7 @@ class OtherRequestController extends Controller {
         $count = count($dropValues);
 
         return view('NewRequest.otherRequest',compact('dropValues','requestTypes','columns','count','id','key'));
-	}
+    }
 
 
     /**
@@ -90,10 +90,10 @@ class OtherRequestController extends Controller {
      * @return Response
      */
 
-	public function store()
-	{
+    public function store()
+    {
         //get all the input values
-		$input = Input::all();
+        $input = Input::all();
 
         //get the request type
         $requestType = substr($input['request_type'],15);
@@ -204,7 +204,7 @@ class OtherRequestController extends Controller {
         }
 
         return Redirect::action('OtherRequestController@index');
-	}
+    }
 
 
     /**
@@ -258,8 +258,8 @@ class OtherRequestController extends Controller {
      * @return Other request type approval form
      */
 
-	public function editAll($id)
-	{
+    public function editAll($id)
+    {
         if($id=='')
         {
             $temp = GRequest::select('type')->where('g_status',1)->get();
@@ -273,7 +273,7 @@ class OtherRequestController extends Controller {
         $columns = Column::select('table_column', 'column_name', 'cid')->where('category',$id)->orderBy('cid')->get();
 
         return view('NewRequest.otherRequestAccept',compact('gRequests','requestTypes','requests','columns','id','prCodes','pr'));
-	}
+    }
 
     /**
      * show the pending requests for approval or rejection
@@ -282,8 +282,8 @@ class OtherRequestController extends Controller {
      *
      * @return Other request type approval form
      */
-	public function edit($id,$pr)
-	{
+    public function edit($id,$pr)
+    {
         $prCodes = GRequest::select('pr_code')->where('type',$id)->where('g_status',1)->groupBy('pr_code')->get();
         $gRequests = GRequest::where('pr_code',$pr)->where('g_status',1)->get();
         $requestTypes = RequestType::all();
@@ -291,7 +291,7 @@ class OtherRequestController extends Controller {
         $columns = Column::select('table_column', 'column_name', 'cid')->where('category',$id)->orderBy('cid')->get();
 
         return view('NewRequest.otherRequestAccept',compact('gRequests','requestTypes','requests','columns','id','prCodes','pr'));
-	}
+    }
 
 
     /**
@@ -301,8 +301,8 @@ class OtherRequestController extends Controller {
      * @return Response
      */
 
-	public function update()
-	{
+    public function update()
+    {
         //get all the inputs
         $input = Input::all();
 
@@ -352,7 +352,7 @@ class OtherRequestController extends Controller {
 
         return Redirect::to('/home');
 
-	}
+    }
 
     public function updateRequest($requestId,$requestType)
     {
@@ -381,10 +381,49 @@ class OtherRequestController extends Controller {
         }
     }
 
-	public function destroy($id)
-	{
-		//
-	}
+    public function view($requestType,$prCode,$status)
+    {
+        //get the columns/fields of the request type table to load the html page
+        $columns = Column::where('category', $requestType)->get();
+        $index = strrpos($status,"/");
+        $stat = substr($status,($index + 1));
+        $requests = '';
+
+        if($status == 'All')
+            $requests = DB::table($requestType)->join('g_requests',$requestType.'.request_id','=','g_requests.request_id')->where('g_requests.pr_code',$prCode)->get();
+        else
+            $requests = DB::table($requestType)->where('status',$status)->join('g_requests',$requestType.'.request_id','=','g_requests.request_id')->where('g_requests.pr_code',$prCode)->get();
+
+        return view('NewRequest.viewRequest',compact('requestType','columns','prCode','requests','status'));
+    }
+
+
+    public function cancel()
+    {
+        $requestId = Input::get('request_id');
+        $requestType = Input::get('request_type');
+        $status = true;
+
+        DB::beginTransaction();
+
+        DB::table($requestType)->where('request_id','=',$requestId)->delete();
+        $gRequest = GRequest::find($requestId);
+        $status = $gRequest->delete();
+
+        if($status)
+        {
+            DB::commit();
+            \Session::flash('flash_message', 'Request Cancelled!');
+        }
+        else
+        {
+            DB::rollback();
+            \Session::flash('flash_message_error', 'Request Could not be Cancelled');
+        }
+
+        return Redirect::action('OtherRequestController@index');
+    }
+
 
     /**
      * Get the dropdown values for a given column

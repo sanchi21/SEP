@@ -4,6 +4,21 @@
 
 @section('content')
 
+<script>
+ var tableToExcel = (function() {
+   var uri = 'data:application/vnd.ms-excel;base64,'
+     , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+     , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+     , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+   return function(table, name) {
+     if (!table.nodeType) table = document.getElementById(table)
+     var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+     window.location.href = uri + base64(format(template, ctx))
+   }
+ })()
+</script>
+
+
 <h2 style="color: #9A0000">Edit Hardware Resource</h2>
 
 {!! Form ::open(['method' => 'POST', 'action' => ['ResourceController@update']]) !!}
@@ -20,7 +35,13 @@
 
 <div class="panel-body">
 
+<div align="right">
+    <input type="button"  class="btn btn-success" style="height:36px" onclick="tableToExcel('printTable','Inventory')" value="Export to Excel">&nbsp;&nbsp;
+    <input type="button" onclick="printContent('content12')" class="btn btn-primary" value="Print">&nbsp;&nbsp;
+</div>
+
 <h3>{{$type}}</h3><input type="hidden" name="type" id="type" value="{{$type}}">
+
 <br>
     <table class="table table-hover" id="hardwareTable">
         <tbody id="tableBody">
@@ -80,18 +101,18 @@
 
                                         {{-- Buttons Panel  --}}
 
-    <div class="container" align="right">
+    <div class="panel-body" align="right">
         @if($depreciation)
             <a href="#" class="btn btn-success" style="width: 120px" data-toggle="modal" data-target="#basicModal">Depreciate</a>&nbsp;&nbsp;
         @else
             <?php
                 $inv = str_replace('/','-',($hardware->inventory_code));
                 $temp = "/hardware-depreciate/".$inv  ?>
-            <a href="{{$temp}}" class="btn btn-success" style="width: 120px">Depreciate</a>&nbsp;&nbsp;
+            <a href="{{$temp}}" class="btn btn-success" style="width: 120px; height: 36px">Depreciate</a>&nbsp;&nbsp;
         @endif
 
-        <input type="button" onclick="printContent('content12')" class="btn btn-primary" value="Print">&nbsp;&nbsp;
-        <input type="submit" name="delete" class="btn btn-danger" style="width: 85px" value="Dispose">&nbsp;&nbsp;
+
+        <input type="submit" name="delete" class="btn btn-danger" style="width: 85px;height: 36px" value="Dispose">&nbsp;&nbsp;
         {{--<input type="submit" name="update" class="btn btn-primary" value="Update" onclick="javascript:return validation2()">--}}
         <input type="submit" name="update" class="btn btn-primary" value="Update">
 
@@ -191,7 +212,7 @@
 <div name = "report-header">
         <table width="100%">
             <tr>
-                <td width="50%"><img src="/includes/images/zone_logo.png" height="70px" width="200px"></td>
+                <td width="50%"><img src="/includes/images/zone_logo.png" height="30px" width="90px"></td>
                 <td width="50%"></td>
             </tr>
             <tr>
@@ -222,38 +243,25 @@
 
 <h3>{{$type}}</h3>
 <br>
-    <table class="table table-hover" id="hardwareTable">
+    <table class="table table-bordered" id="printTable">
         <tbody id="tableBody">
 
-        <?php $x = 0;
-         $y = 0;?>
 
         @foreach($columns as $col)
 
             <?php
                $attribute = $col->table_column;
             ?>
-
-            @if($x == 0)
-                <tr>
-            @elseif($x % 2 == 0)
-                </tr>
-                <tr>
-            @endif
+            <tr>
                 <td>
-                    {{$col->column_name}}
+                    <b>{{$col->column_name}}</b>
                 </td>
                 <td>
                     {{$hardware->$attribute}}
                 </td>
-                <?php $x++; ?>
+            </tr>
         @endforeach
 
-        @if($x % 2 != 0)
-            <td></td>
-            <td></td>
-            </tr>
-        @endif
         </tbody>
     </table>
 

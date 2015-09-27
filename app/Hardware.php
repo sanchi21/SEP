@@ -71,4 +71,39 @@ class Hardware extends Model {
         return $newCode;
     }
 
+    public function getHardwareData($selectCols,$cat,$group,$orderBy,$order,$dt,$dtSt,$dtEd,$vl,$vlSt,$vlEd)
+    {
+        $hardware = '';
+
+        if($dt == 'None' && $vl == 'None')
+        {
+            $hardware = Hardware::select($selectCols)->where('type',$cat)
+                ->groupBy($group)
+                ->orderBy($orderBy,$order)
+                ->get();
+        }
+        elseif($dt == 'None' && $vl != 'None')
+        {
+            $hardware = Hardware::select($selectCols)->where('type',$cat)->whereBetween($vl,array($vlSt,$vlEd))
+                ->groupBy($group)
+                ->orderBy($orderBy,$order)
+                ->get();
+        }
+        elseif($dt != 'None' && $vl == 'None')
+        {
+            $hardware = Hardware::select($selectCols)->where('type',$cat)->whereBetween($dt,array($dtSt,$dtEd))
+                ->groupBy($group)
+                ->orderBy($orderBy,$order)
+                ->get();
+        }
+        else
+        {
+            $hardware = Hardware::select($selectCols)->where('type', $cat)->whereBetween($dt, array($dtSt, $dtEd))->whereBetween($vl, array($vlSt, $vlEd))
+                ->groupBy($group)
+                ->orderBy($orderBy,$order)
+                ->get();
+        }
+        return $hardware;
+    }
+
 }

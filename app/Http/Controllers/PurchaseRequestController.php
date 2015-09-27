@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Mail;
+use App\Type;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use League\Flysystem\Exception;
 
@@ -192,10 +193,14 @@ class PurchaseRequestController extends Controller {
         return $email;
     }
 
-	public function show($id)
-	{
-		//
-	}
+    public function inventoryView($id)
+    {
+        $items = ProcurementItem::where('pRequest_no',$id)->where('status','Approved')->join('p_items','procurement_items.item_no','=','p_items.id')->get();
+        $types = Type::all();
+
+        return view('Procument.addToInventory',compact('items','types'));
+    }
+
 
 	/**
 	 * Show the form for editing the specified resource.

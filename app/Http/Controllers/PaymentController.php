@@ -2,6 +2,8 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\ProcurementItem;
+use App\Type;
 use Illuminate\Support\Facades\DB;
 
 use Request;
@@ -177,18 +179,19 @@ class PaymentController extends Controller {
 
         $reqID = $input['reqID'];
 
-        $status = DB::table('orders')->where('request_id', $reqID)
-                ->update(array('status'=>"Purchased"));
+//        $status = DB::table('orders')->where('request_id', $reqID)
+//                ->update(array('status'=>"Purchased"));
 
-        if($status)
-
-        {
+//        if($status)
+//
+//        {
 
             \Session::flash('flash_message','Purchase Update was successful');
 
-            return Redirect::action('PaymentController@getOrders');
+            return Redirect::action('PurchaseRequestController@inventoryView',array('id' => $reqID));
 
-        }
+        //}
+        //return Redirect::action('PurchaseRequestController@inventoryView',array('id' => $reqID));
 
     }
 

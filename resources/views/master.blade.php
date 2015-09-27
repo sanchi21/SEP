@@ -104,6 +104,8 @@
 
                 <li class="nav-item" id="renewal"><a id="renewal_a" href=" {{ URL::route('renewal') }}"><img src="{{asset('/includes/images/icons/renew.png')}}" alt="Edit Software" style="width:18px;height:18px">&nbsp;&nbsp;Renew&nbsp;Project</a></li>
    @endif
+
+    <li class="nav-item"></li>
   </ul>
 <input type="checkbox" id="nav-trigger" class="nav-trigger"/>
 

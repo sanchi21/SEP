@@ -10,6 +10,21 @@
                     });
                 });
 </script>
+
+<script>
+ var tableToExcel = (function() {
+   var uri = 'data:application/vnd.ms-excel;base64,'
+     , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+     , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+     , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+   return function(table, name) {
+     if (!table.nodeType) table = document.getElementById(table)
+     var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+     window.location.href = uri + base64(format(template, ctx))
+   }
+ })()
+</script>
+
 <style>
 .dropdown-menu {
 max-height: 370px;
@@ -43,7 +58,7 @@ margin-left:50px;
        <input type="text" name="search_t" class="form-control input-sm" style="width: 200px" placeholder="Search">{{--<label style="width: 100px">Search</label>--}}
     </td>
     <td>
-        &nbsp;<button type="submit" class="btn btn-primary" style="height: 30px;"><span class="glyphicon glyphicon-search"></span> </button>
+        &nbsp;<button type="submit" name="search" value="search" class="btn btn-primary" style="height: 30px;"><span class="glyphicon glyphicon-search"></span> </button>
     </td>
     <td>
     &nbsp;&nbsp;&nbsp;
@@ -65,7 +80,7 @@ margin-left:50px;
         </td>
         <td>
             <select id="sort" name="sort" class="form-control input-sm" style="width: 200px">
-                @foreach($columns as $c)
+                @foreach($columns2 as $c)
                     <option value="{{$c->table_column}}" @if($c->table_column==$column) selected @endif>{{$c->column_name}}</option>
                 @endforeach
             </select>
@@ -81,11 +96,24 @@ margin-left:50px;
             <label style="width: 90px">Columns</label>
         </td>
         <td>
-            <select id="existing_attribute" name="existing_attribute[]" class="form-control input-sm" style="width: 180px; min-height: 30px" multiple="multiple">
+            <select id="existing_attribute" name="existing_attribute[]" class="form-control input-sm" style="width: 180px; min-height: 30px" multiple="multiple" onchange="this.form.submit()">
+
                 @foreach($columns as $col)
-                    @if($col->table_column != 'inventory_code')
-                   	    <option value='{{$col->table_column}}' @if($col->column_name == 'Description' || $col->column_name == 'Make') selected @endif>{{ $col->column_name }}</option>
+
+                    <?php $sel = false ; ?>
+                    @foreach($selectedColumns as $selected)
+                        <?php $temp = ($selected == $col->cid) ? true : false;
+                            if($temp)
+                                $sel = true;
+                        ?>
+                    @endforeach
+
+                    @if($col->table_column == 'inventory_code')
+                        <option value='{{$col->cid}}' selected>{{ $col->column_name }}</option>
+                   	@else
+                   	    <option value='{{$col->cid}}' @if($sel) selected @endif>{{ $col->column_name }}</option>
                    	@endif
+
                 @endforeach
             </select>
         </td>
@@ -94,15 +122,29 @@ margin-left:50px;
 {!! Form ::close() !!}
 </div>
 
-<div align="right"><label><b>Max Display Per Page : 30 Items</b></label></div>
+<div align="right">
+
+    @if($id != 'All')
+        <a href="/hardware-report/{{$id}}"><button class="btn btn-warning" style="height: 36px">Advanced Reports</button></a>&nbsp;
+    @endif
+
+    <input type="button"  class="btn btn-success" style="height:36px" onclick="tableToExcel('printTable','Inventory')" value="Export to Excel">&nbsp;
+    <input type="button"  class="btn btn-primary" style="width:90px; text-align: center" onclick="printContent('content12')" value="Print">&nbsp;
+
+    <br><br>
+        <label><b>Max Display Per Page : 30 Items</b></label>
+
+</div>
 
 <div class="span12" style="overflow:auto; min-height: 300px;height: 500px">
 
 <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
     <tr id="headRow" style="background-color: #e7e7e7;">
-        @foreach($columns as $c)
+        @foreach($columns2 as $c)
             <?php $tm = str_replace(' ','&nbsp;', $c->column_name) ?>
+
             <th>{{$tm}}</th>
+
         @endforeach
         <th></th>
     </tr>
@@ -113,7 +155,7 @@ margin-left:50px;
     @if($hardware->type == $id || $id=='All')
     {!! Form ::open(['method' => 'POST', 'action' => ['ResourceController@editSpecific']]) !!}
     <tr>
-        @foreach($columns as $col)
+        @foreach($columns2 as $col)
         <td>
             <div class="hideextra">
             <?php $attribute = $col->table_column; ?>
@@ -159,7 +201,8 @@ margin-left:50px;
 <div name = "report-header">
         <table width="100%">
             <tr>
-                <td width="50%"><img src="/includes/images/zone_logo.png" height="70px" width="200px"></td>
+                {{--<td width="50%"><img src="/includes/images/zone_logo.png" height="70px" width="200px"></td>--}}
+                <td width="50%"><img src="/includes/images/zone_logo.png" height="30px" width="90px"></td>
                 <td width="50%"></td>
             </tr>
             <tr>
@@ -189,9 +232,9 @@ margin-left:50px;
     </div>
 <br>
 
-<table class="table table-bordered" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
+<table class="table table-bordered" id="printTable" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
     <tr id="headRow" style="background-color: #e7e7e7;">
-        @foreach($columns as $c)
+        @foreach($columns2 as $c)
             <?php $tm = str_replace(' ','&nbsp;', $c->column_name) ?>
             <th>{{$tm}}</th>
         @endforeach
@@ -203,7 +246,7 @@ margin-left:50px;
     @foreach($hardwares as $hardware)
 
     <tr>
-        @foreach($columns as $col)
+        @foreach($columns2 as $col)
         <td>
             <?php $attribute = $col->table_column; ?>
 
@@ -243,3 +286,4 @@ margin-left:50px;
         document.body.innerHTML = restorepage;
     }
 </script>
+

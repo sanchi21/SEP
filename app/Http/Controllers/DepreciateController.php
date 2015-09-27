@@ -18,6 +18,7 @@ class DepreciateController extends Controller {
         $inventory_code = str_replace('-','/',$id);
         $depreciation = Depreciation::find($inventory_code);
         $method = $depreciation->method;
+        $inventory = Depreciation::all();
         $depreciate = '';
         $dVal = array();
         $hardware = Hardware::find($inventory_code);
@@ -39,7 +40,7 @@ class DepreciateController extends Controller {
         }
 
 
-        return view('ManageResource.depreciation',compact('depreciate','hardware','dVal'));
+        return view('ManageResource.depreciation',compact('depreciate','hardware','dVal','inventory'));
     }
 
 

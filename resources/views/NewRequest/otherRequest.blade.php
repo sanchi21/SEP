@@ -35,10 +35,9 @@
             <div class="col-xs-4 col-md-2">
                 <label style="font-size: 18px" name="category">Request Type</label>
             </div>
-
+            <input type="hidden" name="xyz" value="123">
             <div class="col-xs-4 col-md-4">
-                <select id="request-type" name="request_type" class="form-control" style="width: 250px" onchange="javascript:location.href = this.value;">
-
+                <select id="request_type" name="request_type" class="form-control" style="width: 250px" onchange="javascript:location.href = this.value;">
                     @foreach($requestTypes as $type)
                         <?php $name = str_replace('_','-',strtoupper($type->request_type)) ?>
                         <option value='/other-request/{{$type->request_type}}' @if($id==$type->request_type) selected @endif>{{ $name }}</option>
@@ -119,7 +118,7 @@
             </div>
 
             <div class="col-xs-4 col-md-4">
-                <select name="PR_Code" class="form-control" style="width: 250px">
+                <select name="PR_Code" id="PR_Code" class="form-control" style="width: 250px">
                     <option value="P001">P001</option>
                     <option value="P002">P002</option>
                     <option value="P003">P003</option>
@@ -199,7 +198,8 @@
 </div>
 
 <div class="panel-body" align="right">
-{{--{!! Form::submit('Insert',['class' => 'btn btn-primary form-control']) !!}--}}
+
+<input type="button" name="view" value="View" class="btn btn-success" style="height: 36px; vertical-align: center;width: 85px" onclick="javascript:location.href = '/other-request-view/' +  document.getElementById('request_type').value.substring(15) + '/' + document.getElementById('PR_Code').value + '/All' ;">
 {!! Form::submit('Request',['class' => 'btn btn-primary form-control','onclick'=>'javascript:return validationRequest()']) !!}
 {{--{!! Form ::token()!!}--}}
 </div>

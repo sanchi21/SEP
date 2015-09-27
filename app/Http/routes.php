@@ -105,11 +105,21 @@ Route::group(array('middleware' => ['auth']), function() {
 
     Route::get('other-request',array('as'=>'other-request','uses'=>'OtherRequestController@index'));
     Route::get('other-request/{id}','OtherRequestController@create');
+    Route::get('other-request-view/{requestType}/{prCode}/{status}','OtherRequestController@view');
     Route::post('other-request','OtherRequestController@store');
     Route::get('other-request-update',array('as'=>'other-request-update','uses'=>'OtherRequestController@showRequests'));
     Route::get('other-request-update/{id}','OtherRequestController@editAll');
     Route::get('other-request-update/{id}/{pr}','OtherRequestController@edit');
     Route::post('other-request-update','OtherRequestController@update');
+    Route::post('other-request-view','OtherRequestController@cancel');
+
+    Route::get('purchase-view/{request_id}',array('as'=>'purchase-view','uses'=>'PurchaseRequestController@inventoryView'));
+    Route::get('purchase-inventory/{category}/{request_id}/{item}',array('as'=>'purchase-inventory','uses'=>'ResourceController@inventory'));
+    //  Route::post('purchase-inventory/{category}/{request_id}/{item}','ResourceController@store');
+
+    Route::get('hardware-report/{category}',array('as'=>'hardware-report','uses'=>'PrintResourceController@index'));
+    Route::post('hardware-report/','PrintResourceController@generateReport');
+
 
 //--------------------------------------------------------Parthi
     Route::get('addPortion',array('as'=>'addPortion','uses'=>'AddResourcePortion@index'));
@@ -163,7 +173,6 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::get('viewInvoice/{request_id}',array('as'=>'viewInvoice','uses'=>'PaymentController@getInvoice'));
     Route::post('viewInvoice/{request_id}',array('as'=>'viewInvoice','uses'=>'PaymentController@getInvoice'));
 
-//    Route::get('purchaseUp',array('as'=>'purchaseUp','uses'=>'PaymentController@updatePurchase'));
     Route::post('purchaseUp',array('as'=>'purchaseUp','uses'=>'PaymentController@updatePurchase'));
     Route::post('email',array('as'=>'email','uses'=>'PaymentController@sendEmail'));
 
