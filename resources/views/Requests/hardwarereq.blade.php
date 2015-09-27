@@ -3,26 +3,34 @@
 @section('content')
 
 
-<h2 style="color: #9A0000">Request</h2>
+<h2 style="color: #9A0000">Request
+
+<input type="button" class="btn btn-primary form-control" style="float: right;width:50px"  value="Print" onclick="printAllocation('print')"></button>
+
+</h2>
 
 <div class="panel-body">
-<form action="{{ URL::route('requestRes') }}" method="post">
-    <p style="margin-left: 1cm;margin-top: 0.5cm;width: 5%;font-size: small;font-family: Arial">
-    {{--<b><h3 style="color: darkred">Request</h3></b>--}}
 
-<div class="well">
+    <form action="{{ URL::route('requestRes') }}" method="post">
+
+    <div class="well">
     <div class="row">
+
             <div class="col-xs-2 col-md-2" style="width: 150px">
+
                 <label style="font-size: 18px">Start Date</label>
+
             </div>
 
             <div class="col-xs-2 col-md-2">
+
             <div id="datepicker_start" class="input-append">
                 <input type="text" id="start" name="start_date" data-format="yyyy-MM-dd" class="rounded" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
                 <span class="add-on" style="height: 30px;">
                 <i class="glyphicon glyphicon-calendar" data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                 </span>
             </div>
+
             <script type="text/javascript">
                     $(function() {
 
@@ -33,14 +41,17 @@
                             startDate: today
                        });
                     });
-                </script>
+            </script>
             </div>
 
             <div class="col-xs-2 col-md-2" style="width: 150px">
+
                 <label style="font-size: 18px;">End Date</label>
+
             </div>
 
             <div class="col-xs-2 col-md-2">
+
                 <div id="datepicker_end" class="input-append">
                     <input type="text" id="start" name="end_date" data-format="yyyy-MM-dd" class="rounded" placeholder="mm/dd/yyyy" style="height:30px;width: 150px">
                     <span class="add-on" style="height: 30px;">
@@ -58,57 +69,80 @@
                                     startDate: today
                                });
                             });
-                        </script>
+                </script>
             </div>
 
             <div class="col-xs-2 col-md-2" style="width: 150px">
+
                 <label style="font-size: 18px">PR Code</label>
+
             </div>
 
             <div class="col-xs-2 col-md-2" style="width: 250px">
                 <select class="form-control" name="project_id" >
+
                       @foreach($pros as $pro)
                         <option>
-                        {{$pro->os_version}}
+
+                            {{$pro->os_version}}
+
                         </option>
                       @endforeach
+
                     </select>
             </div>
+
+
     </div>
-</div>
+    </div>
 
     </br>
-<div>
-    <div class="row">
+
+
+    <div>
+        <div class="row">
+
             <div class="col-xs-4 col-md-4">
+
                 <h3>Hardware</h3>
+
             </div>
 
-        <div class="col-xs-2 col-md-2">
-            <h3><input type="button" value="+"  class="sbtn" style="width: 35px;height: 35px" onClick="add_Row('dataTable')" />&nbsp;
-            <input type="button" value="-" class="sbtn" style="width: 35px;height: 35px" onClick="delete_Row('dataTable')" /></h3>
+            <div class="col-xs-2 col-md-2">
+
+                 <h3><input type="button" value="+"  class="sbtn" style="width: 35px;height: 35px" onClick="add_Row('dataTable')" />&nbsp;
+                <input type="button" value="-" class="sbtn" style="width: 35px;height: 35px" onClick="delete_Row('dataTable')" /></h3>
+
+             </div>
         </div>
     </div>
-</div>
 
     </p>
 
     <table class="table table-hover" width="100%" style="margin-bottom: 1px">
+
     <tr id="headRow" style="background-color: #e7e7e7;">
+
             <th width="3%"></th>
             <th width="27%">Item</th>
             <th width="70%">Additional Information</th>
-        </tr>
+    </tr>
+
     </table>
+
+
     <table id="dataTable" class="table table-hover" width="100%">
     <tbody>
+
     <tr>
+
     <style>
     input[type="checkbox"]{
       width: 30px; /*Desired width*/
       height: 30px; /*Desired height*/
     }
     </style>
+
      <td width="3%">
          <input type='checkbox' class="form-control"/>
      </td>
@@ -273,7 +307,121 @@
    {!! Form::close() !!}
 </div>
 
-   <script>
+
+{{--PRINT VALUES--}}
+
+<div id="print" style="display: none;">
+
+    <table width="100%">
+
+        <tr>
+              <td width="50%">
+                    <img src="/includes/images/zone_logo.png" height="70px" width="200px">
+              </td>
+
+              <td width="50%"></td>
+        </tr>
+
+        <tr>
+              <td width="50%">
+                       <h4>Zone24x7 (Private) Limited</h4>
+              </td>
+
+              <td width="50%" align="right">
+                       <h4>Date : {{date("d-m-Y")}}</h4>
+              </td>
+        </tr>
+
+        <tr>
+              <td width="50%">
+                        <h4>Nawala Road,</h4>
+              </td>
+
+              <td></td>
+        </tr>
+
+        <tr>
+              <td width="50%">
+                         <h4>Koswatte,</h4>
+              </td>
+
+              <td></td>
+        </tr>
+
+        <tr>
+              <td width="50%">
+                          <h4>Sri Lanka 10107</h4>
+              </td>
+
+              <td></td>
+        </tr>
+
+    </table>
+
+    <h2 align="center">Hardware And Software Requests</h2>
+
+    </br>
+
+
+ @if($project_id !=null)
+
+    <h4 style="color: maroon"><b>Project Code&nbsp;-&nbsp;{{$project_id}}</b></h4></br>
+
+    <table id="TablePrint"  class="table table-hover" style="font-size: medium;font-family: Arial" >
+
+    <tbody>
+
+    <tr style="width: 20%;background-color: #e7e7e7;">
+
+         <td align="left">{!! Form::label('request_id','Request ID') !!} </td>
+
+         <td align="left">{!! Form::label('sub_id','Sub ID') !!} </td>
+
+         <td align="left">{!! Form::label('item','Item') !!} </td>
+
+         <td align="left">{!! Form::label('device_type','Device Type')!!} </td>
+
+         <td align="left">{!! Form::label('model','Model')!!} </td>
+
+         <td align="left">{!! Form::label('additional_information','Additional Information')!!} </td>
+
+         <td align="left">{!! Form::label('request_status','Request Status')!!} </td>
+
+    </tr>
+
+    @foreach($all_requests as $all)
+
+        <form action="{{ URL::route('requestRes') }}" method="post">
+
+        <tr>
+
+            <td>{{$all->request_id}}</td>
+            <td>{{$all->sub_id}}</td>
+            <td>{{$all->item}}</td>
+            <td>{{$all->device_type}}</td>
+            <td>{{$all->model}}</td>
+            <td>{{$all->additional_information}}</td>
+            <td style="color: maroon">{{$all->status}}</td>
+
+        </tr>
+
+        </form>
+    @endforeach
+
+    </tbody>
+
+    </table>
+
+ @endif
+
+
+</div>
+
+
+
+
+<script>
+
    function add_Row(tableID) {
    	var table = document.getElementById(tableID);
    	var rowCount = table.rows.length;
@@ -320,7 +468,20 @@
       var y= document.getElementById("Table2").rows.length;
       document.getElementById("test1").value=y;
    }
-   </script>
+
+</script>
+
+
+
+<script>
+        function printAllocation(print){
+            var restorepage = document.body.innerHTML;
+            var printcontent1 = document.getElementById(print).innerHTML;
+            document.body.innerHTML = printcontent1;
+            window.print();
+            document.body.innerHTML = restorepage;
+        }
+</script>
 
 
 

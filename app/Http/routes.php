@@ -200,6 +200,9 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('ViewAll', array('as' => 'ViewAll', 'uses' => 'AllocationController@ViewAll'));
     Route::get('ViewHardwareResources','AllocationController@getViewOfAllocations');
 
+    Route::get('ViewGraphs','AllocationController@getAllocationReports');
+    Route::post('ViewGraphs', array('as' => 'ViewAllocationGraph', 'uses' => 'AllocationController@ViewAllocationGraph'));
+
     Route::get('AssignFolder','FolderController@ViewFolder');
     Route::post('AssignFolder', array('as' => 'ViewFolderRequests', 'uses' => 'FolderController@ViewFolderRequests'));
     //Route::post('AssignFolder/AssignData', array('as' => 'AssignData', 'uses' => 'FolderController@AssignData'));
@@ -219,6 +222,9 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('ftpreq','FtpController@Ftp');
     Route::get('ftpreq', array('as'=>'ftpreq','uses'=>'FtpController@FindU'));
 
+    Route::get('ViewAccounts','FolderController@getViewAccounts');
+    Route::post('ViewAccounts', array('as' => 'EditAccountChanges','uses'=>'FolderController@EditAccountChanges'));
+
     Route::get('Connectivity','FtpController@ViewConnectivity');
     Route::post('Connectivity', array('as' => 'Connectivity','uses'=>'FtpController@SendConnRequest'));
 
@@ -228,6 +234,10 @@ Route::group(array('middleware' => ['auth']), function() {
 
     Route::get('HardwareMaintenance','AllocationController@getHardwareMaintenance');
     Route::post('HardwareMaintenance', array('as' => 'HardwareMaintenance','uses'=>'AllocationController@SaveHardwareCost'));
+
+    Route::get('MonthlyExpenses','MonthlyExpensesController@getMonthlyExpenses');
+    Route::post('MonthlyExpenses', array('as' => 'ViewMonthlyExpenses', 'uses' => 'MonthlyExpensesController@ViewMonthlyExpenses'));
+
 
     Route::get('/download/{id}', 'ApprovalController@getDownload');
 

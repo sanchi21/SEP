@@ -16,6 +16,7 @@
             <tr style="background-color: #e7e7e7;">
                 <th width="80%">Project&nbsp;Code</th>
                 <th width="10%">Requests</th>
+                <th width="10%">View & Edit</th>
              </tr>
 
         <tbody>
@@ -25,7 +26,7 @@
 
                 <td>
                     <select class="form-control" name="project_ids">
-                        <option>-- Select Procurement Request --</option>
+                        <option>-- Select Project Code --</option>
                         @foreach($ids as $id)
                             <option>
                                     {{$id->project_id}}
@@ -40,6 +41,8 @@
 
                 {!! Form::token() !!}
                 <td> {!! Form::submit('View',['class'=>'btn btn-primary form-control','name'=>'ViewRequests']) !!}</td>
+                <td><button type="submit" class="btn btn-primary" style="height: 32px;" name="allocation" id="allocation"><span class="glyphicon glyphicon-edit"></span> </button></td>
+
 
         </form>
 
@@ -141,9 +144,9 @@
                                                 {{--@if( (Session::has('flash_Assign')  && $ftp->sub_id==$sub_id) || Session::has('flash_message_url_error'  && $ftp->sub_id==$sub_id) )--}}
                                                 <form action="{{ URL::route('AssignDataToDb') }}" method="post">
 
-                                                <td><input type="text" class="form-control" name="username" id="username" placeholder="Username" value="{{$username[$count]}}" disabled="disabled" style="height: 30px "   tabindex="1" value="" /></td>
-                                                <td><input type="password" class="form-control" name="psw" id="psw"  style="height: 30px "   tabindex="1" value="{{$password[$count]}}" disabled="disabled" /></td>
-                                                <td><input type="text" class="form-control" name="link" id="link" placeholder="Path"  style="height: 30px "   tabindex="1" value="" /></td>
+                                                <td><input type="text" class="form-control" name="username" id="username" placeholder="Username"  style="height: 30px " tabindex="1" value="{{$username}}"  /></td>
+                                                <td><input type="text" class="form-control" name="psw" id="psw"  placeholder="Password" style="height: 30px "   tabindex="1"   /></td>
+                                                <td><input type="text" class="form-control" name="link" id="link" placeholder="Path"  style="height: 30px "   tabindex="1"  /></td>
 
                                                 <input type="hidden" value="{{$ftp->sub_id}}" name="hid_s">
                                                 <input type="hidden" value="{{$ftp->request_id}}" name="hid_r">
@@ -162,7 +165,7 @@
                                                     <input type="hidden" value="{{$ftp->request_id}}" name="cancel_requestid">
 
                                                 <td>
-                                                    {!! Form::submit('&Chi;',['class'=>'btn btn-danger form-control','name'=>'Cancel','style'=>'width:60px','onClick' => 'popup()']) !!}
+                                                    {!! Form::submit('&Chi;',['class'=>'btn btn-danger form-control','name'=>'Cancel{{$ftp->sub_id}}','style'=>'width:60px','onClick' => 'popup()']) !!}
 
                                                     <input type="hidden" id ="valueCancel" name="valueCancel">
                                                 </td>
