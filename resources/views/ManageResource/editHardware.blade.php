@@ -124,7 +124,9 @@ margin-left:50px;
 
 <div align="right">
 
-    @if($id != 'All')
+    @if($id == 'All')
+        <a href="/hardware-report-all"><button class="btn btn-warning" style="height: 36px">Category Summary</button></a>&nbsp;
+    @else
         <a href="/hardware-report/{{$id}}"><button class="btn btn-warning" style="height: 36px">Advanced Reports</button></a>&nbsp;
     @endif
 

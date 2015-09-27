@@ -120,6 +120,7 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::get('hardware-report/{category}',array('as'=>'hardware-report','uses'=>'PrintResourceController@index'));
     Route::post('hardware-report/','PrintResourceController@generateReport');
 
+    Route::get('hardware-report-all',array('as'=>'hardware-report-all','uses'=>'PrintResourceController@categoryView'));
 
 //--------------------------------------------------------Parthi
     Route::get('addPortion',array('as'=>'addPortion','uses'=>'AddResourcePortion@index'));

@@ -354,6 +354,12 @@ class OtherRequestController extends Controller {
 
     }
 
+    /**
+     * update the other requests
+     *
+     *
+     * @return Response
+     */
     public function updateRequest($requestId,$requestType)
     {
         //variable to track the pending multiple requests
@@ -381,12 +387,20 @@ class OtherRequestController extends Controller {
         }
     }
 
+
+    /**
+     * display the other requests
+     *
+     *
+     * @param requestType, prCode, status
+     * @return request data
+     */
     public function view($requestType,$prCode,$status)
     {
         //get the columns/fields of the request type table to load the html page
         $columns = Column::where('category', $requestType)->get();
-        $index = strrpos($status,"/");
-        $stat = substr($status,($index + 1));
+
+        //variable to hold request data
         $requests = '';
 
         if($status == 'All')
@@ -398,18 +412,32 @@ class OtherRequestController extends Controller {
     }
 
 
+    /**
+     * cancel the other requests
+     *
+     *
+     * @return request data
+     */
     public function cancel()
     {
+        //get the request id
         $requestId = Input::get('request_id');
+
+        //get the request type
         $requestType = Input::get('request_type');
         $status = true;
 
+        //begin db transaction
         DB::beginTransaction();
 
+        //delete the the request from other request type table
         DB::table($requestType)->where('request_id','=',$requestId)->delete();
+
+        //delete the request from general request table
         $gRequest = GRequest::find($requestId);
         $status = $gRequest->delete();
 
+        //commit changes is status is true
         if($status)
         {
             DB::commit();

@@ -10,9 +10,19 @@ use App\Column;
 class ObserverColumn extends AbstractObserver {
 
 
+    /**
+     * to update observer
+     *
+     *
+     * @param AbstractSubject
+     * @return observer
+     */
     function update(AbstractSubject $subject)
     {
+        //get the category changed
         $category = $subject->getCategory();
+
+        //update column observer according to the category
         $columns = Column::join('types','types.category','=','columns.category')->where('types.category', $category)->get();
 
         return $columns;
