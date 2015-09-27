@@ -15,6 +15,18 @@
 <h2 style="color: #9A0000">Resource Allocation</h2>
 
 <div class="panel-body">
+
+    </br>
+
+    <form action="{{ URL::route('CheckAvailability') }}" method="post">
+
+    <button type="submit" class="btn btn-success" style="height: 32px;float: right;width: 15%" name="checkAvail" id="checkAvail" value="Check Availability">Check Availability</button></td>
+
+    {!! Form::token() !!}
+    </form>
+
+    </br></br></br>
+
     <table class="table table-hover" width="100%">
         <tr style="background-color: #f5f5f5;">
             <th width="80%">Project&nbsp;Code</th>
