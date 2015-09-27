@@ -147,14 +147,15 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('requestRenewal', 'RenewalController@requestRenewal');
     Route::post('cancelRenewal', 'RenewalController@cancelRequest');
     Route::get('renewalAccept',array('as'=>'renewalAccept','uses'=>'RenewalController@adminView'));
-    Route::post('renewalAccept', 'RenewalController@adminAccept');
+    Route::post('renewalAccept2', 'RenewalController@adminAccept');
+
+    Route::post('renewalAccept3', 'RenewalController@adminSearchView');
 
     Route::get('releaseResource',array('as'=>'releaseResource','uses'=>'RenewalController@adminReleaseView'));
     Route::post('releaseResourceProject', 'RenewalController@resourceReleaseProject');
     Route::post('releaseResourceEmployee', 'RenewalController@resourceReleaseEmployee');
 
 
-    Route::post('searchResource', 'RenewalController@searchResource');
 
 //    Route::get('employeeAllocation', 'RenewalController@employeeAllocationView');
     Route::get('employeeAllocation',array('as'=>'employeeAllocation','uses'=>'RenewalController@employeeAllocationView'));
@@ -175,6 +176,28 @@ Route::group(array('middleware' => ['auth']), function() {
 
     Route::post('purchaseUp',array('as'=>'purchaseUp','uses'=>'PaymentController@updatePurchase'));
     Route::post('email',array('as'=>'email','uses'=>'PaymentController@sendEmail'));
+
+    //Final Iteration
+
+    Route::get('requestVendorReports',array('as'=>'requestVendorReports','uses'=>'ProcumentReport@requestVendorReports'));
+    Route::get('acceptedRequestReports',array('as'=>'acceptedRequestReports','uses'=>'ProcumentReport@acceptedRequestReports'));
+    Route::get('orderReports',array('as'=>'orderReports','uses'=>'ProcumentReport@orderReports'));
+
+    Route::post('requestVendorReports',array('as'=>'requestVendorReports','uses'=>'ProcumentReport@requestVendorReportsPost'));
+    Route::post('acceptedRequestReports',array('as'=>'acceptedRequestReports','uses'=>'ProcumentReport@acceptedRequestReportsPost'));
+    Route::post('orderReports',array('as'=>'orderReports','uses'=>'ProcumentReport@orderReportsPost'));
+
+    Route::get('requestRelease',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseView'));
+    Route::post('requestReleaseSearch',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleasePost'));
+    Route::post('requestRelease',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseSearch'));
+
+    Route::get('requestReleaseAdmin',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseAdminView'));
+    Route::post('requestReleaseAdmin2',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseAdminPost'));
+    Route::post('requestReleaseAdmin',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseAdminSearch'));
+
+
+
+
 
 
 

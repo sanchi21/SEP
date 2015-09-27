@@ -17,8 +17,11 @@ class CreateOrdersTable extends Migration {
 			$table->increments('invoice_id');
             $table->string('request_id');
             $table->string('payment_method');
-            $table->double('total');
+            $table->string('order_date');
             $table->string('status');
+            $table->double('total');
+            $table->string('cheque_number');
+            $table->string('pay_description');
 
 		});
 	}

@@ -109,9 +109,6 @@
 
                                 {!! Form ::open(['method' => 'POST', 'url' => 'releaseResourceEmployee']) !!}
 
-
-
-
                                      <td>{{$all->inventory_code}}</td>
                                      <td>{{$all->resource_type}}</td>
                                      <td>{{$all->make}}</td>
@@ -123,14 +120,10 @@
 
                                 {!! Form::close() !!}
 
-
                               </td>
                               </tr>
 
                             @endforeach
-
-
-
 
             </tbody>
             </table>

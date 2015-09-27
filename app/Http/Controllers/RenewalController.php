@@ -4,6 +4,7 @@ use App\Hardware;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\ReleaseRequest;
 use App\req;
 use App\User;
 use Illuminate\Support\Facades\Redirect;
@@ -152,125 +153,129 @@ class RenewalController extends Controller {
 
     }
 
+    public function adminSearchView()
+    {
+
+        $requests = DB::table('renewal')
+            ->join('reqs', 'renewal.id', '=', 'reqs.request_id')
+            ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
+            ->select('renewal.id', 'renewal.sid', 'renewal.name','renewal.req_upto','requesths.project_id','reqs.required_upto')
+            ->where('renewal.status', 0)->groupBy('renewal.name')
+            ->where(function($query)
+            {
+                $input = Request::all();
+
+                $name = $input['name'];
+
+                $query->where('renewal.name','LIKE', '%'.$name.'%')
+                    ->orWhere('renewal.req_upto','LIKE', '%'.$name.'%')
+                    ->orWhere('requesths.project_id', 'LIKE', '%'.$name.'%')
+                    ->orWhere('reqs.required_upto', 'LIKE', '%'.$name.'%');
+            })
+            ->get();
+
+        return view('pages.acceptRequest')->with('requests',$requests);
+
+    }
+
     public function adminAccept()
     {
         $input = Request::all();
-        $reject = Input::get('reject');
+//        $reject = Input::get('reject');
+
+        $action = Input::get('action');
 
         $date= $input['req_upto'];
         $id = $input['reqID'];
         $sid = $input['SubID'];
 
-        try {
-            if ($reject!="Reject") //Accept button has been clicked
-            {
-                $status1 = DB::table('reqs')->where('request_id', $id)
-                    ->where('sub_id',$sid)
-                    ->update(array('renewal'=>0, 'required_upto'=>$date));
+//        $prCode = DB::table('requesths')->where('request_id', $id)->first();
+//
+//        $item = DB::table('reqs')->where('request_id', $id)
+//            ->where('sub_id',$sid)->first();
+//
+//        $code = DB::table('reqs')->where('request_id', $id)
+//            ->where('sub_id',$sid)->first();
 
-                $status2 = DB::table('renewal')->where('id', $id)
-                    ->where('sid',$sid)
-                    ->update(array('status'=>1));
+        $status = true;
 
-                $prCode = DB::table('requesths')->where('request_id', $id)->first();
+        //$temp = count($id);
+//        var_dump($action);
 
-                $item = DB::table('reqs')->where('request_id', $id)
-                    ->where('sub_id',$sid)->first();
-
-                $code = DB::table('reqs')->where('request_id', $id)
-                    ->where('sub_id',$sid)->first();
-
-                if($status1 && $status2)
-                {
-                    $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
-//                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
-//                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
-                    $user_d = SystemUser::where('id',$user_id)->get();
-                    $user_data = $user_d[0];
-                    $user = $user_data->username;
-                    $email = $user_data->email;
-
-
-
-
-                    Mail::send('emails.acceptRenewal', array('user'=>$user,
-                        'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage) use ($user, $email)
-                    {
-                        $messsage->to($email,$user)->subject('Renewal Accepted');
-                    });
-
-                    \Session::flash('flash_message','Renewal Accepted');
-                }
-
-
-                else
-                {
-
-
-                    \Session::flash('flash_message_error','Failed to accept');
-                }
-
-
-                return Redirect::action('RenewalController@adminView');
-
-            }
-            else
-            {
-
-                $status1 = DB::table('reqs')->where('request_id', $id)
-                    ->where('sub_id',$sid)
-                    ->update(array('renewal'=>0));
-
-                $prCode = DB::table('requesths')->where('request_id', $id)->first();
-
-                $item = DB::table('reqs')->where('request_id', $id)
-                    ->where('sub_id',$sid)->first();
-
-                $code = DB::table('reqs')->where('request_id', $id)
-                    ->where('sub_id',$sid)->first();
-
-
-                $status2 = DB::table('renewal')->where('id', $id)->where('sid',$sid)->delete();
-
-                if($status1 && $status2){
-
-                    $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
-//                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
-//                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
-
-                    $user_d = SystemUser::where('id',$user_id)->get();
-                    $user_data = $user_d[0];
-                    $user = $user_data->username;
-                    $email = $user_data->email;
-
-
-                    Mail::send('emails.rejectRenewal', array('user'=>'srinithy',
-                        'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage) use ($user,$email)
-                    {
-                        $messsage->to($email,$user)->subject('Renewal Rejected');
-                    });
-
-                    \Session::flash('flash_message','Renewal Rejected');
-                }
-
-                else
-                    \Session::flash('flash_message_error','Failed to reject renewal');
-
-                return Redirect::action('RenewalController@adminView');
-
-            }
-
-
-        }
-        catch(\Exception $e)
+        if(count($sid)==0)
         {
-            return Redirect::back()->withErrors($e->getMessage());
+            \Session::flash('flash_message_error','Nothing to Update');
         }
 
-    }
+        try {
 
-    public function requestRenewal(Requests\RenewalRequest $request)
+            for ($i = 0; $i < count($sid); $i++)
+            {
 
+                if($action[$i]=="accept") {
+
+                    DB::table('reqs')->where('request_id', $id[$i])
+                        ->where('sub_id',$sid[$i])
+                        ->update(array('renewal'=>0, 'required_upto'=>$date));
+
+                    DB::table('renewal')->where('id', $id[$i])
+                        ->where('sid',$sid[$i])
+                        ->update(array('status'=>1));
+
+                }
+
+                if($action[$i]=="reject") {
+
+                    DB::table('reqs')->where('request_id', $id)
+                        ->where('sub_id',$sid)
+                        ->update(array('renewal'=>0));
+
+                    DB::table('renewal')->where('id', $id[$i])
+                        ->where('sid',$sid[$i])
+                        ->update(array('status'=>2));
+                }
+
+            }
+        }
+
+        catch(Exception $e)
+        {
+            $status = false;
+        }
+
+        if($status)
+        {
+            $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
+//                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
+//                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+            $user_d = SystemUser::where('id',$user_id)->get();
+            //$user_data = $user_d[0];
+            $user = 'Parthi'; //$user_data->username;
+            $email = 'paarthipank@gmail.com'; //$user_data->email;
+
+            Mail::send('emails.acceptRenewal', array('user'=>'Parthi',
+                'prCode'=>'001','item'=>'New', 'inventory'=>'Hello'),function($messsage) use ($user, $email)
+            {
+                $messsage->to('paarthipank@gmail.com',$user)->subject('Renewal Accepted');
+            });
+
+            \Session::flash('flash_message','Actions Updated');
+
+        }
+
+        else
+        {
+
+            \Session::flash('flash_message_error','Failed to Update');
+        }
+
+        return Redirect::action('RenewalController@adminView');
+
+        }
+
+
+
+    public function requestRenewal()
     {
 
         $input = Request::all();
@@ -280,67 +285,68 @@ class RenewalController extends Controller {
         $renewal_date = $input['req_upto'];
         $name = $input['name'];
 
-        $renew = new Renewal();
+        $status = true;
 
-        try {
-            $renew->id = $id;
-            $renew->sid = $sid;
-            $renew->req_upto = $renewal_date;
-            $renew->name = $name;
+        //var_dump(count($sid));
 
-            $renew->status = 0;
-
-
-            $status1 = DB::table('reqs')->where('request_id', $id)
-                ->where('sub_id',$sid)
-                ->update(array('renewal'=>1));
-
-            $prCode = DB::table('requesths')->where('request_id', $id)->first();
-
-            $item = DB::table('reqs')->where('request_id', $id)
-                ->where('sub_id',$sid)->first();
-
-            $code = DB::table('reqs')->where('request_id', $id)
-                ->where('sub_id',$sid)->first();
-
-            $status = $renew->save() ? true : false;
-
-
-
-
-            if($status && $status1)
-            {
-                $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
-                $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
-
-                Mail::send('emails.renewalConfirmation', array('renewalDate'=>$renewal_date, 'user'=>$user,
-                    'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage)
-                {
-                    $messsage->to('sabhayans@gmail.com','Abhayan')->subject('Resource Renewal');
-                });
-
-                \Session::flash('flash_message','New Renewal date requested successfully!');
-
-                return Redirect::action('RenewalController@index');
-
-            }
-
-
-            else{
-                \Session::flash('flash_message_error','Renewal request failed');
-
-                return Redirect::action('RenewalController@index');
-
-            }
-
-        }
-
-        catch(\Exception $e)
+        for ($i = 0; $i < count($sid); $i++)
         {
-            return Redirect::back()->withErrors($e->getMessage());
+            try {
+                $renew = new Renewal();
+
+                $renew->id = $id[$i];
+                $renew->sid = $sid[$i];
+                $renew->req_upto = $renewal_date[$i];
+                $renew->name = $name[$i];
+
+                $renew->status = 0;
+
+               DB::table('reqs')->where('request_id', $id[$i])
+                    ->where('sub_id',$sid[$i])
+                    ->update(array('renewal'=>1));
+
+
+
+                $renew->save() ? true : false;
+
+            }
+            catch(\Exception $e)
+            {
+                $status = false;
+                return Redirect::back()->withErrors($e->getMessage());
+            }
         }
 
+        if($status)
+        {
+            //$user_id = DB::table('requesths')->where('request_id',$id[0])->pluck('user_id');
+            //$user = DB::table('system_users')->where('id', $user_id[0])->pluck('username');
 
+            $prCode = DB::table('requesths')->where('request_id', $id[0])->first();
+
+            $item = DB::table('reqs')->where('request_id', $id[0])
+                ->where('sub_id',$sid[0])->first();
+
+            $code = DB::table('reqs')->where('request_id', $id[0])
+                ->where('sub_id',$sid[0])->first();
+
+            Mail::send('emails.renewalConfirmation', array('renewalDate'=>$renewal_date[0], 'user'=>'Parthi',
+                'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage)
+            {
+                $messsage->to('paarthipank@gmail.com','Abhayan')->subject('Resource Renewal');
+            });
+
+            \Session::flash('flash_message','New Renewal date requested successfully!');
+
+            return Redirect::action('RenewalController@index');
+
+        }
+
+        else{
+            \Session::flash('flash_message_error','Renewal request failed');
+
+            return Redirect::action('RenewalController@index');
+        }
     }
 
     public function adminReleaseView()
@@ -495,6 +501,209 @@ class RenewalController extends Controller {
         $allocations = DB::table('employeeAllocation')->where('status', 1)->get();
 
         return view('pages.viewAllocations')->with('allocations',$allocations );
+    }
+
+    public function requestReleaseView()
+    {
+
+        $hold = DB::table('reqs')
+            ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
+            ->select( 'requesths.project_id','reqs.item','reqs.device_type','reqs.request_id'
+                ,'reqs.sub_id', 'reqs.assigned_date', 'reqs.required_upto','reqs.status','reqs.renewal')
+            ->where('reqs.release_request',0)->get();
+
+
+        return view('pages.requestRelease')->with('allocated',$hold);
+
+    }
+
+    public function requestReleaseSearch()
+    {
+
+        $hold = DB::table('reqs')
+            ->join('requesths', 'reqs.request_id', '=', 'requesths.request_id')
+            ->select( 'requesths.project_id','reqs.item','reqs.device_type','reqs.request_id'
+                ,'reqs.sub_id', 'reqs.assigned_date', 'reqs.required_upto','reqs.status','reqs.renewal')
+            ->where('reqs.release_request',0)
+            ->where(function($query)
+            {
+                $input = Request::all();
+
+                $searchKey = $input['searchKey'];
+
+                $query->where('reqs.item','LIKE', '%'.$searchKey.'%')
+                    ->orWhere('requesths.project_id','LIKE', '%'.$searchKey.'%')
+                    ->orWhere('reqs.device_type', 'LIKE', '%'.$searchKey.'%');
+            })
+            ->get();
+
+        return view('pages.requestRelease')->with('allocated',$hold);
+
+    }
+
+    public function requestReleasePost()
+    {
+
+        $input = Request::all();
+
+        $id = $input['rid'];
+        $sid = $input['sid'];
+        $item = $input['item'];
+        $type = $input['type'];
+        $pID = $input['pID'];
+        $assigned_date = $input['assigned_date'];
+        $reqUpto = $input['reqUpto'];
+
+        $releaseRequest = new ReleaseRequest();
+
+        $releaseRequest->req_id = $id;
+        $releaseRequest->sub_id = $sid;
+        $releaseRequest->item_name = $item;
+        $releaseRequest->type = $type;
+        $releaseRequest->project_code = $pID;
+        $releaseRequest->assigned_date = $assigned_date;
+        $releaseRequest->required_upto = $reqUpto;
+
+
+        $status1 = $releaseRequest->save() ? true : false;
+
+        $status2 = DB::table('reqs')->where('request_id', $id)
+            ->where('sub_id',$sid)
+            ->update(array('release_request'=>1));
+
+        if ($status1 && $status2)
+            \Session::flash('flash_message', 'Request Sent Successfully');
+        else
+
+            \Session::flash('flash_message_error', 'Request is not sent');
+
+        return Redirect::action('RenewalController@requestReleaseView');
+
+
+    }
+
+    public function requestReleaseAdminView()
+    {
+
+        $requests = DB::table('release_requests')->where('status',0)->get();
+
+        return view('pages.requestReleaseAdmin')->with('requests',$requests);
+
+    }
+
+    public function requestReleaseAdminPost()
+    {
+        $input = Request::all();
+        $reject = Input::get('reject');
+
+        $id = $input['reqID'];
+        $sid = $input['SubID'];
+
+        try {
+            if ($reject!="Reject") //Accept button has been clicked
+            {
+                $status1 = DB::table('reqs')->where('request_id', $id)
+                    ->where('sub_id',$sid)
+                    ->update(array('release_request'=>0));
+
+                $status2 = DB::table('release_requests')->where('id', $id)
+                    ->where('sid',$sid)
+                    ->update(array('status'=>1));
+
+                $prCode = DB::table('requesths')->where('request_id', $id)->first();
+
+                $item = DB::table('reqs')->where('request_id', $id)
+                    ->where('sub_id',$sid)->first();
+
+                $code = DB::table('reqs')->where('request_id', $id)
+                    ->where('sub_id',$sid)->first();
+
+                if($status1 && $status2)
+                {
+                    $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
+//                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
+//                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+                    $user_d = SystemUser::where('id',$user_id)->get();
+                    $user_data = $user_d[0];
+                    $user = $user_data->username;
+                    $email = $user_data->email;
+
+
+                    Mail::send('emails.acceptRenewal', array('user'=>$user,
+                        'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage) use ($user, $email)
+                    {
+                        $messsage->to('paarthipank@gmail.com',$user)->subject('Release Request Accepted');
+                    });
+
+                    \Session::flash('flash_message','Release Request Accepted');
+                }
+
+                else
+                {
+
+                    \Session::flash('flash_message_error','Failed to accept');
+                }
+
+                return Redirect::action('RenewalController@requestReleaseAdminView');
+
+            }
+            else
+            {
+
+                $status1 = DB::table('reqs')->where('request_id', $id)
+                    ->where('sub_id',$sid)
+                    ->update(array('release_request'=>0));
+
+                $prCode = DB::table('requesths')->where('request_id', $id)->first();
+
+                $item = DB::table('reqs')->where('request_id', $id)
+                    ->where('sub_id',$sid)->first();
+
+                $code = DB::table('reqs')->where('request_id', $id)
+                    ->where('sub_id',$sid)->first();
+
+                $status2 = DB::table('release_requests')->where('id', $id)->where('sid',$sid)->delete();
+
+                if($status1 && $status2){
+
+                    $user_id = DB::table('requesths')->where('request_id',$id)->pluck('user_id');
+//                    $user = DB::table('system_users')->where('id', $user_id)->pluck('username');
+//                    $email = DB::table('system_users')->where('id', $user_id)->pluck('email');
+
+                    $user_d = SystemUser::where('id',$user_id)->get();
+                    $user_data = $user_d[0];
+                    $user = $user_data->username;
+                    $email = $user_data->email;
+
+                    Mail::send('emails.rejectRenewal', array('user'=>'srinithy',
+                        'prCode'=>$prCode->project_id,'item'=>$item->item, 'inventory'=>$code->inventory_code),function($messsage) use ($user,$email)
+                    {
+                        $messsage->to('paarthipank@gmail.com',$user)->subject('Release Request Rejected');
+                    });
+
+                    \Session::flash('flash_message','Release Request Rejected');
+                }
+
+                else
+                    \Session::flash('flash_message_error','Failed to reject renewal');
+
+                return Redirect::action('RenewalController@requestReleaseAdminView');
+
+            }
+
+        }
+        catch(\Exception $e)
+        {
+            return Redirect::back()->withErrors($e->getMessage());
+        }
+
+
+    }
+
+    public function requestReleaseAdminSearch()
+    {
+
+
     }
 
 }
