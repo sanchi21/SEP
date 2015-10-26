@@ -44,7 +44,10 @@ class OtherRequestController extends Controller {
         $dropValues = $this->getDropDownValues($columns);
         $count = count($dropValues);
 
-        return view('NewRequest.otherRequest',compact('dropValues','requestTypes','columns','count','id','key'));
+        //get PR Codes from services
+        $prCodes = $this->getPRCodes();
+
+        return view('NewRequest.otherRequest',compact('dropValues','requestTypes','columns','count','id','key','prCodes'));
     }
 
 
@@ -79,7 +82,10 @@ class OtherRequestController extends Controller {
         $dropValues = $this->getDropDownValues($columns);
         $count = count($dropValues);
 
-        return view('NewRequest.otherRequest',compact('dropValues','requestTypes','columns','count','id','key'));
+        //get PR Codes from services
+        $prCodes = $this->getPRCodes();
+
+        return view('NewRequest.otherRequest',compact('dropValues','requestTypes','columns','count','id','key','prCodes'));
     }
 
 
@@ -530,5 +536,12 @@ class OtherRequestController extends Controller {
             $email = 'sanchayan@live.com';
 
         return $email;
+    }
+
+    private function getPRCodes()
+    {
+        $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+        $results = json_decode(utf8_encode(file_get_contents($host)),true);
+        return $results['data'];
     }
 }

@@ -65,11 +65,19 @@ class PurchaseRequestController extends Controller {
             $mailCC = '';
             $note = $input['note'];
             $vendors = $input['vendor_name'];
+            $sVat = 'NO';
+
             $vendorCount = 1;
             $tax = 0.02;
 
             $itemData = array();
             $mailData = array();
+            $oMailData = array();
+
+            if(isset($input['s_vat']))
+            {
+                $sVat = $input['s_vat'];
+            }
 
             foreach ($vendors as $vendor)
             {
@@ -78,11 +86,16 @@ class PurchaseRequestController extends Controller {
                 $quantities = $input['quantity_v' . $vendorCount];
                 $prices = $input['price_v' . $vendorCount];
                 $warranties = $input['warranty_v' . $vendorCount];
+                $sVt = $sVat[$vendorCount-1];
+                $vendorName = $vendor;
+
+                if($vendor == 'Other')
+                    $vendorName = $input['nv'.$vendorCount];
 
                 for ($i = 0; $i < count($itemNos); $i++) {
                     $tempData = array();
                     $tempData = array_add($tempData, 'pRequest_no', $requestNo);
-                    $tempData = array_add($tempData, 'vendor_id', $vendor);
+                    $tempData = array_add($tempData, 'vendor_id', $vendorName);
                     $tempData = array_add($tempData, 'item_no', $itemNos[$i]);
                     $tempData = array_add($tempData, 'description', $descriptions[$i]);
                     $tempData = array_add($tempData, 'quantity', $quantities[$i]);
@@ -93,6 +106,7 @@ class PurchaseRequestController extends Controller {
                     $tempData = array_add($tempData, 'price_tax', $tax_total);
                     $tempData = array_add($tempData, 'warranty', $warranties[$i]);
                     $tempData = array_add($tempData, 'status', 'On Process');
+                    $tempData = array_add($tempData,'svat',$sVt);
 
                     array_push($itemData, $tempData);
                 }
@@ -141,6 +155,26 @@ class PurchaseRequestController extends Controller {
                     array_push($mailData, $mailCCs);
                 }
                 ProcMailCC::insert($mailData);
+            }
+
+            if(isset($input['other_cc']))
+            {
+                if(trim($input['other_cc']) != '')
+                {
+                    $otherCC = $input['other_cc'];
+                    $oCC = explode(',', $otherCC);
+
+                    foreach ($oCC as $oMail)
+                    {
+
+                        $oMailCCs = array();
+                        $oMailCCs = array_add($oMailCCs, 'pRequest_no', $requestNo);
+                        $oMailCCs = array_add($oMailCCs, 'user_name', $oMail);
+                        array_push($oMailData, $oMailCCs);
+                        array_push($mailCC, $oMail);
+                    }
+                    ProcMailCC::insert($oMailData);
+                }
             }
 
             $procurementRequest->save();

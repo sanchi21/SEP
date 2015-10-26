@@ -65,8 +65,7 @@ class TableController extends Controller {
             $attribute_name = $input['attribute_name'];
 
         $attribute_type = $input['attribute_type'];
-        $attribute_min = $input['attribute_min'];
-        $attribute_max = $input['attribute_max'];
+
         $attribute_drop = $input['attribute_drop'];
         $attribute_validation = $input['attribute_validation'];
 
@@ -137,9 +136,9 @@ class TableController extends Controller {
                 if($col_name)
                 {
                     $status = false;
-                    $err = $attr_name.' Duplicate Column Name. ';
+                    $err = ' Duplicate Column Name : '.$attr_name;
                     DB::rollback();
-                    \Session::flash('flash_message_error', $err.'Settings could not be changed!');
+                    \Session::flash('flash_message_error', $err.'. Settings could not be changed!');
                     return Redirect::action('TableController@index');
                 }
 
@@ -148,8 +147,14 @@ class TableController extends Controller {
                 $column2->table_column = $attr_name;
                 $column2->column_type = $attribute_type;
                 $column2->column_name = $attribute_name;
-                $column2->min = $attribute_min;
-                $column2->max = $attribute_max;
+
+                if(isset($input['attribute_min']))
+                {
+                    $attribute_min = $input['attribute_min'];
+                    $attribute_max = $input['attribute_max'];
+                    $column2->min = $attribute_min;
+                    $column2->max = $attribute_max;
+                }
                 $column2->validation = $attribute_validation;
                 $column2->dropDown = $attribute_drop;
 

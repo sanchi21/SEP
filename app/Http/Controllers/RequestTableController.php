@@ -106,6 +106,15 @@ class RequestTableController extends Controller {
                 //replace the new title - with _
                 $newTitle = str_replace('-','_',strtolower($title));
 
+                //check whether request type already exist
+                $existingRequest = RequestType::find($newTitle);
+
+                if(!is_null($existingRequest))
+                {
+                    \Session::flash('flash_message_error', 'Request Type already exist');
+                    return Redirect::action('RequestTableController@index');
+                }
+
                 //get the new request type data
                 $requestCode = $input['request_code'];
                 $requestGroup = $input['request_group'];
@@ -149,6 +158,14 @@ class RequestTableController extends Controller {
                 //get the new columns details and store it to an array
                 for($i=0 ; $i<count($attributeNames); $i++)
                 {
+                    $cl = Column::where('column_name',$attributeNames[$i])->get();
+
+                    if(!is_null($cl))
+                    {
+                        \Session::flash('flash_message_error', 'Column Name : '.$attributeNames[$i].' already exist. Settings not saved!');
+                        return Redirect::action('RequestTableController@index');
+                    }
+
                     $newColumns = array();
                     $newColumns = array_add($newColumns,'category',$newTitle);
                     $newColumns = array_add($newColumns,'table_column',str_replace(' ','_',strtolower($attributeNames[$i])));

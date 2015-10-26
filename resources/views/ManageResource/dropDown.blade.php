@@ -26,6 +26,7 @@
 
   <li role="presentation" class="active"><a href="#admin" aria-controls="admin" role="tab" data-toggle="tab">Administrator</a></li>
   <li role="presentation"><a href="#pr" aria-controls="pr" role="tab" data-toggle="tab">Project Responsible</a></li>
+  <li role="presentation"><a href="#proc" aria-controls="proc" role="tab" data-toggle="tab">Procurement</a></li>
 </ul>
 
 
@@ -48,6 +49,7 @@
                     <?php $x = 0; ?>
                     @foreach($columns as $column)
 
+                    @if($column->column_name != 'Status')
                     {!! Form ::open(['method' => 'POST', 'action' => ['DropDownController@handle']]) !!}
 
                         <tr id="firstRow">
@@ -81,6 +83,7 @@
 
                         {!! Form ::close() !!}
 
+                        @endif
                         @endforeach
                     </tbody>
 
@@ -133,6 +136,126 @@
         </div>
 
     </div>
+
+    <div role="tabpanel" class="tab-pane" id="proc">
+            <div class="panel-body" style="overflow:auto; min-height: 200px">
+                <table class="table table-hover" id="hardwareTable" cellpadding="0" cellspacing="0" width="100%">
+
+                        <tr id="headRow" style="background-color: #e7e7e7">
+                            <th>Attribute</th>
+                            <th>Values</th>
+                            <th>Add/Edit</th>
+                            <th>Operation</th>
+                        </tr>
+
+                        <tbody>
+
+                        {!! Form ::open(array('url' => 'change-option-procurement')) !!}
+                        <tr>
+                            <td width="20%">
+
+                                Vendor
+                            </td>
+
+                            <td width="25%">
+                                <select style="width: 250px" id="" name='dropDown_V' class="form-control input-sm">
+                                    @foreach($vendors as $vendor)
+                                        <option value='{{$vendor->vendor_name}}'>{{ $vendor->vendor_name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td width="25%">
+                                <input type="text" name='new_value_V' class="form-control input-sm" style="width:250px">
+                            </td>
+                            <td width="30%">
+                                <input type="submit" name="add_button" value="Add" class="btn btn-primary form-control" style="width:85px">
+                                &nbsp;<input type="submit" name="update_button" value="Update" class="btn btn-success form-control" style="width:85px">
+                                &nbsp;<input type="submit" name="delete_button" value="Delete" class="btn btn-danger form-control" style="width:85px">
+                            </td>
+                        </tr>
+                        {!! Form ::close() !!}
+
+                        {!! Form ::open(array('url' => 'change-option-procurement')) !!}
+                        <tr>
+                            <td width="20%">
+
+                                Item
+                            </td>
+
+                            <td width="25%">
+                                <select style="width: 250px" id="" name='dropDown_I' class="form-control input-sm">
+                                    @foreach($pItems as $pItem)
+                                        <option value='{{$pItem->id}}'>{{ $pItem->item }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td width="25%">
+                                <input type="text" name='new_value_I' class="form-control input-sm" style="width:250px">
+                            </td>
+                            <td width="30%">
+                                <input type="submit" name="add_button" value="Add" class="btn btn-primary form-control" style="width:85px">
+                                &nbsp;<input type="submit" name="update_button" value="Update" class="btn btn-success form-control" style="width:85px">
+                                &nbsp;<input type="submit" name="delete_button" value="Delete" class="btn btn-danger form-control" style="width:85px">
+                            </td>
+                        </tr>
+                        {!! Form ::close() !!}
+
+                        {!! Form ::open(array('url' => 'change-option-procurement')) !!}
+                        <tr>
+                            <td width="20%">
+
+                                Approval Email List
+                            </td>
+
+                            <td width="25%">
+                                <select style="width: 250px" id="" name='dropDown_A' class="form-control input-sm">
+                                    @foreach($approvals as $approval)
+                                        <option value='{{$approval->email}}'>{{ $approval->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td width="25%">
+                                <input type="text" name='new_value_A' class="form-control input-sm" style="width:250px">
+                            </td>
+                            <td width="30%">
+                                <input type="submit" name="add_button" value="Add" class="btn btn-primary form-control" style="width:85px">
+                                &nbsp;<input type="submit" name="update_button" value="Update" class="btn btn-success form-control" style="width:85px">
+                                &nbsp;<input type="submit" name="delete_button" value="Delete" class="btn btn-danger form-control" style="width:85px">
+                            </td>
+                        </tr>
+                        {!! Form ::close() !!}
+
+                        {!! Form ::open(array('url' => 'change-option-procurement')) !!}
+                        <tr>
+                            <td width="20%">
+
+                                CC List
+                            </td>
+
+                            <td width="25%">
+                                <select style="width: 250px" id="" name='dropDown_C' class="form-control input-sm">
+                                    @foreach($ccList as $list)
+                                        <option value='{{$list->email}}'>{{ $list->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td width="25%">
+                                <input type="text" name='new_value_C' class="form-control input-sm" style="width:250px">
+                            </td>
+                            <td width="30%">
+                                <input type="submit" name="add_button" value="Add" class="btn btn-primary form-control" style="width:85px">
+                                &nbsp;<input type="submit" name="update_button" value="Update" class="btn btn-success form-control" style="width:85px">
+                                &nbsp;<input type="submit" name="delete_button" value="Delete" class="btn btn-danger form-control" style="width:85px">
+                            </td>
+                        </tr>
+                        {!! Form ::close() !!}
+
+                        </tbody>
+
+                    </table>
+            </div>
+
+        </div>
 
 </div>
 
