@@ -106,4 +106,13 @@ class Hardware extends Model {
         return $hardware;
     }
 
+    public function getCategoryView()
+    {
+        $category = DB::table('hardware')
+                        ->select('type',DB::raw('count(inventory_code) as catCount'),DB::raw('sum(value) as total'))
+                        ->groupBy('type')->get();
+
+        return $category;
+    }
+
 }

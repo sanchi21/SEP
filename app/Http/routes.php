@@ -87,6 +87,7 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::get('change-options',array('as'=>'change-options','uses'=>'DropDownController@index'));
     Route::post('change-options','DropDownController@handle');
     Route::post('change-option','DropDownController@handle2');
+    Route::post('change-option-procurement','DropDownController@handle3');
 
     Route::get('hardware-depreciate/{id}','DepreciateController@show');
 //    Route::get('hardware-d','DepreciateController@index');
@@ -119,6 +120,9 @@ Route::group(array('middleware' => ['auth']), function() {
 
     Route::get('hardware-report/{category}',array('as'=>'hardware-report','uses'=>'PrintResourceController@index'));
     Route::post('hardware-report/','PrintResourceController@generateReport');
+
+    Route::get('hardware-report-all',array('as'=>'hardware-report-all','uses'=>'PrintResourceController@categoryView'));
+
 
 
 //--------------------------------------------------------Parthi
@@ -187,13 +191,13 @@ Route::group(array('middleware' => ['auth']), function() {
     Route::post('acceptedRequestReports',array('as'=>'acceptedRequestReports','uses'=>'ProcumentReport@acceptedRequestReportsPost'));
     Route::post('orderReports',array('as'=>'orderReports','uses'=>'ProcumentReport@orderReportsPost'));
 
-    Route::get('requestRelease',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseView'));
-    Route::post('requestReleaseSearch',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleasePost'));
-    Route::post('requestRelease',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseSearch'));
+    Route::get('requestRelease',array('as'=>'requestRelease','uses'=>'RenewalController@requestReleaseView'));
+    Route::post('requestReleaseSearch',array('as'=>'requestReleaseSearch','uses'=>'RenewalController@requestReleasePost'));
+    Route::post('requestRelease',array('as'=>'requestRelease','uses'=>'RenewalController@requestReleaseSearch'));
 
-    Route::get('requestReleaseAdmin',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseAdminView'));
-    Route::post('requestReleaseAdmin2',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseAdminPost'));
-    Route::post('requestReleaseAdmin',array('as'=>'requestVendorReports','uses'=>'RenewalController@requestReleaseAdminSearch'));
+    Route::get('requestReleaseAdmin',array('as'=>'requestReleaseAdmin','uses'=>'RenewalController@requestReleaseAdminView'));
+    Route::post('requestReleaseAdmin2',array('as'=>'requestReleaseAdmin2','uses'=>'RenewalController@requestReleaseAdminPost'));
+    Route::post('requestReleaseAdmin',array('as'=>'requestReleaseAdmin','uses'=>'RenewalController@requestReleaseAdminSearch'));
 
 
 
@@ -221,7 +225,7 @@ Route::group(array('middleware' => ['auth']), function() {
 
 
     Route::get('ViewAll','AllocationController@getViewAll');
-    Route::post('ViewAll', array('as' => 'ViewAll', 'uses' => 'AllocationController@ViewAll'));
+    //Route::post('ViewAll', array('as' => 'ViewAll', 'uses' => 'AllocationController@ViewAll'));
     //Route::get('ViewHardwareResources','AllocationController@getViewOfAllocations');
 
     Route::get('ViewGraphs','AllocationController@getAllocationReports');
@@ -264,6 +268,14 @@ Route::group(array('middleware' => ['auth']), function() {
 
 
     Route::get('/download/{id}', 'ApprovalController@getDownload');
+
+    Route::get('/finds',function(){
+
+        $projectCode=Input::get('project_id');
+        $checkProject= \App\requesth::where('project_id','=',$projectCode)->get();
+
+        return Response::json($checkProject);
+    });
 
 
 

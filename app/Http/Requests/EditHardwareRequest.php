@@ -26,7 +26,8 @@ class EditHardwareRequest extends Request {
 	{
         if(Input::get('update') != '')
         {
-            $columns = Column::select('table_column','column_name','validation','cid')->where('validation','>',0)->groupBy('table_column')->orderBy('cid')->get();
+            $type = Input::get('type');
+            $columns = Column::select('table_column','column_name','validation','cid')->where('validation','>',0)->where('category',$type)->groupBy('table_column')->orderBy('cid')->get();
             $rules = [];
 
             foreach ($columns as $col) {

@@ -2,6 +2,7 @@
 @extends('...master')
 
 @section('content')
+
 <style>
 .table>tbody>tr>td {
     padding: 2px;
@@ -21,9 +22,46 @@
     $(document).ready(function() {
         $('#mail_cc').multiselect({
         enableCaseInsensitiveFiltering: true,
+        buttonWidth: '240px'
+        });
+    });
+
+
+    $(document).ready(function() {
+        $('#appr').multiselect({
+        enableCaseInsensitiveFiltering: true,
         buttonWidth: '250px'
         });
     });
+</script>
+
+<script>
+ function newVendor(vid,nvid)
+ {
+    if(vid == 'Other')
+    {
+        document.getElementById(nvid).style.display = 'block';
+    }
+    else
+    {
+        document.getElementById(nvid).style.display = 'none';
+    }
+ }
+
+
+ function sVat(sid)
+  {
+    var val = document.getElementById(sid).value;
+    if(val == 'YES')
+    {
+        document.getElementById(sid).value = 'NO';
+    }
+    else
+    {
+        document.getElementById(sid).value = 'YES';
+    }
+  }
+
 </script>
 
 
@@ -31,9 +69,11 @@
 {{--<br>--}}
 <br>
 <div class="alert alert-danger" id="error_msg" style="display: none">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <label id="msg"></label>
 </div>
 <div class="alert alert-success" id="success_msg" style="display: none">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <label id="smsg"></label>
 </div>
 
@@ -74,6 +114,7 @@
 
 <div class="tab-content" id="mainTab">
 
+
 @for($j=1 ; $j<=$noOfVendors ; $j++)
     <div role="tabpane{{$j}}" @if($j==1) class="tab-pane active" @else class="tab-pane" @endif id="vendor{{$j}}">
 
@@ -81,18 +122,27 @@
             <table width="100%">
 
             <tr>
-                <td width="15%">
+                <td width="15%" valign="top">
                     <label id="n2">Vendor ({{$j}})</label>
                 </td>
 
                 <td width="25%">
-                    <select style="width: 250px" class="form-control input-sm" name="vendor_name[]">
+                    <?php $nv = 'nv'.$j ; ?>
+                    <select style="width: 250px" class="form-control input-sm" name="vendor_name[]" onchange="newVendor(this.value,'{{$nv}}')">
                     @foreach($vendors as $vendor)
-                        <option value="{{$vendor->vendor_id}}">
+                        <option value="{{$vendor->vendor_name}}">
                             {{$vendor->vendor_name}}
                         </option>
                     @endforeach
+                        <option value="Other">Other</option>
                     </select>
+                    <br>
+                    <input type="text" name="{{$nv}}" id="{{$nv}}" style="width: 250px; display: none" class="form-control input-sm">
+
+                </td>
+
+                <td width="10%" valign="top">
+                    <input type="checkbox" id="sv{{$j}}" name="s_vat[]" value="NO" style="width: 25px; height: 25px" onchange="sVat('sv{{$j}}')"><label style="vertical-align: 10px">SVAT</label>
                 </td>
 
                 <td>
@@ -188,7 +238,7 @@
             <label>For&nbsp;Approval</label>
         </td>
         <td width="30%">
-            <select class="form-control" style="width: 300px" name="approval">
+            <select class="form-control" id="appr" style="width: 250px" name="approval">
                 <option value="1">Abhayan</option>
                 <option value="2">Srinithy</option>
                 <option value="3">Parthipan</option>
@@ -196,16 +246,20 @@
             </select>
         </td>
 
-        <td width="20%">
+        <td width="10%">
             <label>Mail&nbsp;CC</label>
         </td>
-        <td width="30%">
+        <td width="20%">
             <select id="mail_cc" name="mail_cc[]" class="form-control" style="width: 250px" multiple="multiple">
                 <option value="sabhayans@gmail.com">Abhayan</option>
                 <option value="pathnithyasri@gmail.com">Srinithy</option>
                 <option value="paarthipank@gmail.com">Parthipan</option>
-                <option value="sanchayan@live.com">Sanchayan</option>
+                <option value="ssanchi007@gmail.com">Sanchayan</option>
             </select>
+        </td>
+
+        <td width="20%">
+            <textarea name="other_cc" class="form-control" style="width: 250px; height: 34px"></textarea>
         </td>
     </tr>
 </table>
@@ -249,7 +303,8 @@
    	</script>
 
     <input type="button"  name="Verify" value="Verify" class="btn btn-success" style="width: 80px; height: 36px" onclick="findSum()">
-    {!! Form::submit('Submit',['class' => 'btn btn-primary','onclick'=>'javascript:return verify()']) !!}
+    {{--{!! Form::submit('Submit',['class' => 'btn btn-primary','onclick'=>'javascript:return verify()']) !!}--}}
+    {!! Form::submit('Submit',['class' => 'btn btn-primary']) !!}
 </div>
 </div>
 

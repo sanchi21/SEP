@@ -32,7 +32,7 @@
                   <option value="status">Request Status</option>
             </select>
              <td>
-            <button type="submit" name ="sort" class="btn btn-primary" style="height: 30px;width: 60px">SORT </button>
+            <button type="submit" name ="sort" class="btn btn-primary" style="height: 36px;width: 60px">SORT </button>
             </td>
             {!! Form ::close() !!}
             @endif
@@ -112,10 +112,11 @@
 
 
          <div align="right">
-        <input type="button"  class="btn btn-success form-control" style="width: 10%" onclick="tableToExcel('vendorProcument','Procurement')" value="Save To File">
+        <input type="button"  class="btn btn-success" style="width: 10%" onclick="tableToExcel('vendorProcument','Procurement')" value="Save To File">
+        <input type="button" onclick="printContent('printContent')" class="btn btn-primary" value="Print">&nbsp;&nbsp;
         </div>
         <div align="right">
-          <input type="button" onclick="printContent('printContent')" class="btn btn-primary" value="Print">&nbsp;&nbsp;
+
           </div>
 
 

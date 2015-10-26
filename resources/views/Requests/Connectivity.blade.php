@@ -11,7 +11,7 @@
                  <select class="form-control" name="project_id" style="width: 250px">
                     @foreach($pros as $pro)
                        <option>
-                               {{$pro->os_version}}
+                              {{$pro['PR_Code']}}
                        </option>
                     @endforeach
                  </select>

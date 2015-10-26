@@ -60,9 +60,12 @@
         <td>
             <select id="inventory" name="inventory" class="form-control input-sm" style="width: 250px" onchange="javascript:location.href = this.value;">
                 @foreach($inventory as $inv)
-                    <option value="/hardware-depreciation/{{$inv->inventory_code}}" @if($hardware->inventory_code == $inv->inventory_code) selected @endif>{{ $inv->inventory_code }}</option>
+                     <?php
+                        $inv2 = str_replace('/','-',($inv->inventory_code));
+                        $temp = "/hardware-depreciate/".$inv2  ?>
+                    <option value="{{$temp}}" @if($hardware->inventory_code == $inv->inventory_code) selected @endif>{{ $inv->inventory_code }}</option>
                 @endforeach
-                <option value="/hardware-depreciation/{{$inv->inventory_code}}">{{ $inv->inventory_code }}</option>
+                {{--<option value="/hardware-depreciation/{{$inv->inventory_code}}">{{ $inv->inventory_code }}</option>--}}
             </select>
         </td>
 

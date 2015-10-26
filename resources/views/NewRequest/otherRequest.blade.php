@@ -119,9 +119,9 @@
 
             <div class="col-xs-4 col-md-4">
                 <select name="PR_Code" id="PR_Code" class="form-control" style="width: 250px">
-                    <option value="P001">P001</option>
-                    <option value="P002">P002</option>
-                    <option value="P003">P003</option>
+                    @foreach($prCodes as $prCode)
+                        <option value="{{$prCode['PR_Code']}}">{{$prCode['PR_Code']}}</option>
+                    @endforeach
                 </select>
             </div>
 

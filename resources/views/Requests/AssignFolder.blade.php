@@ -29,15 +29,15 @@
                         <option>-- Select Project Code --</option>
                         @foreach($ids as $id)
                             <option>
-                                    {{$id->project_id}}
+                                    {{$id['PR_Code']}}
                             </option>
                       @endforeach
                     </select>
                 </td>
 
-                <input type="hidden" value="{{$id->request_id}}" name="hid1">
-                <input type="hidden" value="{{$id->project_id}}" name="hid2">
-                <?php $value=$id->request_id; $value2=$id->sub_id ?>
+                {{--<input type="hidden" value="{{$id->request_id}}" name="hid1">--}}
+                {{--<input type="hidden" value="{{$id->project_id}}" name="hid2">--}}
+
 
                 {!! Form::token() !!}
                 <td> {!! Form::submit('View',['class'=>'btn btn-primary form-control','name'=>'ViewRequests']) !!}</td>
@@ -49,8 +49,8 @@
         </tbody>
         </table>
 
-        <input type="hidden" value="{{$value}}" name="value">
-        <input type="hidden" value="{{$value2}}" name="value2">
+        {{--<input type="hidden" value="{{$value}}" name="value">--}}
+        {{--<input type="hidden" value="{{$value2}}" name="value2">--}}
   </div>
 
   @if( (Session::has('flash_ViewRequests') || Session::has('flash_message_url_success') || Session::has('flash_message_url_error')) && ($ftp_count != 0 || $folder_count != 0 ))
@@ -145,7 +145,7 @@
                                                 <form action="{{ URL::route('AssignDataToDb') }}" method="post">
 
                                                 <td><input type="text" class="form-control" name="username" id="username" placeholder="Username"  style="height: 30px " tabindex="1" value="{{$username}}"  /></td>
-                                                <td><input type="text" class="form-control" name="psw" id="psw"  placeholder="Password" style="height: 30px "   tabindex="1"   /></td>
+                                                <td><input type="password" class="form-control" name="psw" id="psw"  placeholder="Password" style="height: 30px "   tabindex="1"   /></td>
                                                 <td><input type="text" class="form-control" name="link" id="link" placeholder="Path"  style="height: 30px "   tabindex="1"  /></td>
 
                                                 <input type="hidden" value="{{$ftp->sub_id}}" name="hid_s">

@@ -1,21 +1,31 @@
 <?php namespace App\Http\Controllers;
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 9/26/2015
- * Time: 1:02 PM
- */
+
 
 class SubjectCategory extends AbstractSubject {
 
+    //array to hold observers
     private $observers = array();
+
+    //variable to hold category
     private $category = 'All';
 
+    /**
+     * to attach an observer
+     *
+     *
+     * @param AbstractObserver
+     */
     function attach(AbstractObserver $observerIn)
     {
         $this->observers[] = $observerIn;
     }
 
+    /**
+     * to detach an observer
+     *
+     *
+     * @param AbstractObserver
+     */
     function detach(AbstractObserver $observerIn)
     {
         foreach ($this->observers as $observerKey => $observerVal)
@@ -26,6 +36,10 @@ class SubjectCategory extends AbstractSubject {
 
     }
 
+    /**
+     * notify changes
+     *
+     */
     function notify()
     {
         $columnNames = array();
@@ -38,13 +52,31 @@ class SubjectCategory extends AbstractSubject {
         return $columnNames;
     }
 
+
+    /**
+     * to update category
+     *
+     *
+     * @param cat
+     * @return observer
+     */
     public function updateCategory($cat)
     {
+        //get the category
         $this->category = $cat;
+
+        //notify the change to the observer
         $obs = $this->notify();
+
         return $obs;
     }
 
+    /**
+     * to get category
+     *
+     *
+     * @return category
+     */
     public function getCategory()
     {
         return $this->category;

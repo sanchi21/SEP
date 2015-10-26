@@ -33,7 +33,19 @@ class AllocationController extends Controller {
     Public function view()
     {
         $Allocation_id =1;
-        $ids = requesth::where('request_status', '=',$Allocation_id)->get();
+
+        $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+        $results = json_decode(utf8_encode(file_get_contents($host)),true);
+
+        for($index = 0; $index < count($results['data']); $index++)
+        {
+            $status = $results['data'][$index]['Status'];
+            if($status == 'Active') {
+                $ids[$index]['PR_Code'] = $results['data'][$index]['PR_Code'];
+                //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+            }
+        }
+
         $request_id = Input::get('hid1');
         $device_status='Not Allocated';
 
@@ -59,26 +71,63 @@ class AllocationController extends Controller {
 
             /* attribute values from the blade page */
 
-            $request_id = Input::get('hid1');
-            $project_id = Input::get('hid2');
+            $viewRequests = Input::get('ViewRequests');
+            $viewAllocations = Input::get('ViewAllocation');
+
+            $project_id = Input::get('project_ids');
             $Allocation_id = 1;
 
-            $sub = '';
-            $inventory_code = 'e';
-            $device_status = 'Not Allocated';
+            $request_id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
 
-            \Session::flash('flash_av', '');
-            $results = req::where('request_id', '=', $request_id)->where('status', '=', $device_status)->get();
+            if($viewRequests) {
 
-            $ids = requesth::where('request_status', '=', $Allocation_id)->get();
-            $ftp_account = file::where('request_id', '=', $request_id)->get();
+                $sub = '';
+                $inventory_code = 'e';
+                $device_status = 'Not Allocated';
 
-            $resource_type = Input::get('resource_type');
-            $type = Input::get('type');
-            $hardware_types = Hardware::where('status', '=', $device_status)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
+                \Session::flash('flash_av', '');
+                $results = req::where('request_id', '=', $request_id)->where('status', '=', $device_status)->get();
+
+                $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+                $results_val = json_decode(utf8_encode(file_get_contents($host)),true);
+
+                for($index = 0; $index < count($results_val['data']); $index++)
+                {
+                    $status = $results_val['data'][$index]['Status'];
+                    if($status == 'Active') {
+                        $ids[$index]['PR_Code'] = $results_val['data'][$index]['PR_Code'];
+                        //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+                    }
+                }
+
+                $ftp_account = file::where('request_id', '=', $request_id)->get();
+
+                $resource_type = Input::get('resource_type');
+                $type = Input::get('type');
+                $hardware_types = Hardware::where('status', '=', $device_status)->where('type', 'LIKE', '%' . $type . '%')->paginate(30);
 
 
-            return view('Requests.Allocate')->with('ids', $ids)->with('results', $results)->with('ftp_account', $ftp_account)->with('hardware_types', $hardware_types)->with('inventory_code', $inventory_code)->with('sub', $sub);
+                return view('Requests.Allocate')->with('ids', $ids)->with('results', $results)->with('ftp_account', $ftp_account)->with('hardware_types', $hardware_types)->with('inventory_code', $inventory_code)->with('sub', $sub);
+
+            }
+
+            if($viewAllocations)
+            {
+                $project_id = Input::get('project_ids');
+                $request_id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
+
+                $device_status='Allocated';
+
+//                 $project=requesth::where('request_id', '=',$request_id);
+//                 $row=$project->first();
+//                 $project_code=$row->project_id;
+
+                 $results = req::where('request_id', '=',$request_id)->where('status','=',$device_status)->get();
+
+                 return view('Requests.ViewAll')->with('results',$results)->with('project_code',$project_id);
+
+
+            }
 
         }
 
@@ -299,7 +348,19 @@ class AllocationController extends Controller {
                 $device_status_allocated = 'Allocated';
 
                 $results = req::where('request_id', '=', $request_id)->where('status', '=', $device_status)->get();
-                $ids = requesth::where('request_status', '=', $Allocation_id)->get();
+
+                $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+                $results_val = json_decode(utf8_encode(file_get_contents($host)),true);
+
+                for($index = 0; $index < count($results_val['data']); $index++)
+                {
+                    $status = $results_val['data'][$index]['Status'];
+                    if($status == 'Active') {
+                        $ids[$index]['PR_Code'] = $results_val['data'][$index]['PR_Code'];
+                        //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+                    }
+                }
+
                 $ftp_account = file::where('request_id', '=', $request_id)->get();
 
 
@@ -380,7 +441,19 @@ class AllocationController extends Controller {
             $sub = Input::get('sub');
 
             $results = req::where('request_id', '=', $request_id)->where('status', '=', $device_status)->get();
-            $ids = requesth::where('request_status', '=', $Allocation_id)->get();
+
+
+            $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+            $results_val = json_decode(utf8_encode(file_get_contents($host)),true);
+
+            for($index = 0; $index < count($results_val['data']); $index++)
+            {
+                $status = $results_val['data'][$index]['Status'];
+                if($status == 'Active') {
+                    $ids[$index]['PR_Code'] = $results_val['data'][$index]['PR_Code'];
+                    //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+                }
+            }
 
             $ftp_account = file::where('request_id', '=', $request_id)->get();
             $type = Input::get('type');
@@ -453,18 +526,10 @@ class AllocationController extends Controller {
 
     Public function ViewAll()
     {
+        $project_id = Input::get('project_ids');
+        $request_id = requesth::where('project_id', '=', $project_id)->pluck('request_id');
 
-        $request_id = Input::get('hid1');
-        $project_id = Input::get('hid2');
-        $device_status='Allocated';
-
-        $project=requesth::where('request_id', '=',$request_id);
-        $row=$project->first();
-        $project_code=$row->project_id;
-
-        $results = req::where('request_id', '=',$request_id)->where('status','=',$device_status)->get();
-
-        return view('Requests.ViewAll')->with('results',$results)->with('project_code',$project_code);
+        return $project_id;
 
     }
 

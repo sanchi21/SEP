@@ -101,7 +101,7 @@
                 <td>{{$requestId[$a]}}</td>
                 <td>{{$orderDate[$a]}}</td>
                 <td>{{$paymentMethod[$a]}}</td>
-                <td>{{$total[$a]}}</td>
+                <td>Rs&nbsp;{{$total[$a]}}.00</td>
 
             </tr>
 
@@ -117,10 +117,10 @@
 
                 <tr>
 
-                    <td><b>Total Order Cost</b></td>
+                    <td width="100%"><b>Total Order Cost</b></td>
                     <td></td>
                     <td width="58%"></td>
-                    <td><b>{{$totalCost}}</b></td>
+                    <td ><b>Rs&nbsp;{{$totalCost}}.00</b></td>
 
                 </tr>
 
@@ -156,7 +156,7 @@
 
                     <td>{{$remarks[$b]}}</td>
                     <td>{{$mainDate[$b]}}</td>
-                    <td>{{$cost[$b]}}</td>
+                    <td>Rs&nbsp;{{$cost[$b]}}.00</td>
 
                 </tr>
 
@@ -175,7 +175,7 @@
 
                     <td><b>Total Maintenance Cost</b></td>
                     <td width="10%"></td>
-                    <td><b>{{$totalCostMain}}</b></td>
+                    <td><b>Rs&nbsp;{{$totalCostMain}}.00</b></td>
 
                 </tr>
 
@@ -197,7 +197,7 @@
 
                   </br></br></br>
 
-               <h4><b>&nbsp;&nbsp;Total Monthly Expenditure&nbsp;:&nbsp;{{$totalSum}}</b></h4>
+               <h4><b>&nbsp;&nbsp;Total Monthly Expenditure&nbsp;:&nbsp;Rs&nbsp;{{$totalSum}}.00</b></h4>
 
          </div>
 
