@@ -27,13 +27,26 @@ class FolderController extends Controller {
 
     Public function ViewFolder()
     {
+        $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+        $results = json_decode(utf8_encode(file_get_contents($host)),true);
+
+        for($index = 0; $index < count($results['data']); $index++)
+        {
+            $status = $results['data'][$index]['Status'];
+            if($status == 'Active') {
+                $ids[$index]['PR_Code'] = $results['data'][$index]['PR_Code'];
+                //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+            }
+        }
+
+
 
         $Allocation_id =1;
         $status='Not Assigned';
-        $ids = requesth::where('request_status', '=',$Allocation_id)->get();
+       // $ids = requesth::where('request_status', '=',$Allocation_id)->get();
         $request_id = Input::get('');
 
-        $sub_id = Input::get('value2');
+        $sub_id = Input::get('');
 
         $ftp_account=file::where('request_id', '=',$request_id)->where('status','=',$status)->get();
         $ftp_count=$ftp_account->count();
@@ -189,8 +202,19 @@ class FolderController extends Controller {
                 $Allocation_id = 1;
                 $sub_id = Input::get('hid_subid');
 
-                $ids = requesth::where('request_status', '=', $Allocation_id)->get();
-                $ftp_account = file::where('request_id', '=', $request_id)->where('status', '=', $status)->get();
+                $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+                $results = json_decode(utf8_encode(file_get_contents($host)),true);
+
+                for($index = 0; $index < count($results['data']); $index++)
+                {
+                    $status = $results['data'][$index]['Status'];
+                    if($status == 'Active') {
+                        $ids[$index]['PR_Code'] = $results['data'][$index]['PR_Code'];
+                        //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+                    }
+                }
+
+                $ftp_account = file::where('request_id', '=', $request_id)->where('status', '=', 'Not Assigned')->get();
 
                 $count_of_ftp = $ftp_account->count();
                 $project = requesth::where('request_id', '=', $request_id)->pluck('project_id');
@@ -265,11 +289,21 @@ class FolderController extends Controller {
             $password = Input::get('psw');
             $link = Input::get('link');
 
-            $status = 'Assigned';
+            $statusFtp = 'Assigned';
             $status1 = 'Not Assigned';
             $Allocation_id = 1;
 
-            $ids = requesth::where('request_status', '=', $Allocation_id)->get();
+            $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+            $results = json_decode(utf8_encode(file_get_contents($host)),true);
+
+            for($index = 0; $index < count($results['data']); $index++)
+            {
+                $status = $results['data'][$index]['Status'];
+                if($status == 'Active') {
+                    $ids[$index]['PR_Code'] = $results['data'][$index]['PR_Code'];
+                    //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+                }
+            }
 
             $project = requesth::where('request_id', '=', $req_id)->pluck('project_id');
 
@@ -280,21 +314,7 @@ class FolderController extends Controller {
             $checkUsername=file::where('username', '=', $username)->get();
             $firstRow = $checkUsername->first();
 
-
-            if($firstRow != null)  /* Check whether the username is already in use */
-            {
-
-                 $usernames = $project;
-
-                 $ftp_account = file::where('request_id', '=', $req_id)->where('status', '=', $status1)->get();
-                 $count_of_ftp = $ftp_account->count();
-
-                \Session::flash('flash_message_url_error', 'This username is already in use.Try a new username.');
-                return view('Requests.AssignFolder')->with('project_id', $project)->with('ftp_account', $ftp_account)->with('sharedFolderRequests', $sharedFolderRequests)->with('folder_count', $count_of_folder)->with('ftp_count', $count_of_ftp)->with('ids', $ids)->with('sub_id', $sub_id)->with('username', $usernames);
-
-            }
-
-            elseif( $username == "" || $password == "" || $link == "")
+            if( $username == "" || $password == "" || $link == "")
             {
 
                 $usernames = $project;
@@ -308,13 +328,27 @@ class FolderController extends Controller {
             }
 
 
+            elseif($firstRow != null)  /* Check whether the username is already in use */
+            {
+
+                 $usernames = $project;
+
+                 $ftp_account = file::where('request_id', '=', $req_id)->where('status', '=', $status1)->get();
+                 $count_of_ftp = $ftp_account->count();
+
+                \Session::flash('flash_message_url_error', 'This username is already in use.Try a new username.');
+                return view('Requests.AssignFolder')->with('project_id', $project)->with('ftp_account', $ftp_account)->with('sharedFolderRequests', $sharedFolderRequests)->with('folder_count', $count_of_folder)->with('ftp_count', $count_of_ftp)->with('ids', $ids)->with('sub_id', $sub_id)->with('username', $usernames);
+
+            }
+
+
              elseif(!filter_var($link, FILTER_VALIDATE_URL) === false) /* Validate URL */
              {
 
                  $r = DB::table('files')
                      ->where('request_id', $req_id)
                      ->where('sub_id', $sub_id)
-                     ->update(array('username' => $username, 'password' => $password, 'link' => $link, 'status' => $status));
+                     ->update(array('username' => $username, 'password' => $password, 'link' => $link, 'status' => $statusFtp));
 
 
                  $ftp_account = file::where('request_id', '=', $req_id)->where('status', '=', $status1)->get();
@@ -343,11 +377,13 @@ class FolderController extends Controller {
 
              }
 
-             else
+             elseif(filter_var($link, FILTER_VALIDATE_URL) === false)
             {
 
                 $ftp_account = file::where('request_id', '=', $req_id)->where('status', '=', $status1)->get();
                 $count_of_ftp = $ftp_account->count();
+
+                $usernames = $project;
 
                 \Session::flash('flash_message_url_error', 'Invalid Url Type');
                 return view('Requests.AssignFolder')->with('project_id', $project)->with('ftp_account', $ftp_account)->with('sharedFolderRequests', $sharedFolderRequests)->with('folder_count', $count_of_folder)->with('ftp_count', $count_of_ftp)->with('ids', $ids)->with('sub_id', $sub_id)->with('username', $usernames);
@@ -390,7 +426,17 @@ class FolderController extends Controller {
             $status1 = 'Not Assigned';
             $Allocation_id = 1;
 
-            $ids = requesth::where('request_status', '=', $Allocation_id)->get();
+            $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+            $results = json_decode(utf8_encode(file_get_contents($host)),true);
+
+            for($index = 0; $index < count($results['data']); $index++)
+            {
+                $status = $results['data'][$index]['Status'];
+                if($status == 'Active') {
+                    $ids[$index]['PR_Code'] = $results['data'][$index]['PR_Code'];
+                    //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+                }
+            }
 
             $ftp_account = file::where('request_id', '=', $req_id)->where('status', '=', $status1)->get();
             $count_of_ftp = $ftp_account->count();
@@ -462,7 +508,18 @@ class FolderController extends Controller {
             $path=Input::get('path');
 
             $Allocation_id =1;
-            $ids = requesth::where('request_status', '=',$Allocation_id)->get();
+
+            $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+            $results = json_decode(utf8_encode(file_get_contents($host)),true);
+
+            for($index = 0; $index < count($results['data']); $index++)
+            {
+                $status = $results['data'][$index]['Status'];
+                if($status == 'Active') {
+                    $ids[$index]['PR_Code'] = $results['data'][$index]['PR_Code'];
+                    //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+                }
+            }
 
             $project=requesth::where('request_id', '=',$folderRequestId)->pluck('project_id');
 
@@ -545,7 +602,18 @@ class FolderController extends Controller {
             $value = Input::get('folderCancelVale');
 
             $Allocation_id = 1;
-            $ids = requesth::where('request_status', '=', $Allocation_id)->get();
+
+            $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+            $results = json_decode(utf8_encode(file_get_contents($host)),true);
+
+            for($index = 0; $index < count($results['data']); $index++)
+            {
+                $status = $results['data'][$index]['Status'];
+                if($status == 'Active') {
+                    $ids[$index]['PR_Code'] = $results['data'][$index]['PR_Code'];
+                    //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+                }
+            }
 
             $project = requesth::where('request_id', '=', $folderRequestId)->pluck('project_id');
 

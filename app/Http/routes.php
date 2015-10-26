@@ -225,7 +225,7 @@ Route::group(array('middleware' => ['auth']), function() {
 
 
     Route::get('ViewAll','AllocationController@getViewAll');
-    Route::post('ViewAll', array('as' => 'ViewAll', 'uses' => 'AllocationController@ViewAll'));
+    //Route::post('ViewAll', array('as' => 'ViewAll', 'uses' => 'AllocationController@ViewAll'));
     //Route::get('ViewHardwareResources','AllocationController@getViewOfAllocations');
 
     Route::get('ViewGraphs','AllocationController@getAllocationReports');
@@ -268,6 +268,14 @@ Route::group(array('middleware' => ['auth']), function() {
 
 
     Route::get('/download/{id}', 'ApprovalController@getDownload');
+
+    Route::get('/finds',function(){
+
+        $projectCode=Input::get('project_id');
+        $checkProject= \App\requesth::where('project_id','=',$projectCode)->get();
+
+        return Response::json($checkProject);
+    });
 
 
 

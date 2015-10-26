@@ -52,7 +52,7 @@
     <select class="form-control" name="project_id" style="width: 25%">
             @foreach($pros as $pro)
                 <option>
-                    {{$pro->os_version}}
+                     {{$pro['PR_Code']}}
                 </option>
             @endforeach
     </select>
@@ -68,8 +68,8 @@
                     }
             </style>
 
-            <td>{!! Form::checkbox('ftp_account', 'yes',['class'=>'form-control','style'=>'width:30px','height:30px']) !!}</td>
-            <td> <h5>Request for FTP Account</h5></td>
+            <td width="5%">{!! Form::checkbox('ftp_account', 'yes',['class'=>'form-control','style'=>'width:30px','height:30px']) !!}</td>
+            <td> <h4>Request for FTP Account</h4></td>
         </tbody>
     </table>
 

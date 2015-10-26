@@ -26,7 +26,24 @@ class FtpController extends Controller
 
 
         $sys_users = DB::table('system_users')->get();
-        $pros = version::all();
+
+        $user_id = Auth::User()->employeeID;
+        //$user_id = Auth::User()->id;
+
+        $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+        $results = json_decode(utf8_encode(file_get_contents($host)),true);
+
+        for($index = 0; $index < count($results['data']); $index++)
+        {
+            $status = $results['data'][$index]['Status'];
+            $PR_id = $results['data'][$index]['PR_ID'];
+            if($status == 'Active' && $PR_id == $user_id)
+            {
+                $pros[$index]['PR_Code'] = $results['data'][$index]['PR_Code'];
+                //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+            }
+        }
+
         $ftp = file::all();
         $sf = sfuser::all();
         $req = req::all();
@@ -51,7 +68,24 @@ class FtpController extends Controller
     Public function ViewConnectivity()
     {
 
-        $pros = version::all();
+        $user_id = Auth::User()->employeeID;
+        //$user_id = Auth::User()->id;
+
+        $host = 'http://www.abhayan.com/api/v1/PRCodes?access_token=w7yO95BV8vrqNAGpFPzhAEvw6tlnpWrcBIzKTBkp';
+        $results = json_decode(utf8_encode(file_get_contents($host)),true);
+
+
+        for($index = 0; $index < count($results['data']); $index++)
+        {
+            $status = $results['data'][$index]['Status'];
+            $PR_id = $results['data'][$index]['PR_ID'];
+            if($status == 'Active' && $PR_id == $user_id)
+            {
+                $pros[$index]['PR_Code'] = $results['data'][$index]['PR_Code'];
+                //$ids[$index]['Status'] = $results['data'][$index]['Status'];
+            }
+        }
+
         $protocols = DB::table('protocol')->get();
         $connectivity = DB::table('connectivity')->get();
 
@@ -147,8 +181,8 @@ class FtpController extends Controller
                     $maxRequestId = DB::table('requesths')->max('request_id');
                     $newRequestId = $maxRequestId + 1;
 
-                    //$user_id = Auth::User()->employeeID;
-                    $user_id = Auth::User()->id;
+                    $user_id = Auth::User()->employeeID;
+                    //$user_id = Auth::User()->id;
                     $init = new requesth;
                     $init->request_id = $newRequestId;
                     $init->required_from = date('yyyy-MM-dd');
@@ -335,8 +369,9 @@ class FtpController extends Controller
 
                         $maxRequestId = DB::table('requesths')->max('request_id');
                         $newRequestId = $maxRequestId + 1;
-                        $user_id = Auth::User()->id;
+                        //$user_id = Auth::User()->id;
                         //$user_id = 8;
+                        $user_id = Auth::User()->employeeID;
                         $init = new requesth;
                         $init->request_id = $newRequestId;
                         $init->required_from = date('yyyy-MM-dd');

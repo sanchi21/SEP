@@ -35,29 +35,44 @@
         </tr>
     <tbody>
 
-        @foreach($ids as $id)
-        <form action="{{ URL::route('ViewRequests') }}" method="post">
-            <tr style="padding: 2px">
-                <td><p><b>Project : {{$id->project_id}}</b></p></td>
 
-                <input type="hidden" value="{{$id->request_id}}" name="hid1">
-                <input type="hidden" value="{{$id->project_id}}" name="hid2">
+ <form action="{{ URL::route('ViewRequests') }}" method="post">
+            <tr style="padding: 2px">
+                <td>
+
+                    <select class="form-control" name="project_ids">
+                            <option>-- Select Project Code --</option>
+                                    @foreach($ids as $id)
+                                        <option>
+                                                 {{$id['PR_Code']}}
+                                        </option>
+                                    @endforeach
+                    </select>
+
+                </td>
+
+                {{--<input type="hidden" value="{{$id->request_id}}" name="hid1">--}}
+                {{--<input type="hidden" value="{{$id->project_id}}" name="hid2">--}}
+
                 {!! Form::token() !!}
+
                 <td> {!! Form::submit('View',['class'=>'btn btn-primary form-control','name'=>'ViewRequests']) !!}</td>
 
-        </form>
 
-        <form action="{{ URL::route('ViewAll') }}" method="post">
 
-            <input type="hidden" value="{{$id->request_id}}" name="hid1">
-            <input type="hidden" value="{{$id->project_id}}" name="hid2">
-            {!! Form::token() !!}
+
+
+            {{--<input type="hidden" value="{{$id->request_id}}" name="hid1">--}}
+            {{--<input type="hidden" value="{{$id->project_id}}" name="hid2">--}}
+
 
             <td style="width: 40%"> {!! Form::submit('View',['class'=>'btn btn-primary form-control','name'=>'ViewAllocation']) !!}</td>
 
-            </tr>
+
         </form>
-        @endforeach
+
+         </tr>
+
     </tbody>
     </table>
 </div>
