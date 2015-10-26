@@ -53,9 +53,7 @@
 
                 <td>{{$all->name}}</td>
                 <td>{{$all->project_id}}</td>
-                <input type="hidden" name="req_upto" class="form-control input-sm" value="{{$all->required_upto}}">
-                <td>{{$all->required_upto}}</td>
-                <input type="hidden" name="req_upto" class="form-control input-sm" value="{{$all->req_upto}}">
+                <input type="hidden" name="req_upto[]" class="form-control input-sm" value="{{$all->req_upto}}">
                 <td>{{$all->req_upto}}</td>
 
                 <td>

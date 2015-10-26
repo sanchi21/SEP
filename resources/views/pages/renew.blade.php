@@ -69,6 +69,7 @@
                  <th>Project Code</th>
                 <th>Assigned Date</th>
                 <th>Required Upto</th>
+                <th>Action</th>
                 <th></th>
 
 
@@ -87,7 +88,7 @@
                  </td>
 
                 @else
-                    <input type="hidden" class="form-control input-sm" value="{{$all->item}}" name="name">
+                    <input type="hidden" class="form-control input-sm" value="{{$all->item}}" name="name[]">
                  <td>(H) {{$all->item}}</td>
                  <td>{{$all->project_id}}</td>
                  <td>{{$all->assigned_date}}
@@ -102,7 +103,14 @@
                    <input type="hidden" value="{{$all->request_id}}" name="rid[]">
                    <input type="hidden" value="{{$all->sub_id}}" name="sid[]">
 
-          </td>
+                    </td>
+
+                    <td>
+                        <select id="action" name="action[]" class="form-control" style="width: 200px">
+                              <option value="default">--Choose Action--</option>
+                              <option value="request">Request</option>
+                        </select>
+                    </td>
           </tr>
 
         @endforeach
@@ -155,8 +163,6 @@
 
 
                {!! Form ::open(['method' => 'POST', 'url' => 'cancelRenewal']) !!}
-
-
 
 
                     <td>{{$all->name}}</td>
